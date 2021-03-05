@@ -1,2 +1,4 @@
 *.gem
 *.rbc
+ip.txt
+./ssl/*

@@ -1,4 +1,3 @@
-require './cred.rb'
 require 'net/http'
 require 'uri'
 def get_client_info (token)
@@ -12,7 +11,11 @@ def get_client_info (token)
 	request["X-Token"] = token
 
 	response = https.request(request)
-	return response.read_body
+	if response.code == '200'
+		return JSON.parse(response.read_body)
+	else 
+		raise StandardError.new("Respose from API: #{response.code} - #{response.read_body}")
+	end
 end
 
 def get_account_statements (token, account, date_start = Time.now.to_i - 2592000, date_end = Time.now.to_i)
@@ -26,5 +29,29 @@ def get_account_statements (token, account, date_start = Time.now.to_i - 2592000
 	request["X-Token"] = token
 
 	response = https.request(request)
-	return response.read_body
+	if response.code == '200'
+		return JSON.parse(response.read_body)
+	else 
+		raise StandardError.new("Respose from API: #{response.code} - #{response.read_body}")
+	end
+end
+
+def return_errors(short,full,errorlevel)
+	if errorlevel == false
+		return short
+	else
+		return short, full
+	end
+end
+
+def get_server_ip
+	if FileTest.exist?("./ip.txt") then
+		file = File.open("./ip.txt")
+		ip = file.readlines.map(&:chomp)
+		file.close
+		return ip.first
+	else
+		puts("IP address was not set up. Please run './install.rb' first")
+		exit
+	end
 end

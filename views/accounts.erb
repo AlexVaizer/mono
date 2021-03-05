@@ -1,0 +1,20 @@
+<table border='1'>
+	<tr>
+		<th>ID</th>
+		<th>Currency</th>
+		<th>Balance</th>
+		<th>Type</th>
+		<th>Card No.</th>
+		<th>Link To Statements</th>
+	</tr>
+	<% @list['accounts'].each do |account| %>
+	<tr>
+		<td><%= account['id'] %></td>
+		<td><%= account['currencyCode'] %></td>
+		<td><%= account['balance']/100 %></td>
+		<td><%= account['type'] %></td>
+		<td><%= account['maskedPan'].first %></td>
+		<td><%= "<a href='./account?id=#{account['id']}'>Link</a>" %></td>
+	</tr>
+	<% end %>
+</table>

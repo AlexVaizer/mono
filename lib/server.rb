@@ -42,7 +42,7 @@
 	
 	#Enable SSL if needed
 	if $env_values['ssl'] then 
-		require File.expand_path('./lib/sinatra_ssl.rb') 
+		require File.expand_path('./lib/ssl.rb') 
 		set :ssl_certificate, File.expand_path("./ssl/cert.crt")
 		set :ssl_key, File.expand_path("./ssl/pkey.pem")
 	end

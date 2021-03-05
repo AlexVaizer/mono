@@ -11,5 +11,9 @@ $mono_opts = {
 	'statements'	=> '/personal/statement/',
 }
 
-
+$currencies = {
+	'840'			=> 'USD',
+	'978'			=> 'EUR',
+	'980'			=> 'UAH',
+}
 

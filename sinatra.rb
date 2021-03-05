@@ -19,7 +19,7 @@ require File.expand_path('./lib/auth.rb')
 		
 	protect do
 			get '/' do 
-				@list = get_client_info($mono_opts['token'])
+				if $env == 'prod' then @list = get_client_info($mono_opts['token']) else @list = $mock_data['client-info'] end
 				erb :accounts
 				#return @list.to_s
 			end
@@ -28,10 +28,10 @@ require File.expand_path('./lib/auth.rb')
 				if not params['start'] then params['start'] = Time.now.to_i - 2592000 end
 				if not params['end'] then params['end'] = Time.now.to_i end
 				if not params['id'] then return "PLEASE PROVIDE ACCOUNT ID" end
-				list = get_client_info($mono_opts['token'])
+				if $env == 'prod' then list = get_client_info($mono_opts['token']) else list = $mock_data['client-info'] end
 				@account_info = list['accounts'].select { |x| x["id"] == params['id'] }
 				@account_info = @account_info.first
-				@statements = get_account_statements($mono_opts['token'], params['id'], params['start'], params['end'])
+				if $env == 'prod' then @statements = get_account_statements($mono_opts['token'], params['id'], params['start'], params['end']) else @statements = $mock_data['statements'] end
 				erb :statements
 			end
 	end

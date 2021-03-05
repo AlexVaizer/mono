@@ -1,20 +1,28 @@
-<table border='1'>
-	<tr>
-		<th>ID</th>
-		<th>Currency</th>
-		<th>Balance</th>
-		<th>Type</th>
-		<th>Card No.</th>
-		<th>Link To Statements</th>
-	</tr>
-	<% @list['accounts'].each do |account| %>
-	<tr>
-		<td><%= account['id'] %></td>
-		<td><%= $currencies[account['currencyCode'].to_s] %></td>
-		<td><%= account['balance'].to_f/100 %></td>
-		<td><%= account['type'] %></td>
-		<td><%= account['maskedPan'].first %></td>
-		<td><%= "<a href='./account?id=#{account['id']}'>Link</a>" %></td>
-	</tr>
-	<% end %>
-</table>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<div class='w3-blue-grey w3-bar w3-responsive'>
+	<div class='w3-bar-item w3-hover-dark-grey'><a href='/'>Hello world</a></div>
+</div>
+<div class='w3-container w3-margin'>
+	<table class='w3-table-all w3-hoverable w3-small'>
+		<thead>
+			<tr>	
+				<th>ID</th>
+				<th>Currency</th>
+				<th>Balance</th>
+				<th>Type</th>
+				<th>Card No.</th>
+				<th>Link To Statements</th>
+			</tr>	
+		</thead>
+		<% @list['accounts'].each do |account| %>
+		<tr>
+			<td><%= account['id'] %></td>
+			<td><%= $currencies[account['currencyCode'].to_s] %></td>
+			<td><%= account['balance'].to_f/100 %></td>
+			<td><%= account['type'] %></td>
+			<td><%= account['maskedPan'].first %></td>
+			<td><%= "<a href='./account?id=#{account['id']}'>Link</a>" %></td>
+		</tr>
+		<% end %>
+	</table>
+</div>

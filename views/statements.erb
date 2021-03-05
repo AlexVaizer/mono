@@ -1,24 +1,30 @@
+<% @title = "Account #{@account_info['maskedPan'].first}" %>
+<%= erb :head%>
 
-Card Number: <%= @account_info['maskedPan'].first %> <br>
-Balance: <%= @account_info['balance'].to_f/100 %> <br>
-Card Type: <%= @account_info['type'] %> <br>
+<div class='w3-container w3-margin'>
+	<span>
+		Card Number: <%= @account_info['maskedPan'].first %> <br>
+		Balance: <%= @account_info['balance'].to_f/100 %> <br>
+		Card Type: <%= @account_info['type'] %> <br>
+	</span>
+</div>
 
-<br>
-<br>
-<h1>Transactions History:</h1>
-<table border='1'>
-	<tr>
-		<th>Time</th>
-		<th>Amount</th>
-		<th>Description</th>
-		<th>Balance After Operation</th>
-	</tr>
-	<% @statements.each do |stat| %>
-	<tr>
-		<td><%= Time.at(stat['time']).strftime("%d.%m.%Y") %></td>
-		<td><%= stat['amount'].to_f/100 %></td>
-		<td><%= stat['description'] %></td>
-		<td><%= stat['balance'].to_f/100 %></td>
-	</tr>
-	<% end %>
-</table>
+<div class='w3-container w3-margin'>
+		<h1>Transactions History:</h1>
+		<table class='w3-table-all w3-hoverable w3-small'>
+			<tr>
+				<th>Time</th>
+				<th>Amount</th>
+				<th>Description</th>
+				<th>Balance After Operation</th>
+			</tr>
+			<% @statements.each do |stat| %>
+			<tr>
+				<td><%= Time.at(stat['time']).strftime("%d.%m.%Y") %></td>
+				<td><%= stat['amount'].to_f/100 %></td>
+				<td><%= stat['description'] %></td>
+				<td><%= stat['balance'].to_f/100 %></td>
+			</tr>
+			<% end %>
+		</table>
+</div>

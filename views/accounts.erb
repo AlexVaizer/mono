@@ -1,26 +1,20 @@
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<div class='w3-blue-grey w3-bar w3-responsive'>
-	<div class='w3-bar-item w3-hover-dark-grey'><a href='/'>Hello world</a></div>
-</div>
+<% @title = "Accounts list" %>
+<%= erb :head%>
+
 <div class='w3-container w3-margin'>
-	<table class='w3-table-all w3-hoverable w3-small'>
-		<thead>
-			<tr>	
-				<th>Card No.</th>
-				<th>Balance</th>
-				<th>Currency</th>
-				<th>Type</th>
-				<th>Link To Statements</th>
-			</tr>	
-		</thead>
+	<ul class="w3-ul w3-card-4">
 		<% @list['accounts'].each do |account| %>
-		<tr>
-			<td><%= account['maskedPan'].first %></td>
-			<td><%= account['balance'].to_f/100 %></td>
-			<td><%= $currencies[account['currencyCode'].to_s] %></td>
-			<td><%= account['type'] %></td>
-			<td><%= "<a href='./account?id=#{account['id']}'>Link</a>" %></td>
-		</tr>
-		<% end %>
-	</table>
+	    <li class="w3-bar">
+	      <span onclick='location.replace("./account?id=<%=account['id']%>")' class="w3-bar-item w3-button w3-white w3-xlarge w3-right">></span>
+	       <img src="./public/<%=$currencies[account['currencyCode'].to_s]%>.png" class="w3-bar-item w3-circle w3-hide-small" style="width:85px">
+	      <div class="w3-bar-item">
+	        <span class="w3-large"><%=account['maskedPan'].first%></span><br>
+	        <span><%= account['balance'].to_f/100%> <%=$currencies[account['currencyCode'].to_s]%> <%=account['type']%></span>
+	      </div>
+	    </li>
+	    <% end %>
+	</ul>
 </div>
+
+
+

@@ -35,3 +35,6 @@ require File.expand_path('./lib/auth.rb')
 				erb :statements
 			end
 	end
+	get '/public/*' do 
+				send_file File.join('./public', params['splat'][0])
+	end

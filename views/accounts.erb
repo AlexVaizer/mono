@@ -11,7 +11,7 @@
 	<tr>
 		<td><%= account['id'] %></td>
 		<td><%= $currencies[account['currencyCode'].to_s] %></td>
-		<td><%= account['balance']/100 %></td>
+		<td><%= account['balance'].to_f/100 %></td>
 		<td><%= account['type'] %></td>
 		<td><%= account['maskedPan'].first %></td>
 		<td><%= "<a href='./account?id=#{account['id']}'>Link</a>" %></td>

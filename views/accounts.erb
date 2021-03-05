@@ -6,21 +6,19 @@
 	<table class='w3-table-all w3-hoverable w3-small'>
 		<thead>
 			<tr>	
-				<th>ID</th>
-				<th>Currency</th>
-				<th>Balance</th>
-				<th>Type</th>
 				<th>Card No.</th>
+				<th>Balance</th>
+				<th>Currency</th>
+				<th>Type</th>
 				<th>Link To Statements</th>
 			</tr>	
 		</thead>
 		<% @list['accounts'].each do |account| %>
 		<tr>
-			<td><%= account['id'] %></td>
-			<td><%= $currencies[account['currencyCode'].to_s] %></td>
-			<td><%= account['balance'].to_f/100 %></td>
-			<td><%= account['type'] %></td>
 			<td><%= account['maskedPan'].first %></td>
+			<td><%= account['balance'].to_f/100 %></td>
+			<td><%= $currencies[account['currencyCode'].to_s] %></td>
+			<td><%= account['type'] %></td>
 			<td><%= "<a href='./account?id=#{account['id']}'>Link</a>" %></td>
 		</tr>
 		<% end %>

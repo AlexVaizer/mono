@@ -28,6 +28,8 @@ require File.expand_path('./lib/auth.rb')
 					erb :accounts
 				rescue 
 					@errors = return_errors($!,$@,$env_values['debug_messages'])
+					puts @errors.to_s
+					status 500
 					erb :error
 				end
 			end
@@ -52,6 +54,8 @@ require File.expand_path('./lib/auth.rb')
 					erb :statements
 				rescue 
 					@errors = return_errors($!,$@,$env_values['debug_messages'])
+					puts @errors.to_s
+					status 500
 					erb :error
 				end	
 			end

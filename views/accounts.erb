@@ -4,7 +4,7 @@
 	<div class='w3-container w3-display-topmiddle'>
 		<ul class="w3-ul w3-card-4">
 			<% @list['accounts'].each do |account| %>
-			<%if account['maskedPan'].empty? then account['maskedPan'].push(account['iban']) end %>
+			<%if account['maskedPan'].empty? then account['maskedPan'].push(account['type'].upcase) end %>
 		    <li class="w3-bar w3-button" onclick='location.replace("./account?id=<%=account['id']%>")'  style='max-width: 750px; min-width:550px'>
 		      <span class="w3-bar-item w3-xlarge w3-right" style=''>></span>
 		       <img src="./public/<%=$currencies[account['currencyCode'].to_s]%>.png" class="w3-bar-item w3-circle w3-hide-small" style="width:81px">

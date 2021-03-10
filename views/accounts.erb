@@ -1,16 +1,21 @@
 <% @title = "Accounts list" %>
 <%= erb :head%>
-<div class='w3-display-container' style='width:100%, height:90%'>
-	<div class='w3-container w3-margin w3-display-topmiddle' style='max-width: 750px'>
+<div class='w3-display-container' style='width:100%'>
+	<div class='w3-container w3-display-topmiddle'>
 		<ul class="w3-ul w3-card-4">
 			<% @list['accounts'].each do |account| %>
 			<%if account['maskedPan'].empty? then account['maskedPan'].push(account['iban']) end %>
-		    <li class="w3-bar w3-button" onclick='location.replace("./account?id=<%=account['id']%>")'>
+		    <li class="w3-bar w3-button" onclick='location.replace("./account?id=<%=account['id']%>")'  style='max-width: 750px; min-width:550px'>
 		      <span class="w3-bar-item w3-xlarge w3-right" style=''>></span>
 		       <img src="./public/<%=$currencies[account['currencyCode'].to_s]%>.png" class="w3-bar-item w3-circle w3-hide-small" style="width:81px">
 		      <div class="w3-bar-item">
 		        <span class="w3-large w3-left"><%= a = account['maskedPan'].first.gsub('******','*') %></span><br>
-		        <span class='w3-left'><%= account['balance'].to_f/100%> <%=$currencies[account['currencyCode'].to_s]%> <b><%=account['type'].upcase%></b></span>
+		        <span class='w3-left' style="text-align: left;"><%= account['balance'].to_f/100%> 
+		        	<%=$currencies[account['currencyCode'].to_s]%> 
+		        	<b>
+		        		<%=account['type'].upcase%>
+		        	</b>
+		        </span>
 		      </div>
 		    </li>
 		    <% end %>

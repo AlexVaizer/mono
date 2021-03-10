@@ -20,6 +20,7 @@ require File.expand_path('./lib/auth.rb')
 	protect do
 			get '/' do 
 				if $env == 'prod' then @list = get_client_info($mono_opts['token']) else @list = $mock_data['client-info'] end
+				
 				erb :accounts
 				#return @list.to_s
 			end

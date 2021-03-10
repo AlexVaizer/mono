@@ -1,0 +1,27 @@
+<%
+# @table_content = {
+# 	'headers' => ['header1', 'header2', 'header3'],
+# 	'width' => [20,50,30],
+# 	'content' => [
+# 		['hello', 'cruel', 'world'],
+# 		['my', 'name', 'is Alex'],
+# 		['and', 'i love', 'living'],
+# 	]
+# }
+%>
+<table class='w3-table-all w3-hoverable w3-small'>
+	<tr class="w3-blue-grey">
+		<% @table_content['headers'].each do |header| %>
+		<th><%= header %></th>
+		<%end%>
+	</tr>
+	<% @table_content['content'].each do |row| %>
+	<tr>
+		<%i = 0
+		row.each do |cell|%>
+			<td  width='<%=@table_content['width'][i]%>%'><%=cell%></td>
+		<% i = i+1
+		end%>
+	</tr>	
+	<%end%>
+</table>

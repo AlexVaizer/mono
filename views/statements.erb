@@ -2,29 +2,25 @@
 <%= erb :head%>
 
 <div class='w3-container w3-margin'>
-	<span>
-		Card Number: <%= @account_info['maskedPan'].first %> <br>
-		Balance: <%= @account_info['balance'].to_f/100 %> <br>
-		Card Type: <%= @account_info['type'] %> <br>
-	</span>
+	<ul class="w3-ul w3-card-4">
+		<li class="w3-bar" >
+		<span onclick='location.replace("./")' class="w3-bar-item w3-button w3-white w3-xlarge w3-left w3-middle" style="vertical-align: middle;"><</span>
+			<img src="./public/<%=$currencies[@account_info['currencyCode'].to_s]%>.png" class="w3-bar-item w3-circle w3-hide-small" style="width:81px">
+			<div class="w3-bar-item">
+				<span class="w3-large"><%=@account_info['maskedPan'].first.gsub('******', '*') %></span><br>
+				<span><%= @account_info['balance'].to_f/100%> <%=$currencies[@account_info['currencyCode'].to_s]%> <b><%=@account_info['type'].upcase%></b></span>
+			</div>
+		</li>
+	</ul>
 </div>
 
 <div class='w3-container w3-margin'>
 		<h1>Transactions History:</h1>
-		<table class='w3-table-all w3-hoverable w3-small'>
-			<tr>
-				<th>Time</th>
-				<th>Amount</th>
-				<th>Description</th>
-				<th>Balance After Operation</th>
-			</tr>
-			<% @statements.each do |stat| %>
-			<tr>
-				<td><%= Time.at(stat['time']).strftime("%d.%m.%Y") %></td>
-				<td><%= stat['amount'].to_f/100 %></td>
-				<td><%= stat['description'] %></td>
-				<td><%= stat['balance'].to_f/100 %></td>
-			</tr>
-			<% end %>
-		</table>
+		<%
+		@table_content = {}
+		@table_content['content'] = @statements.map { |stat| [ Time.at(stat['time']).strftime("%d.%m.%Y"), stat['amount'].to_f/100, stat['description'], stat['balance'].to_f/100] }
+		@table_content['headers'] = ['Time', 'Amount', 'Description', 'Balance']
+		@table_content['width'] = [20,20,40,20]
+		%>
+		<%= erb :table %>
 </div>

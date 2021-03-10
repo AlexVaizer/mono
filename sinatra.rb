@@ -37,7 +37,11 @@ require File.expand_path('./lib/auth.rb')
 			get '/account' do
 				if not params['start'] then params['start'] = Time.now.to_i - 2592000 end
 				if not params['end'] then params['end'] = Time.now.to_i end
-				if not params['id'] then return "PLEASE PROVIDE ACCOUNT ID" end
+				if not params['id'] then 
+					status 400
+					@error = "Please provide account id as 'id' in query params"
+					erb :error
+				end
 				begin
 					if  ['prod','stage'].include?($env) then 
 						list = get_client_info($mono_opts['token']) 

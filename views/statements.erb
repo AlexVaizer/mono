@@ -1,3 +1,4 @@
+<%if @account_info['maskedPan'].empty? then @account_info['maskedPan'].push(@account_info['iban']) end %>
 <% @title = "Account #{@account_info['maskedPan'].first}" %>
 <%= erb :head%>
 
@@ -7,8 +8,9 @@
 		<span onclick='location.replace("./")' class="w3-bar-item w3-button w3-white w3-xlarge w3-left w3-middle" style="vertical-align: middle;"><</span>
 			<img src="./public/<%=$currencies[@account_info['currencyCode'].to_s]%>.png" class="w3-bar-item w3-circle w3-hide-small" style="width:81px">
 			<div class="w3-bar-item">
-				<span class="w3-large"><%=@account_info['maskedPan'].first.gsub('******', '*') %></span><br>
-				<span><%= @account_info['balance'].to_f/100%> <%=$currencies[@account_info['currencyCode'].to_s]%> <b><%=@account_info['type'].upcase%></b></span>
+				
+				<span class="w3-large"><%= @account_info['balance'].to_f/100%> <%=$currencies[@account_info['currencyCode'].to_s]%> <b><%=@account_info['type'].upcase%></b></span><br>
+				<span><%=@account_info['maskedPan'].first.gsub('******','*') %></span>
 			</div>
 		</li>
 	</ul>

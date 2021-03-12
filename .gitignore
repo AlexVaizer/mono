@@ -2,3 +2,4 @@
 *.rbc
 ip.txt
 ./ssl/*
+./logs/*

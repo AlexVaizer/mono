@@ -48,6 +48,6 @@
 	 out_file.puts(service_settings)
 	 out_file.close
 	 puts 'File saved.'
-	 puts 'If you want to run sinatra on startup, please run "systemctl enable sinatra"'
+	 puts 'If you want to run sinatra on startup, please run "sudo systemctl enable monobank"'
 
 

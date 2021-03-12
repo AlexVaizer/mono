@@ -1,2 +1,5 @@
 *.gem
 *.rbc
+ip.txt
+./ssl/*
+./logs/*

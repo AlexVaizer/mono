@@ -14,7 +14,8 @@ def get_client_info (token)
 	if response.code == '200'
 		return JSON.parse(response.read_body)
 	else 
-		raise StandardError.new("Respose from API: #{response.code} - #{response.read_body}")
+		error = JSON.parse(response.read_body)
+		raise StandardError.new("Respose from API: #{response.code} - #{error}")
 	end
 end
 
@@ -32,15 +33,16 @@ def get_account_statements (token, account, date_start = Time.now.to_i - 2592000
 	if response.code == '200'
 		return JSON.parse(response.read_body)
 	else 
-		raise StandardError.new("Respose from API: #{response.code} - #{response.read_body}")
+		error = JSON.parse(response.read_body)
+		raise StandardError.new("Respose from API: #{response.code} - #{error}")
 	end
 end
 
 def return_errors(short,full,errorlevel)
 	if errorlevel == false
-		return short
+		return short.message
 	else
-		return short, full
+		return [short.message, full.to_s]
 	end
 end
 

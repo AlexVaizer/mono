@@ -6,7 +6,7 @@ $mock_data = {
 $mono_opts = {
 	'site'      	=> 'https://api.monobank.ua',
 	#'token'			=> 'hello',
-	'token'			=> 'upFz6g7q4J-hkM8yiqs9Fuwxh2munEs5toRKqSFKuJmc',
+	'token'			=> 'upFz6g7q4J-hkM8yiqs9Fuwxh2munEs5toRKqSFKuJmc', #I will use ENV vars instead of hardcoding, but later
 	'client-info'	=> '/personal/client-info',
 	'statements'	=> '/personal/statement/',
 }

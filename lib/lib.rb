@@ -42,7 +42,7 @@ def return_errors(short,full,errorlevel)
 	if errorlevel == false
 		return short.message
 	else
-		return [short.message, full.to_s]
+		return [short.message, full.to_s].to_s
 	end
 end
 

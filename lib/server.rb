@@ -1,50 +1,95 @@
 #########################################################
 # => SERVER SET UP										#
 #########################################################
-	$allowed_envs = ['local', 'stage', 'prod']
-	OptionParser.new do |opts|
-		opts.banner = "Usage: ruby sinatra.rb -e <ENV>"
-		opts.on("-e", "--env ENVIRONMENT", "Set a testing ENV. Possible values: local, stage, prod") do |e|
-			$env = e
-		end
-	end.parse!
+	# OptionParser.new do |opts|
+	# 	opts.banner = "Usage: ruby sinatra.rb -e <ENV>"
+	# 	opts.on("-e", "--env ENVIRONMENT", "Set a testing ENV. Possible values: local, stage, prod") do |e|
+	# 		$env = e
+	# 	end
+	# end.parse!
 
-	#Get server IP from file.
-	$ip = get_server_ip
+	# #Get server IP from file.
+	# $ip = get_server_ip
 
-	$server = {
-				'local' => {
-					'port' => 4567,
-					'ip' => $ip,
-					'ssl' => false,
-					'debug_messages' => true,
-				},
-				'stage' => {
-					'port' => 4567,
-					'ip' => $ip,
-					'ssl' => false,
-					'debug_messages' => true,
-				},
-				'prod' => {
-					'port' => 11111,
-					'ip' => $ip,
-					'ssl' => true,
-					'debug_messages' => false,
-				},
-	}
+	# $server = {
+	# 			'local' => {
+	# 				'port' => 4567,
+	# 				'ip' => $ip,
+	# 				'ssl' => false,
+	# 				'debug_messages' => true,
+	# 			},
+	# 			'stage' => {
+	# 				'port' => 4567,
+	# 				'ip' => $ip,
+	# 				'ssl' => false,
+	# 				'debug_messages' => true,
+	# 			},
+	# 			'prod' => {
+	# 				'port' => 11111,
+	# 				'ip' => $ip,
+	# 				'ssl' => true,
+	# 				'debug_messages' => false,
+	# 			},
+	# }
 
 
-	#Validate ENVIRONMENT
-	if not $allowed_envs.include?($env) then raise ArgumentError.new("Environment should be: #{$allowed_envs.to_s}") end
-	$env_values = $server[$env]
+	# #Validate ENVIRONMENT
+	# if not $allowed_envs.include?($env) then raise ArgumentError.new("Environment should be: #{$allowed_envs.to_s}") end
+	# $env_values = $server[$env]
 
 
 	
-	#Enable SSL if needed
-	if $env_values['ssl'] then 
-		require File.expand_path('./lib/ssl.rb') 
-		set :ssl_certificate, File.expand_path("./ssl/cert.crt")
-		set :ssl_key, File.expand_path("./ssl/pkey.pem")
-	end
-	puts "SERVER STARTED WITH SETTINGS: #{$env_values}"
+	# #Enable SSL if needed
+	# if $env_values['ssl'] then 
+	# 	require File.expand_path('./lib/ssl.rb') 
+	# 	set :ssl_certificate, File.expand_path("./ssl/cert.crt")
+	# 	set :ssl_key, File.expand_path("./ssl/pkey.pem")
+	# end
+	# puts "SERVER STARTED WITH SETTINGS: #{$env_values}"
 #########################################################
+
+module ServerSettings
+	require 'erb'
+	ALLOWED_ENVS = ['local', 'stage', 'prod']
+	SSL_ENABLE_FOR = ['prod','stage']
+	SSL_CERT_PATH = './ssl/cert.crt'
+	SSL_KEY_PATH = './ssl/pkey.pem'
+	SSL_SETUP_PATH = './lib/ssl.rb'
+	IP = ENV['MONO_SERV_IP']
+	PORT = ENV['MONO_SERV_PORT'].to_i
+	SERVICE_TEMPLATE_PATH = './lib/monobank_service.erb'
+	#SERVICE_DESTINATION_PATH = '/etc/systemd/system/monobank.service'
+	SERVICE_DESTINATION_PATH = '/Users/vaizer/Desktop/monobank.service'
+	CURRENT_FOLDER = `pwd`.chomp
+
+	def validate_env(env)
+		if not ALLOWED_ENVS.include?(env) then 
+			raise ArgumentError.new("Environment should be: #{ALLOWED_ENVS.to_s}") 
+		end
+	end
+
+	def enable_ssl(env)
+		if SSL_ENABLE_FOR.include?(env) then 
+			require File.expand_path(SSL_SETUP_PATH)
+			set :ssl_certificate, File.expand_path(SSL_CERT_PATH)
+			set :ssl_key, File.expand_path(SSL_KEY_PATH)
+		end
+	end
+
+	def ServerSettings.setup_service
+		puts "Setting up service for Sinatra"
+		puts "Saving file to #{ServerSettings::SERVICE_DESTINATION_PATH}"
+		service_settings = ERB.new(File.read(File.expand_path(SERVICE_TEMPLATE_PATH)))
+		out_file = File.new(SERVICE_DESTINATION_PATH, "w")
+		out_file.puts(service_settings.result)
+		out_file.close
+		puts 'File saved.'
+		puts 'If you want to run sinatra on startup, please run "sudo systemctl enable monobank"'
+	end
+	
+	def ServerSettings.list_ips
+		a = `ifconfig | grep 'inet ' | awk '{print $2}'`
+		a = a.split
+		return a
+	end
+end

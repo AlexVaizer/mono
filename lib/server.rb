@@ -1,51 +1,7 @@
 #########################################################
 # => SERVER SET UP										#
 #########################################################
-	# OptionParser.new do |opts|
-	# 	opts.banner = "Usage: ruby sinatra.rb -e <ENV>"
-	# 	opts.on("-e", "--env ENVIRONMENT", "Set a testing ENV. Possible values: local, stage, prod") do |e|
-	# 		$env = e
-	# 	end
-	# end.parse!
 
-	# #Get server IP from file.
-	# $ip = get_server_ip
-
-	# $server = {
-	# 			'local' => {
-	# 				'port' => 4567,
-	# 				'ip' => $ip,
-	# 				'ssl' => false,
-	# 				'debug_messages' => true,
-	# 			},
-	# 			'stage' => {
-	# 				'port' => 4567,
-	# 				'ip' => $ip,
-	# 				'ssl' => false,
-	# 				'debug_messages' => true,
-	# 			},
-	# 			'prod' => {
-	# 				'port' => 11111,
-	# 				'ip' => $ip,
-	# 				'ssl' => true,
-	# 				'debug_messages' => false,
-	# 			},
-	# }
-
-
-	# #Validate ENVIRONMENT
-	# if not $allowed_envs.include?($env) then raise ArgumentError.new("Environment should be: #{$allowed_envs.to_s}") end
-	# $env_values = $server[$env]
-
-
-	
-	# #Enable SSL if needed
-	# if $env_values['ssl'] then 
-	# 	require File.expand_path('./lib/ssl.rb') 
-	# 	set :ssl_certificate, File.expand_path("./ssl/cert.crt")
-	# 	set :ssl_key, File.expand_path("./ssl/pkey.pem")
-	# end
-	# puts "SERVER STARTED WITH SETTINGS: #{$env_values}"
 #########################################################
 
 module ServerSettings
@@ -55,16 +11,17 @@ module ServerSettings
 	SSL_CERT_PATH = './ssl/cert.crt'
 	SSL_KEY_PATH = './ssl/pkey.pem'
 	SSL_SETUP_PATH = './lib/ssl.rb'
-	IP = ENV['MONO_SERV_IP']
-	PORT = ENV['MONO_SERV_PORT'].to_i
+	IP = ENV['MONO_SERV_IP'] || '127.0.0.1'
+	PORT = ENV['MONO_SERV_PORT'].to_i || 4567
 	SERVICE_TEMPLATE_PATH = './lib/monobank_service.erb'
-	#SERVICE_DESTINATION_PATH = '/etc/systemd/system/monobank.service'
-	SERVICE_DESTINATION_PATH = '/Users/vaizer/Desktop/monobank.service'
+	SERVICE_DESTINATION_PATH = '/etc/systemd/system/monobank.service'
 	CURRENT_FOLDER = `pwd`.chomp
 
-	def validate_env(env)
+	def ServerSettings.validate_env(env)
 		if not ALLOWED_ENVS.include?(env) then 
-			raise ArgumentError.new("Environment should be: #{ALLOWED_ENVS.to_s}") 
+			raise ArgumentError.new("Environment should be: #{ALLOWED_ENVS.to_s}")
+		else 
+			return env
 		end
 	end
 

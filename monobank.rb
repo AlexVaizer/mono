@@ -13,9 +13,17 @@ require File.expand_path('./lib/server.rb')
 require File.expand_path('./lib/auth.rb') 
 #########################################################
 
+OptionParser.new do |opts|
+	opts.banner = "Usage: ruby sinatra.rb -e <ENV>"
+	opts.on("-e", "--env ENVIRONMENT", "Set a testing ENV. Possible values: local, stage, prod") do |e|
+		@env = e
+	end
+end.parse!
 
-set :port, $env_values['port']
-set :bind, $env_values['ip']
+ServerSettings::ENV = ServerSettings.validate_env(@env)
+
+set :port, ServerSetting::PORT
+set :bind, ServerSetting::IP
 set :views, Proc.new { File.join(root, "views") } 
 
 	

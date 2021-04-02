@@ -1,3 +1,5 @@
 authorize do |username, password|
-  username == "vaizer" && password == "BlahBlahPass"
+	user = ENV['MONO_BASIC_USER'] || "vaizer"
+	pass = ENV['MONO_BASIC_PASS'] || "BlahBlahPass"
+	username == user && password == pass
 end

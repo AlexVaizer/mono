@@ -16,6 +16,7 @@ module ServerSettings
 	SERVICE_TEMPLATE_PATH = './lib/monobank_service.erb'
 	SERVICE_DESTINATION_PATH = '/etc/systemd/system/monobank.service'
 	CURRENT_FOLDER = `pwd`.chomp
+	DEBUG_MESSAGES = true
 
 	def ServerSettings.validate_env(env)
 		if not ALLOWED_ENVS.include?(env) then 
@@ -25,7 +26,7 @@ module ServerSettings
 		end
 	end
 
-	def enable_ssl(env)
+	def ServerSettings.enable_ssl(env)
 		if SSL_ENABLE_FOR.include?(env) then 
 			require File.expand_path(SSL_SETUP_PATH)
 			set :ssl_certificate, File.expand_path(SSL_CERT_PATH)
@@ -44,9 +45,17 @@ module ServerSettings
 		puts 'If you want to run sinatra on startup, please run "sudo systemctl enable monobank"'
 	end
 	
-	def ServerSettings.list_ips
+	def ServerSettings.list_ifconfig_ips
 		a = `ifconfig | grep 'inet ' | awk '{print $2}'`
 		a = a.split
 		return a
+	end
+	
+	def ServerSettings.return_errors(short,full,errorlevel)
+		if errorlevel == false
+			return short.message
+		else
+			return "#{short.message}.\n #{full.to_s}"
+		end
 	end
 end

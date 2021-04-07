@@ -1,6 +1,6 @@
 #!/usr/bin/ruby
 require './lib/server.rb'
-ips = ServerSettings.list_ips
+ips = ServerSettings.list_ifconfig_ips
 ips.each_with_index do |v,i|
 	puts "#{i+1}. [#{v}]"
 end

@@ -7,8 +7,7 @@ require 'sinatra'
 require 'sinatra/cors'
 require "sinatra/basic_auth"
 require 'optparse'
-require File.expand_path('./lib/lib.rb')
-require File.expand_path('./lib/cred.rb')
+require File.expand_path('./lib/mono.rb')
 require File.expand_path('./lib/server.rb')
 require File.expand_path('./lib/auth.rb') 
 #########################################################
@@ -22,22 +21,19 @@ end.parse!
 
 ServerSettings::ENV = ServerSettings.validate_env(@env)
 
-set :port, ServerSetting::PORT
-set :bind, ServerSetting::IP
-set :views, Proc.new { File.join(root, "views") } 
+set :port, ServerSettings::PORT
+set :bind, ServerSettings::IP
+set :views, Proc.new { File.join(root, "views") }
+puts "Server started for ENV:#{ServerSettings::ENV} at #{ServerSettings::IP}:#{ServerSettings::PORT}" 
 
 	
 protect do
 	get '/' do 
 		begin
-			if  ['prod','stage'].include?($env) then 
-				@list = get_client_info($mono_opts['token']) 
-			else 
-				@list = $mock_data['client-info'] 
-			end
+			@list = MonobankConnector.get_client_info(ServerSettings::ENV) 
 			erb :accounts
 		rescue 
-			@errors = return_errors($!,$@,$env_values['debug_messages'])
+			@errors = ServerSettings.return_errors($!,$@,ServerSettings::DEBUG_MESSAGES)
 			puts @errors.to_s
 			status 500
 			erb :error
@@ -45,29 +41,21 @@ protect do
 	end
 
 	get '/account' do
-		if not params['start'] then params['start'] = Time.now.to_i - 2592000 end
-		if not params['end'] then params['end'] = Time.now.to_i end
+		date_start = params['start'] || Time.now.to_i - 30*24*60*60
+		date_end = params['end'] || Time.now.to_i
 		if not params['id'] then 
 			status 400
 			@error = "Please provide account id as 'id' in query params"
 			erb :error
 		end
 		begin
-			if  ['prod','stage'].include?($env) then 
-				list = get_client_info($mono_opts['token']) 
-			else 
-				list = $mock_data['client-info'] 
-			end
+			list = MonobankConnector.get_client_info(ServerSettings::ENV)
 			@account_info = list['accounts'].select { |x| x["id"] == params['id'] }
 			@account_info = @account_info.first
-			if ['prod','stage'].include?($env) then 
-				@statements = get_account_statements($mono_opts['token'], params['id'], params['start'], params['end']) 
-			else 
-				@statements = $mock_data['statements'] 
-			end
+			@statements = MonobankConnector.get_statements(ServerSettings::ENV, params['id'], date_start, date_end) 
 			erb :statements
 		rescue 
-			@errors = return_errors($!,$@,$env_values['debug_messages'])
+			@errors = ServerSettings.return_errors($!,$@,ServerSettings::DEBUG_MESSAGES)
 			puts @errors.to_s
 			status 500
 			erb :error

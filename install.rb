@@ -1,5 +1,7 @@
 #!/usr/bin/ruby
 require './lib/server.rb'
+
+#GET IP ADDRESS
 ips = ServerSettings.list_ifconfig_ips
 ips.each_with_index do |v,i|
 	puts "#{i+1}. [#{v}]"
@@ -8,10 +10,21 @@ puts "Please enter [1-#{ips.count}] number and hit Enter"
 i = gets
 i = i.to_i
 ip = ips[i-1]
-out_file = File.new("./ip.txt", "w")
-out_file.puts(ip)
-out_file.close
-puts "#{ip} was saved to ./ip.txt"
+puts "IP address chosen: #{ip}"
+puts "----------------------------------------------"
+
+# GET PORT
+puts "Please enter PORT number and hit Enter"
+port_s = gets
+port = port_s.to_i
+puts "Port chosen: #{port}"
+puts "----------------------------------------------"
+
+# GET MONOBANK TOKEN
+puts "Please enter PORT number and hit Enter"
+mono_token = gets
+puts "Token chosen: #{mono_token}"
+
 
 puts "(WORKS ONLY IN UBUNTU) Do you want to set up service [y/n]"
 service_setup = gets.chomp
@@ -22,5 +35,6 @@ end
 if service_setup == 'y' then
 	ServerSettings.setup_service
 else
-	puts "No service setup needed. Closing script"
+	puts "----------------------------------------------"
+	puts "Command to run server manually:\n MONO_SERV_IP='#{ip}' MONO_SERV_PORT='#{port}' MONO_TOKEN='#{mono_token}' monobank.rb -e local"
 end

@@ -4,7 +4,7 @@ module MonobankConnector
 	require 'json'
 	
 	API_URL = 'https://api.monobank.ua'
-	TOKEN = ENV['MONO_TOKEN'] || 'upFz6g7q4J-hkM8yiqs9Fuwxh2munEs5toRKqSFKuJmc'
+	TOKEN = ENV['MONO_TOKEN']
 	CLIENT_INFO_PATH = '/personal/client-info'
 	STATEMENTS_PATH = '/personal/statement'
 	CURRENCIES = {

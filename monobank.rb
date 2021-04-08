@@ -9,7 +9,7 @@ require "sinatra/basic_auth"
 require 'optparse'
 require File.expand_path('./lib/mono.rb')
 require File.expand_path('./lib/server.rb')
-require File.expand_path('./lib/auth.rb') 
+require File.expand_path('./lib/auth.rb')
 #########################################################
 
 OptionParser.new do |opts|
@@ -48,12 +48,14 @@ protect do
 			status 400
 			@error = "Please provide account id as 'id' in query params"
 			erb :error
+		else
+			account_id = params['id']
 		end
 		begin
 			list = MonobankConnector.get_client_info(ServerSettings::ENV)
-			@account_info = list['accounts'].select { |x| x["id"] == params['id'] }
+			@account_info = list['accounts'].select { |x| x["id"] == account_id }
 			@account_info = @account_info.first
-			@statements = MonobankConnector.get_statements(ServerSettings::ENV, params['id'], date_start, date_end) 
+			@statements = MonobankConnector.get_statements(ServerSettings::ENV, account_id, date_start, date_end) 
 			erb :statements
 		rescue 
 			@errors = ServerSettings.return_errors($!,$@,ServerSettings::DEBUG_MESSAGES)

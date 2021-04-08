@@ -20,6 +20,7 @@ OptionParser.new do |opts|
 end.parse!
 
 ServerSettings::ENV = ServerSettings.validate_env(@env)
+ServerSettings.save_pid
 
 set :port, ServerSettings::PORT
 set :bind, ServerSettings::IP

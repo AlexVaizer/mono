@@ -11,7 +11,7 @@ module ServerSettings
 	SERVICE_TEMPLATE_PATH = './lib/monobank_service.erb'
 	SERVICE_DESTINATION_PATH = '/etc/systemd/system/monobank.service'
 	CURRENT_FOLDER = `pwd`.chomp
-	DEBUG_MESSAGES = 
+	DEBUG_MESSAGES = true
 
 	def ServerSettings.validate_env(env)
 		if not ALLOWED_ENVS.include?(env) then 
@@ -53,5 +53,13 @@ module ServerSettings
 		else
 			return short.message
 		end
+	end
+
+	def ServerSettings.save_pid
+		pid = Process.pid
+		pidfile_path = File.join(ServerSettings::CURRENT_FOLDER,"mono.pid")
+		pidfile = File.new(pidfile_path, "w")
+		pidfile.puts(pid)
+		pidfile.close
 	end
 end

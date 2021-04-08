@@ -4,3 +4,4 @@ ip.txt
 ./ssl/*
 ./logs/*
 *.DS_Store
+*.pid

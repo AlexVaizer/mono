@@ -22,7 +22,7 @@ puts "----------------------------------------------"
 
 # GET MONOBANK TOKEN
 puts "Please enter Monobank Auth Token and hit Enter"
-mono_token = gets
+mono_token = gets.chomp
 puts "Token chosen: #{mono_token}"
 
 

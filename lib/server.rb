@@ -1,8 +1,3 @@
-#########################################################
-# => SERVER SET UP										#
-#########################################################
-
-#########################################################
 
 module ServerSettings
 	require 'erb'
@@ -16,7 +11,7 @@ module ServerSettings
 	SERVICE_TEMPLATE_PATH = './lib/monobank_service.erb'
 	SERVICE_DESTINATION_PATH = '/etc/systemd/system/monobank.service'
 	CURRENT_FOLDER = `pwd`.chomp
-	DEBUG_MESSAGES = true
+	DEBUG_MESSAGES = 
 
 	def ServerSettings.validate_env(env)
 		if not ALLOWED_ENVS.include?(env) then 
@@ -34,15 +29,16 @@ module ServerSettings
 		end
 	end
 
-	def ServerSettings.setup_service
+	def ServerSettings.setup_service(env_values)
 		puts "Setting up service for Sinatra"
 		puts "Saving file to #{ServerSettings::SERVICE_DESTINATION_PATH}"
-		service_settings = ERB.new(File.read(File.expand_path(SERVICE_TEMPLATE_PATH)))
-		out_file = File.new(SERVICE_DESTINATION_PATH, "w")
-		out_file.puts(service_settings.result)
+		@env_values = env_values
+		service_settings = ERB.new(File.read(File.expand_path(ServerSettings::SERVICE_TEMPLATE_PATH)))
+		out_file = File.new(ServerSettings::SERVICE_DESTINATION_PATH, "w")
+		out_file.puts(service_settings.result(binding))
 		out_file.close
-		puts 'File saved.'
-		puts 'If you want to run sinatra on startup, please run "sudo systemctl enable monobank"'
+		puts "File saved."
+		puts "If you want to run sinatra on startup, please run 'sudo systemctl enable monobank'"
 	end
 	
 	def ServerSettings.list_ifconfig_ips
@@ -52,10 +48,10 @@ module ServerSettings
 	end
 	
 	def ServerSettings.return_errors(short,full,errorlevel)
-		if errorlevel == false
-			return short.message
-		else
+		if errorlevel 
 			return "#{short.message}.\n #{full.to_s}"
+		else
+			return short.message
 		end
 	end
 end

@@ -21,11 +21,12 @@ puts "Port chosen: #{port}"
 puts "----------------------------------------------"
 
 # GET MONOBANK TOKEN
-puts "Please enter PORT number and hit Enter"
+puts "Please enter Monobank Auth Token and hit Enter"
 mono_token = gets
 puts "Token chosen: #{mono_token}"
 
 
+env_values = "MONO_SERV_IP='#{ip}' MONO_SERV_PORT='#{port}' MONO_TOKEN='#{mono_token}'"
 puts "(WORKS ONLY IN UBUNTU) Do you want to set up service [y/n]"
 service_setup = gets.chomp
 until ['y','n'].include?(service_setup)
@@ -33,8 +34,8 @@ until ['y','n'].include?(service_setup)
 	service_setup = gets
 end
 if service_setup == 'y' then
-	ServerSettings.setup_service
+	ServerSettings.setup_service(env_values)
 else
 	puts "----------------------------------------------"
-	puts "Command to run server manually:\n MONO_SERV_IP='#{ip}' MONO_SERV_PORT='#{port}' MONO_TOKEN='#{mono_token}' monobank.rb -e local"
+	puts "Command to run server manually:\n#{env_values} #{ServerSettings::CURRENT_FOLDER}/monobank.rb -e local"
 end

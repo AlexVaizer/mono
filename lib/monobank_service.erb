@@ -7,7 +7,7 @@ StartLimitIntervalSec=0
 Type=simple
 User=root
 WorkingDirectory=<%=ServerSettings::CURRENT_FOLDER%>
-ExecStart=<%=File.join(ServerSettings::CURRENT_FOLDER, 'monobank.rb -e prod')%>
+ExecStart=<%="#{@env_values} #{File.join(ServerSettings::CURRENT_FOLDER, 'monobank.rb -e prod')}"%>
 ExecStop=<%=File.join(ServerSettings::CURRENT_FOLDER,'stop.rb')%>
 StandardOutput=file:<%=File.join(ServerSettings::CURRENT_FOLDER,'logs/info.log')%>
 StandardError=file:<%=File.join(ServerSettings::CURRENT_FOLDER,'logs/error.log')%>

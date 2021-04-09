@@ -3,4 +3,3 @@
 ./logs/*
 *.DS_Store
 *.pid
-.lock

@@ -6,7 +6,7 @@
 	<body>
 		<div class='w3-blue-grey w3-bar w3-responsive'>
 			<%@list['accounts'].each do |account|%>
-			<a href="./account?id=<%=account['id']%>">
+			<a href="./?id=<%=account['id']%>">
 				<div class='w3-bar-item w3-hover-<%=account["type"]%>'>
 					<%= account['maskedPan'] %> <br>
 					<%= account['balance'] %> <%= MonobankConnector::CURRENCIES[account['currencyCode'].to_s] %>

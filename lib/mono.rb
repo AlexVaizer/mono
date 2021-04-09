@@ -28,7 +28,17 @@ module MonobankConnector
 			request["X-Token"] = MonobankConnector::TOKEN
 			response = https.request(request)
 			if response.code == '200'
-				return JSON.parse(response.read_body)
+				json = JSON.parse(response.read_body)
+				json['accounts'].each do |account|
+					if account['maskedPan'].empty?
+						account['maskedPan'] = []
+						account['maskedPan'].push(account['type'].upcase)
+					end
+					account['maskedPan'] = account['maskedPan'].first.gsub('******', '*')
+					account['balance'] = account['balance'].to_f/100
+					account['type'] = account['type'].upcase
+				end
+				return json
 			else 
 				error = JSON.parse(response.read_body)
 				raise StandardError.new("Respose from API: #{response.code} - #{error}")

@@ -1,5 +1,5 @@
 <%if @account_info['maskedPan'].empty? then @account_info['maskedPan'].push(@account_info['iban']) end %>
-<% @title = "Account #{@account_info['maskedPan'].first}" %>
+<% @title = "Account #{@account_info['maskedPan']}" %>
 <%= erb :head%>
 
 <div class='w3-container w3-margin'>
@@ -9,8 +9,8 @@
 			<img src="./public/<%=MonobankConnector::CURRENCIES[@account_info['currencyCode'].to_s]%>.png" class="w3-bar-item w3-circle w3-hide-small" style="width:81px">
 			<div class="w3-bar-item">
 				
-				<span class="w3-large"><%= @account_info['balance'].to_f/100%> <%=MonobankConnector::CURRENCIES[@account_info['currencyCode'].to_s]%> <b><%=@account_info['type'].upcase%></b></span><br>
-				<span><%=@account_info['maskedPan'].first.gsub('******','*') %></span>
+				<span class="w3-large"><%= @account_info['balance']%> <%=MonobankConnector::CURRENCIES[@account_info['currencyCode'].to_s]%> <b><%=@account_info['type']%></b></span><br>
+				<span><%=@account_info['maskedPan']%></span>
 			</div>
 		</li>
 	</ul>

@@ -4,7 +4,13 @@
 	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 	<link rel="shortcut icon" href="./public/favicon.png">
 	<body>
-	
 		<div class='w3-blue-grey w3-bar w3-responsive'>
-			<div class='w3-bar-item w3-hover-dark-grey'><a href='/'>Accounts list</a></div>
+			<%@list['accounts'].each do |account|%>
+			<a href="./account?id=<%=account['id']%>">
+				<div class='w3-bar-item w3-hover-<%=account["type"]%>'>
+					<%= account['maskedPan'] %> <br>
+					<%= account['balance'] %> <%= MonobankConnector::CURRENCIES[account['currencyCode'].to_s] %>
+				</div>
+			</a>
+			<% end %>
 		</div>

@@ -56,8 +56,8 @@ ServerSettings.save_pid
 				account_id = params['id']
 			end
 			begin
-				list = MonobankConnector.get_client_info(ServerSettings::ENV)
-				@account_info = list['accounts'].select { |x| x["id"] == account_id }
+				@list = MonobankConnector.get_client_info(ServerSettings::ENV)
+				@account_info = @list['accounts'].select { |x| x["id"] == account_id }
 				@account_info = @account_info.first
 				@statements = MonobankConnector.get_statements(ServerSettings::ENV, account_id, date_start, date_end) 
 				erb :statements

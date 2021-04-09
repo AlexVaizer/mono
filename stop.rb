@@ -5,3 +5,4 @@ file.close
 puts "Killing process #{pid}"
 `kill #{pid}`
 puts "Monobank process #{pid} killed"
+File.delete("./mono.pid")

@@ -11,7 +11,7 @@ module ServerSettings
 	SERVICE_TEMPLATE_PATH = './lib/monobank_service.erb'
 	SERVICE_DESTINATION_PATH = '/etc/systemd/system/monobank.service'
 	CURRENT_FOLDER = `pwd`.chomp
-	DEBUG_MESSAGES = true
+	DEBUG_MESSAGES = ENV['MONO_DEBUG_MODE'] || false
 
 	def ServerSettings.validate_env(env)
 		if not ALLOWED_ENVS.include?(env) then 

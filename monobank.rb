@@ -3,6 +3,8 @@
 #########################################################
 # => DEPENDENCIES										#
 #########################################################
+require 'bundler'
+Bundler.require 
 require 'sinatra'
 require 'sinatra/cors'
 require "sinatra/basic_auth"
@@ -11,6 +13,7 @@ require File.expand_path('./lib/mono.rb')
 require File.expand_path('./lib/server.rb')
 require File.expand_path('./lib/auth.rb')
 #########################################################
+
 
 OptionParser.new do |opts|
 	opts.banner = "Usage: ruby sinatra.rb -e <ENV>"
@@ -22,49 +25,50 @@ end.parse!
 ServerSettings::ENV = ServerSettings.validate_env(@env)
 ServerSettings.save_pid
 
-set :port, ServerSettings::PORT
-set :bind, ServerSettings::IP
-set :views, Proc.new { File.join(root, "views") }
-puts "Server started for ENV:#{ServerSettings::ENV} at #{ServerSettings::IP}:#{ServerSettings::PORT}" 
 
-	
-protect do
-	get '/' do 
-		begin
-			@list = MonobankConnector.get_client_info(ServerSettings::ENV) 
-			erb :accounts
-		rescue 
-			@errors = ServerSettings.return_errors($!,$@,ServerSettings::DEBUG_MESSAGES)
-			puts @errors.to_s
-			status 500
-			erb :error
+	set :port, ServerSettings::PORT
+	set :bind, ServerSettings::IP
+	set :views, Proc.new { File.join(root, "views") }
+	puts "Server started for ENV:#{ServerSettings::ENV} at #{ServerSettings::IP}:#{ServerSettings::PORT}" 
+
+		
+	protect do
+		get '/' do 
+			begin
+				@list = MonobankConnector.get_client_info(ServerSettings::ENV) 
+				erb :accounts
+			rescue 
+				@errors = ServerSettings.return_errors($!,$@,ServerSettings::DEBUG_MESSAGES)
+				puts @errors.to_s
+				status 500
+				erb :error
+			end
+		end
+
+		get '/account' do
+			date_start = params['start'] || Time.now.to_i - 30*24*60*60
+			date_end = params['end'] || Time.now.to_i
+			if not params['id'] then 
+				status 400
+				@error = "Please provide account id as 'id' in query params"
+				erb :error
+			else
+				account_id = params['id']
+			end
+			begin
+				list = MonobankConnector.get_client_info(ServerSettings::ENV)
+				@account_info = list['accounts'].select { |x| x["id"] == account_id }
+				@account_info = @account_info.first
+				@statements = MonobankConnector.get_statements(ServerSettings::ENV, account_id, date_start, date_end) 
+				erb :statements
+			rescue 
+				@errors = ServerSettings.return_errors($!,$@,ServerSettings::DEBUG_MESSAGES)
+				puts @errors.to_s
+				status 500
+				erb :error
+			end	
 		end
 	end
-
-	get '/account' do
-		date_start = params['start'] || Time.now.to_i - 30*24*60*60
-		date_end = params['end'] || Time.now.to_i
-		if not params['id'] then 
-			status 400
-			@error = "Please provide account id as 'id' in query params"
-			erb :error
-		else
-			account_id = params['id']
-		end
-		begin
-			list = MonobankConnector.get_client_info(ServerSettings::ENV)
-			@account_info = list['accounts'].select { |x| x["id"] == account_id }
-			@account_info = @account_info.first
-			@statements = MonobankConnector.get_statements(ServerSettings::ENV, account_id, date_start, date_end) 
-			erb :statements
-		rescue 
-			@errors = ServerSettings.return_errors($!,$@,ServerSettings::DEBUG_MESSAGES)
-			puts @errors.to_s
-			status 500
-			erb :error
-		end	
+	get '/public/*' do 
+		send_file(File.join('./public', params['splat'][0]))
 	end
-end
-get '/public/*' do 
-	send_file(File.join('./public', params['splat'][0]))
-end

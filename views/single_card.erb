@@ -1,7 +1,3 @@
-<%if @account_info['maskedPan'].empty? then @account_info['maskedPan'].push(@account_info['iban']) end %>
-<% @title = "Account #{@account_info['maskedPan']}" %>
-<%= erb :head%>
-
 <div class='w3-container w3-margin'>
 	<ul class="w3-ul w3-card-4">
 		<li class="w3-bar" >
@@ -15,15 +11,3 @@
 		</li>
 	</ul>
 </div>
-
-<div class='w3-container w3-margin'>
-		<h1>Transactions History:</h1>
-		<%
-		@table_content = {}
-		@table_content['content'] = @statements.map { |stat| [ Time.at(stat['time']).strftime("%d.%m.%Y"), stat['amount'].to_f/100, stat['description'], stat['balance'].to_f/100] }
-		@table_content['headers'] = ['Time', 'Amount', 'Description', 'Balance']
-		@table_content['width'] = [20,20,40,20]
-		%>
-		<%= erb :table %>
-</div>
-<%= erb :foot %>

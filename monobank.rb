@@ -37,17 +37,15 @@ ServerSettings.save_pid
 			date_start = params['start'] || Time.now.to_i - 30*24*60*60
 			date_end = params['end'] || Time.now.to_i
 			begin
-				if not params['id'] then 
-					@list = MonobankConnector.get_client_info(ServerSettings::ENV) 
-					erb :accounts
-				else
+				@list = MonobankConnector.get_client_info(ServerSettings::ENV) 
+				if params['id'] then 
 					account_id = params['id']
-					@list = MonobankConnector.get_client_info(ServerSettings::ENV)
 					@account_info = @list['accounts'].select { |x| x["id"] == account_id }
 					@account_info = @account_info.first
 					@statements = MonobankConnector.get_statements(ServerSettings::ENV, account_id, date_start, date_end) 
-					erb :statements
+					
 				end
+				erb :index
 			rescue 
 				@errors = ServerSettings.return_errors($!,$@,ServerSettings::DEBUG_MESSAGES)
 				puts @errors.to_s

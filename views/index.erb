@@ -4,6 +4,7 @@
 	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 	<link rel="shortcut icon" href="./public/favicon.png">
 	<body>
+<!-- HEADER  -->
 		<div class='w3-blue-grey w3-bar w3-responsive'>
 			<%if @list then%>
 			<%@list['accounts'].each do |account|%>
@@ -22,7 +23,15 @@
 			</a>
 			<%end%>
 		</div>
+<!-- ERRORS  -->
+		<% if @errors then %>
+			<div class='w3-container w3-margin'>
+				<h1 class="w3-center">Error occured</h1>
+				<span class="w3-center"><%=@errors%></span>
+			</div>
+		<% end %>
 
+<!-- STATEMENTS  -->
 		<% if @statements && @account_info then %>
 			<%= erb :single_card %>
 			<div class='w3-container w3-margin'>
@@ -36,7 +45,9 @@
 				<%= erb :table %>
 			</div>
 		<% else %>
+<!-- ACCOUNTS  -->
 			<%= erb :accounts%>
 		<% end %>
+<!-- FOOTER  -->
 	</body>
 </html>

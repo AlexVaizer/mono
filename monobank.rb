@@ -38,11 +38,13 @@ ServerSettings.save_pid
 			date_end = params['end'] || Time.now.to_i
 			begin
 				@list = MonobankConnector.get_client_info(ServerSettings::ENV) 
+				@title = "Accounts List"
 				if params['id'] then 
 					account_id = params['id']
 					@account_info = @list['accounts'].select { |x| x["id"] == account_id }
 					@account_info = @account_info.first
-					@statements = MonobankConnector.get_statements(ServerSettings::ENV, account_id, date_start, date_end) 
+					@statements = MonobankConnector.get_statements(ServerSettings::ENV, account_id, date_start, date_end)
+					@title = @account_info['maskedPan'] 
 					
 				end
 				erb :index

@@ -13,13 +13,29 @@ module MonobankConnector
 		'980'			=> 'UAH',
 	}
 	MOCK_DATA = {
-		'client-info' 	=> {"clientId"=>"4xhSmt92RD", "name"=>"Вайзер Олександр", "webHookUrl"=>"", "permissions"=>"psf", "accounts"=>[{"id"=>"lu_DfA927YqdOUyQyiwIwA", "currencyCode"=>840, "cashbackType"=>"UAH", "balance"=>0, "creditLimit"=>0, "maskedPan"=>["537541******0394"], "type"=>"black", "iban"=>"UA983220010000026204304728629"}, {"id"=>"Wru4sMWBrWfsCGpwg_2OJg", "currencyCode"=>978, "cashbackType"=>"UAH", "balance"=>120000, "creditLimit"=>0, "maskedPan"=>["537541******8332"], "type"=>"black", "iban"=>"UA693220010000026203301620141"}, {"id"=>"vwM0597-8y5pyZX-RjmpZQ", "currencyCode"=>980, "cashbackType"=>"UAH", "balance"=>1549380, "creditLimit"=>0, "maskedPan"=>["537541******1260"], "type"=>"black", "iban"=>"UA173220010000026206300008932"}, {"id"=>"RXgPPTrGMLQu_iXuGRXJbg", "currencyCode"=>980, "cashbackType"=>"", "balance"=>0, "creditLimit"=>0, "maskedPan"=>[], "type"=>"fop", "iban"=>"UA623220010000026009300005217"}]},
-		'statements'	=> [{"id"=>"fQ35XN5yrDI0wFys", "time"=>1612212722, "description"=>"Patreon", "mcc"=>5815, "amount"=>-14080, "operationAmount"=>-500, "currencyCode"=>840, "commissionRate"=>0, "cashbackAmount"=>0, "balance"=>1409232, "hold"=>false, "receiptId"=>"K737-HMXC-H45X-XA6K"}, {"id"=>"43zcG2xWtQ-OE3Or", "time"=>1612188144, "description"=>"Від: Антон К.", "mcc"=>4829, "amount"=>12400, "operationAmount"=>12400, "currencyCode"=>980, "commissionRate"=>0, "cashbackAmount"=>0, "balance"=>1423312, "hold"=>true}, {"id"=>"Gzl-xSPVTvsj-Lf5", "time"=>1612187087, "description"=>"Велика Кишеня", "mcc"=>5411, "amount"=>-12400, "operationAmount"=>-12400, "currencyCode"=>980, "commissionRate"=>0, "cashbackAmount"=>0, "balance"=>1410912, "hold"=>false, "receiptId"=>"HE3P-T762-EE2K-92EB"}, {"id"=>"ZEcXBmHXn6GzoqPN", "time"=>1612143372, "description"=>"Відсотки за сiчень", "mcc"=>4829, "amount"=>5010, "operationAmount"=>5010, "currencyCode"=>980, "commissionRate"=>0, "cashbackAmount"=>0, "balance"=>1423312, "hold"=>true}],	
+		'client-info' 	=> {
+			"clientId"=>"4xhSmt92RD", 
+			"name"=>"Вайзер Олександр", 
+			"webHookUrl"=>"", 
+			"permissions"=>"psf", 
+			"accounts"=>[
+				{"id"=>"lu_DfA927YqdOUyQyiwIwA", "currencyCode"=>840, "cashbackType"=>"UAH", "balance"=>0.0, "creditLimit"=>0, "maskedPan"=>["537541*0987"], "type"=>"BLACK", "iban"=>"UA983220010000026204304774520"}, 
+				{"id"=>"Wru4sMWBrWfsCGpwg_2OJg", "currencyCode"=>978, "cashbackType"=>"UAH", "balance"=>12.0, "creditLimit"=>0, "maskedPan"=>["537541*4567"], "type"=>"BLACK", "iban"=>"UA693220010000026203301609457"}, 
+				{"id"=>"vwM0597-8y5pyZX-RjmpZQ", "currencyCode"=>980, "cashbackType"=>"UAH", "balance"=>15.88, "creditLimit"=>0, "maskedPan"=>["537541*9875"], "type"=>"BLACK", "iban"=>"UA173220010000026206300063546"}, 
+				{"id"=>"RXgPPTrGMLQu_iXuGRXJbg", "currencyCode"=>980, "cashbackType"=>"", "balance"=>120.4, "creditLimit"=>0, "maskedPan"=>["FOP"], "type"=>"FOP", "iban"=>"UA173220010000026206300063546"}
+			]
+		},
+		'statements'	=> [
+			{"id"=>"fQ35XN5yrDI0wFys", "time"=>1612212722, "description"=>"Patreon", "mcc"=>5815, "amount"=>-14080, "operationAmount"=>-500, "currencyCode"=>840, "commissionRate"=>0, "cashbackAmount"=>0, "balance"=>1409232, "hold"=>false, "receiptId"=>"K737-HMXC-H45X-XA6K"}, 
+			{"id"=>"43zcG2xWtQ-OE3Or", "time"=>1612188144, "description"=>"Від: Антон К.", "mcc"=>4829, "amount"=>12400, "operationAmount"=>12400, "currencyCode"=>980, "commissionRate"=>0, "cashbackAmount"=>0, "balance"=>1423312, "hold"=>true}, 
+			{"id"=>"Gzl-xSPVTvsj-Lf5", "time"=>1612187087, "description"=>"Велика Кишеня", "mcc"=>5411, "amount"=>-12400, "operationAmount"=>-12400, "currencyCode"=>980, "commissionRate"=>0, "cashbackAmount"=>0, "balance"=>1410912, "hold"=>false, "receiptId"=>"HE3P-T762-EE2K-92EB"}, 
+			{"id"=>"ZEcXBmHXn6GzoqPN", "time"=>1612143372, "description"=>"Відсотки за сiчень", "mcc"=>4829, "amount"=>5010, "operationAmount"=>5010, "currencyCode"=>980, "commissionRate"=>0, "cashbackAmount"=>0, "balance"=>1423312, "hold"=>true}
+		],	
 	}
 
 	def MonobankConnector.get_client_info(env)
-		if env == 'local'
-			return MOCK_DATA['client-info']
+		if env == 'local' then
+			client_info = Marshal.load(Marshal.dump(MonobankConnector::MOCK_DATA['client-info']))
 		else
 			url = URI.join(MonobankConnector::API_URL, MonobankConnector::CLIENT_INFO_PATH)
 			https = Net::HTTP.new(url.host, url.port)
@@ -28,27 +44,28 @@ module MonobankConnector
 			request["X-Token"] = MonobankConnector::TOKEN
 			response = https.request(request)
 			if response.code == '200'
-				json = JSON.parse(response.read_body)
-				json['accounts'].each do |account|
-					if account['maskedPan'].empty?
-						account['maskedPan'] = []
-						account['maskedPan'].push(account['type'].upcase)
-					end
-					account['maskedPan'] = account['maskedPan'].first.gsub('******', '*')
-					account['balance'] = account['balance'].to_f/100
-					account['type'] = account['type'].upcase
-				end
-				return json
+				client_info = JSON.parse(response.read_body)
 			else 
 				error = JSON.parse(response.read_body)
 				raise StandardError.new("Respose from API: #{response.code} - #{error}")
 			end
 		end
+		client_info['accounts'].each do |account|   
+			if account['maskedPan'].empty?
+				account['maskedPan'] = account['type'].upcase
+			else
+				account['maskedPan'] = account['maskedPan'].first
+			end
+			account['maskedPan'] = account['maskedPan'].gsub('******', '*')
+			account['balance'] = account['balance'].to_f/100
+			account['type'] = account['type'].upcase
+		end
+		return client_info
 	end
 
 	def MonobankConnector.get_statements(env, account, date_start = (Time.now.to_i - 30*24*60*60), date_end = Time.now.to_i)
 		if env == 'local'
-			return MOCK_DATA['statements']
+			json = MOCK_DATA['statements']
 		else
 			url = URI(MonobankConnector::API_URL + MonobankConnector::STATEMENTS_PATH + "/#{account}/#{date_start}/#{date_end}")
 			https = Net::HTTP.new(url.host, url.port)
@@ -57,11 +74,12 @@ module MonobankConnector
 			request["X-Token"] = MonobankConnector::TOKEN
 			response = https.request(request)
 			if response.code == '200'
-				return JSON.parse(response.read_body)
+				json = JSON.parse(response.read_body)
 			else 
 				error = JSON.parse(response.read_body)
 				raise StandardError.new("Respose from API: #{response.code} - #{error}")
 			end
 		end
+		return json
 	end
 end

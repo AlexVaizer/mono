@@ -52,7 +52,7 @@ ServerSettings.save_pid
 				@errors = ServerSettings.return_errors($!,$@,ServerSettings::DEBUG_MESSAGES)
 				puts @errors.to_s
 				status 500
-				erb :error
+				erb :index
 			end
 		end
 	end

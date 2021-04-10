@@ -23,30 +23,32 @@
 			</a>
 			<%end%>
 		</div>
-<!-- ERRORS  -->
-		<% if @errors then %>
-			<div class='w3-container w3-margin'>
-				<h1 class="w3-center">Error occured</h1>
-				<span class="w3-center"><%=@errors%></span>
-			</div>
-		<% end %>
 
 <!-- STATEMENTS  -->
-		<% if @statements && @account_info then %>
-			<%= erb :single_card %>
-			<div class='w3-container w3-margin'>
-				<h1>Transactions History:</h1>
-				<%
-				@table_content = {}
-				@table_content['content'] = @statements.map { |stat| [ Time.at(stat['time']).strftime("%d.%m.%Y"), stat['amount'].to_f/100, stat['description'], stat['balance'].to_f/100] }
-				@table_content['headers'] = ['Time', 'Amount', 'Description', 'Balance']
-				@table_content['width'] = [20,20,40,20]
-				%>
-				<%= erb :table %>
-			</div>
-		<% else %>
+		<% begin %>
+			<% if @statements && @account_info  then %>
+				<%= erb :single_card %>
+				<div class='w3-container w3-margin'>
+					<h1>Transactions History:</h1>
+					<%
+					@table_content = {}
+					@table_content['content'] = @statements.map { |stat| [ Time.at(stat['time']).strftime("%d.%m.%Y"), stat['amount'].to_f/100, stat['description'], stat['balance'].to_f/100] }
+					@table_content['headers'] = ['Time', 'Amount', 'Description', 'Balance']
+					@table_content['width'] = [20,20,40,20]
+					%>
+					<%= erb :table %>
+				</div>
+			<% else %>
 <!-- ACCOUNTS  -->
-			<%= erb :accounts%>
+				<%= erb :accounts%>
+			<% end %>
+		<% rescue %>
+<!-- ERRORS  -->
+			<% @errors = @errors || ServerSettings.return_errors($!,$@,ServerSettings::DEBUG_MESSAGES) %>
+				<div class='w3-container w3-margin'>
+					<h1 class="w3-center">Error occured</h1>
+					<span class="w3-center"><%=@errors%></span>
+				</div>
 		<% end %>
 <!-- FOOTER  -->
 	</body>

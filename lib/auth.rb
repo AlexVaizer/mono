@@ -1,5 +1,5 @@
 authorize do |username, password|
-	user = ENV['MONO_BASIC_USER'] || "vaizer"
-	pass = ENV['MONO_BASIC_PASS'] || "BlahBlahPass"
+	user = ServerSettings::BASIC_AUTH_USER 
+	pass = ServerSettings::BASIC_AUTH_PASS
 	username == user && password == pass
 end

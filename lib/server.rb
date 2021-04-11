@@ -12,6 +12,8 @@ module ServerSettings
 	SERVICE_DESTINATION_PATH = '/etc/systemd/system/monobank.service'
 	CURRENT_FOLDER = `pwd`.chomp
 	DEBUG_MESSAGES = ENV['MONO_DEBUG_MODE'] || false
+	BASIC_AUTH_USER = ENV['MONO_BASIC_AUTH_USER']
+	BASIC_AUTH_PASS = ENV['MONO_BASIC_AUTH_PASS']
 
 	def ServerSettings.validate_env(env)
 		if not ALLOWED_ENVS.include?(env) then 

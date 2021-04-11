@@ -24,9 +24,20 @@ puts "----------------------------------------------"
 puts "Please enter Monobank Auth Token and hit Enter"
 mono_token = gets.chomp
 puts "Token chosen: #{mono_token}"
+puts "----------------------------------------------"
 
+# GET BASIC AUTH SETTINGS
+puts "Please enter Username for Basic Auth"
+mono_user = gets.chomp
+puts "Basic Auth Username chosen: #{mono_user}"
+puts "----------------------------------------------"
 
-env_values = "MONO_SERV_IP='#{ip}' MONO_SERV_PORT='#{port}' MONO_TOKEN='#{mono_token}'"
+puts "Please enter Password for Basic Auth"
+mono_pass = gets.chomp
+puts "Basic Auth Password chosen: #{mono_pass}"
+puts "----------------------------------------------"
+
+env_values = "MONO_SERV_IP='#{ip}' MONO_SERV_PORT='#{port}' MONO_TOKEN='#{mono_token}' MONO_BASIC_AUTH_USER='#{mono_user}' MONO_BASIC_AUTH_PASS='#{mono_pass}'"
 puts "(WORKS ONLY IN UBUNTU) Do you want to set up service [y/n]"
 service_setup = gets.chomp
 until ['y','n'].include?(service_setup)
@@ -37,5 +48,5 @@ if service_setup == 'y' then
 	ServerSettings.setup_service(env_values)
 else
 	puts "----------------------------------------------"
-	puts "Command to run server manually:\n#{env_values} #{ServerSettings::CURRENT_FOLDER}/monobank.rb -e local"
+	puts "Command to run server manually:\n#{env_values} ruby #{ServerSettings::CURRENT_FOLDER}/monobank.rb -e local"
 end

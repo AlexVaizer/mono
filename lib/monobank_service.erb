@@ -6,7 +6,7 @@ StartLimitIntervalSec=0
 [Service]
 Type=simple
 User=root
-Environment=<%= "'#{@env_values}'" %>
+Environment=<%= "#{@env_values}" %>
 WorkingDirectory=<%=ServerSettings::CURRENT_FOLDER%>
 ExecStart=<%=File.join(ServerSettings::CURRENT_FOLDER, 'monobank.rb -e prod')%>
 ExecStop=<%=File.join(ServerSettings::CURRENT_FOLDER,'stop.rb')%>

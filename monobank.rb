@@ -23,6 +23,7 @@ OptionParser.new do |opts|
 end.parse!
 
 ServerSettings::ENV = ServerSettings.validate_env(@env)
+ServerSettings.enable_ssl(ServerSettings::ENV)
 ServerSettings.save_pid
 
 

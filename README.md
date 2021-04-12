@@ -1,8 +1,16 @@
+# Description
+Provides a frontend for Monobank API (https://api.monobank.ua/docs/)
+## Features
+ - shows list of accounts
+ - shows list of transaction by Account ID
+
+
 # Installation
  - Install ruby: `sudo apt install ruby-full`
  - Clone the repo: `git clone https://github.com/AlexVaizer/mono.git`
  - Install dependencies: `cd ./mono/ && bundle install`
- - Run service setup: `cd /path/to/files && sudo ./install.rb`, follow the instructions (USER-INPUT needed). This will create a service file in `/etc/systemd/system/monobank.service`
+ - Get a Monobank API Token: https://api.monobank.ua/
+ - Run service setup: `sudo ./install.rb`, follow the instructions (USER-INPUT needed). This will create a service file in `/etc/systemd/system/monobank.service`
  - Create a `ssl` folder inside project, copy SSL certificate/key there. They should be named `cert.crt` (certificate) and `pkey.pem` (private key)
 
 
@@ -30,6 +38,6 @@ Run `./install.rb` and fill all needed info, reply 'n' to question "Do you want 
 # Logging
 If Sinatra runs as a service, logs are saved into `/var/log/syslog`
 
-To see only sinatra logs, use `tail -f /var/log/syslog | grep sinatra`
+To see only monobank logs, use `tail -f /var/log/syslog | grep monobank`
 
 If you are running in debug mode, logs are outputted to the console.

@@ -1,12 +1,16 @@
 # Description
 Provides a frontend for Monobank API (https://api.monobank.ua/docs/)
+
 Works on Sinatra DSL (http://sinatrarb.com/)
+
+Deployment and work is tested on Ubuntu 20.04.2 LTS hosted on AWS virtual machine with Ruby v2.7.0. You can see other dependencies here: https://github.com/AlexVaizer/mono/blob/master/Gemfile
 ## Features
  - shows list of accounts
  - shows list of transaction by Account ID
 ## Security
  - Stage and Prod ENVs are working through HTTPS protocol
- - Monobank Token and Basic Auth settings are taken from ENV variables
+ - Monobank Token and is taken from ENV variables and is never sent anywhere except Monobank servers
+ - Basic Auth (User and Password are taken from ENV variables)
 
 
 # Installation (For Ubuntu)

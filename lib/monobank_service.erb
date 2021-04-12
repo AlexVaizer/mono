@@ -6,8 +6,13 @@ StartLimitIntervalSec=0
 [Service]
 Type=simple
 User=root
+Environment=<%= MONO_SERV_IP='#{@ip}' %>
+Environment=<%= MONO_SERV_PORT='#{@port}' %>
+Environment=<%= MONO_TOKEN='#{@mono_token}' %>
+Environment=<%= MONO_BASIC_AUTH_USER='#{@mono_user}' %>
+Environment=<%= MONO_BASIC_AUTH_PASS='#{@mono_pass}' %>
 WorkingDirectory=<%=ServerSettings::CURRENT_FOLDER%>
-ExecStart=<%="#{@env_values} #{File.join(ServerSettings::CURRENT_FOLDER, 'monobank.rb -e prod')}"%>
+ExecStart=<%=File.join(ServerSettings::CURRENT_FOLDER, 'monobank.rb -e prod')%>
 ExecStop=<%=File.join(ServerSettings::CURRENT_FOLDER,'stop.rb')%>
 StandardOutput=file:<%=File.join(ServerSettings::CURRENT_FOLDER,'logs/info.log')%>
 StandardError=file:<%=File.join(ServerSettings::CURRENT_FOLDER,'logs/error.log')%>

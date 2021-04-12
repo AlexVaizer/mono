@@ -10,7 +10,7 @@ puts "Please enter [1-#{ips.count}] number and hit Enter"
 i = gets
 i = i.to_i
 ip = ips[i-1]
-puts "IP address chosen: #{ip}"
+puts "IP address chosen: #{@ip}"
 puts "----------------------------------------------"
 
 # GET PORT

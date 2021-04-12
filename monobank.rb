@@ -23,12 +23,14 @@ OptionParser.new do |opts|
 end.parse!
 
 ServerSettings::ENV = ServerSettings.validate_env(@env)
-ServerSettings.enable_ssl(ServerSettings::ENV)
 ServerSettings.save_pid
 
 
 	set :port, ServerSettings::PORT
 	set :bind, ServerSettings::IP
+	set :ssl_certificate, File.expand_path(ServerSettings::SSL_CERT_PATH)
+	set :ssl_key, File.expand_path(ServerSettings::SSL_KEY_PATH)
+	ServerSettings.enable_ssl(ServerSettings::ENV)
 	set :views, Proc.new { File.join(root, "views") }
 	puts "Server started for ENV:#{ServerSettings::ENV} at #{ServerSettings::IP}:#{ServerSettings::PORT}" 
 

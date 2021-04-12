@@ -1,0 +1,24 @@
+[Unit]
+Description=Sinatra Monobank service
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+User=root
+Environment=<%= "'MONO_SERV_IP=#{@env_values['ip']}'" %>
+Environment=<%= "'MONO_SERV_PORT=#{@env_values['port']}'" %>
+Environment=<%= "'MONO_TOKEN=#{@env_values['mono_token']}'" %>
+Environment=<%= "'MONO_BASIC_AUTH_USER=#{@env_values['mono_user']}'" %>
+Environment=<%= "'MONO_BASIC_AUTH_PASS=#{@env_values['mono_pass']}'" %>
+WorkingDirectory=<%=ServerSettings::CURRENT_FOLDER%>
+ExecStart=<%=File.join(ServerSettings::CURRENT_FOLDER, 'monobank.rb -e prod')%>
+ExecStop=<%=File.join(ServerSettings::CURRENT_FOLDER,'stop.rb')%>
+StandardOutput=file:<%=File.join(ServerSettings::CURRENT_FOLDER,'logs/info.log')%>
+StandardError=file:<%=File.join(ServerSettings::CURRENT_FOLDER,'logs/error.log')%>
+
+SyslogIdentifier=monobank.service
+
+
+[Install]
+WantedBy=default.target

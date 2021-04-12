@@ -1,0 +1,5 @@
+*.gem
+./ssl/*
+./logs/*
+*.DS_Store
+*.pid

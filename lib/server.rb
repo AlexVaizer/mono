@@ -2,7 +2,7 @@
 module ServerSettings
 	require 'erb'
 	ALLOWED_ENVS = ['local', 'stage', 'prod']
-	SSL_ENABLE_FOR = ['prod']
+	SSL_ENABLE_FOR = ['prod','stage']
 	SSL_CERT_PATH = './ssl/cert.crt'
 	SSL_KEY_PATH = './ssl/pkey.pem'
 	SSL_SETUP_PATH = './lib/ssl.rb'
@@ -25,9 +25,7 @@ module ServerSettings
 
 	def ServerSettings.enable_ssl(env)
 		if SSL_ENABLE_FOR.include?(env) then 
-			require File.expand_path(SSL_SETUP_PATH)
-			set :ssl_certificate, File.expand_path(SSL_CERT_PATH)
-			set :ssl_key, File.expand_path(SSL_KEY_PATH)
+			require File.expand_path(ServerSettings::SSL_SETUP_PATH)
 		end
 	end
 

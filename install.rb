@@ -1,60 +1,52 @@
 #!/usr/bin/ruby
+require './lib/server.rb'
 
-	a = `ifconfig | grep 'inet ' | awk '{print $2}'`
-	a = a.split
-	a.each_with_index do |v,i|
-		puts "#{i+1}. [#{v}]"
-	end
-	puts "Please enter [1-#{a.count}] number and hit Enter"
-	i = gets
-	i = i.to_i
-	ip = a[i-1]
-	out_file = File.new("./ip.txt", "w")
-	out_file.puts(ip)
-	out_file.close
-	puts "#{ip} was saved to ./ip.txt"
+#GET IP ADDRESS
+ips = ServerSettings.list_ifconfig_ips
+ips.each_with_index do |v,i|
+	puts "#{i+1}. [#{v}]"
+end
+puts "Please enter [1-#{ips.count}] number and hit Enter"
+i = gets
+i = i.to_i
+ip = ips[i-1]
+puts "IP address chosen: #{ip}"
+puts "----------------------------------------------"
 
-	puts "(WORKS ONLY IN UBUNTU) Do you want to set up service [y/n]"
-	service_setup = gets.chomp
-	until ['y','n'].include?(service_setup)
-		puts "Wrong input, type in 'y' or 'n'"
-		service_setup = gets
-	end
-	if service_setup == 'y' then
-		puts "Setting up service for Sinatra"
-		puts "Saving file to /etc/systemd/system/monobank.service"
-		current_folder = `pwd`.chomp
-		destination = '/etc/systemd/system/monobank.service'
-		service_settings = "
-							[Unit]
-		 					Description=Sinatra Monobank service
-		 					After=network.target
-		 					StartLimitIntervalSec=0
+# GET PORT
+puts "Please enter PORT number and hit Enter"
+port_s = gets
+port = port_s.to_i
+puts "Port chosen: #{port}"
+puts "----------------------------------------------"
 
-		 					[Service]
-		 					Type=simple
-		 					User=root
-		 					WorkingDirectory=#{current_folder}
-		 					ExecStart=#{File.join(current_folder, 'monobank.rb -e prod')}
-		 					ExecStop=#{File.join(current_folder,'stop.rb')}
-		 					StandardOutput=file:/home/ubuntu/mono/logs/info.log
-							StandardError=file:/home/ubuntu/mono/logs/error.log
-							SyslogIdentifier=monobank.service
+# GET MONOBANK TOKEN
+puts "Please enter Monobank Auth Token and hit Enter"
+mono_token = gets.chomp
+puts "Token chosen: #{mono_token}"
+puts "----------------------------------------------"
 
-		 					[Install]
-		 					WantedBy=default.target
-		 					"
-		
-		
+# GET BASIC AUTH SETTINGS
+puts "Please enter Username for Basic Auth"
+mono_user = gets.chomp
+puts "Basic Auth Username chosen: #{mono_user}"
+puts "----------------------------------------------"
 
-		
-		 out_file = File.new(destination, "w")
-		 out_file.puts(service_settings)
-		 out_file.close
-		 puts 'File saved.'
-		 puts 'If you want to run sinatra on startup, please run "sudo systemctl enable monobank"'
-	else
-		puts "No service setup needed. Closing script"
-	end
+puts "Please enter Password for Basic Auth"
+mono_pass = gets.chomp
+puts "Basic Auth Password chosen: #{mono_pass}"
+puts "----------------------------------------------"
 
-
+env_values = "MONO_SERV_IP='#{ip}' MONO_SERV_PORT='#{port}' MONO_TOKEN='#{mono_token}' MONO_BASIC_AUTH_USER='#{mono_user}' MONO_BASIC_AUTH_PASS='#{mono_pass}'"
+puts "(WORKS ONLY IN UBUNTU) Do you want to set up service [y/n]"
+service_setup = gets.chomp
+until ['y','n'].include?(service_setup)
+	puts "Wrong input, type in 'y' or 'n'"
+	service_setup = gets
+end
+if service_setup == 'y' then
+	ServerSettings.setup_service(env_values)
+else
+	puts "----------------------------------------------"
+	puts "Command to run server manually:\n#{env_values} ruby #{ServerSettings::CURRENT_FOLDER}/monobank.rb -e local"
+end

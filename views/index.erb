@@ -1,0 +1,56 @@
+<html>
+	<title><%= @title %></title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+	<link rel="shortcut icon" href="./public/favicon.png">
+	<body>
+<!-- HEADER -->
+		<div class='w3-blue-grey w3-bar w3-responsive'>
+			<%if @list then%>
+			<%@list['accounts'].each do |account|%>
+			<a href="./?id=<%=account['id']%>">
+				<div class='w3-bar-item w3-hover-<%= account["type"] %> w3-round-large' style="border-right: 1px solid black;font-size: 12px">
+					<%= account['maskedPan'] %> <br>
+					<%= account['balance'] %> <%= MonobankConnector::CURRENCIES[account['currencyCode'].to_s] %>
+				</div>
+			</a>
+			<% end %>
+	<!-- HEADER WHEN ERROR -->
+			<%else%>
+			<a href="#" onclick="window.location.reload(true);">
+				<div class='w3-bar-item w3-hover-black'>
+					Reload Page
+				</div>
+			</a>
+			<%end%>
+		</div>
+
+<!-- STATEMENTS  -->
+		<% begin %>
+			<% if @statements && @account_info  then %>
+				<%= erb :single_card %>
+				<div class='w3-container w3-margin'>
+					<h1>Transactions History:</h1>
+					<%
+					@table_content = {}
+					@table_content['content'] = @statements.map { |stat| [ Time.at(stat['time']).strftime("%d.%m.%Y"), stat['amount'].to_f/100, stat['description'], stat['balance'].to_f/100] }
+					@table_content['headers'] = ['Time', 'Amount', 'Description', 'Balance']
+					@table_content['width'] = [20,20,40,20]
+					%>
+					<%= erb :table %>
+				</div>
+			<% else %>
+<!-- ACCOUNTS  -->
+				<%= erb :accounts%>
+			<% end %>
+		<% rescue %>
+<!-- ERRORS  -->
+			<% @errors = @errors || ServerSettings.return_errors($!,$@,ServerSettings::DEBUG_MESSAGES) %>
+				<div class='w3-container w3-margin'>
+					<h1 class="w3-center">Error occured</h1>
+					<span class="w3-center"><%=@errors%></span>
+				</div>
+		<% end %>
+<!-- FOOTER  -->
+	</body>
+</html>

@@ -1,12 +1,16 @@
 # Description
 Provides a frontend for Monobank API (https://api.monobank.ua/docs/)
+Works on Sinatra DSL (http://sinatrarb.com/)
 ## Features
  - shows list of accounts
  - shows list of transaction by Account ID
+## Security
+ - Stage and Prod ENVs are working through HTTPS protocol
+ - Monobank Token and Basic Auth settings are taken from ENV variables
 
 
-# Installation
- - Install ruby: `sudo apt install ruby-full`
+# Installation (For Ubuntu)
+ - Install ruby v2.7.0: `sudo apt install ruby-full`
  - Clone the repo: `git clone https://github.com/AlexVaizer/mono.git`
  - Install dependencies: `cd ./mono/ && bundle install`
  - Get a Monobank API Token: https://api.monobank.ua/

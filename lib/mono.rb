@@ -60,6 +60,7 @@ module MonobankConnector
 			account['balance'] = account['balance'].to_f/100
 			account['type'] = account['type'].upcase
 		end
+		client_info['accounts'].sort_by! { |k| k["maskedPan"]}
 		return client_info
 	end
 

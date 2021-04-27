@@ -37,6 +37,7 @@ module MonobankConnector
 		https.use_ssl = true
 		request = Net::HTTP::Get.new(url)
 		request["X-Token"] = MonobankConnector::TOKEN
+		puts MonobankConnector::TOKEN
 		response = https.request(request)
 		if response.code == '200'
 				client_info = JSON.parse(response.read_body)
@@ -54,7 +55,8 @@ module MonobankConnector
 			url = URI.join(MonobankConnector::API_URL, MonobankConnector::CLIENT_INFO_PATH)
 			client_info = MonobankConnector.send_request(url)
 		end
-		client_info['accounts'].each do |account|   
+		client_info['accounts'].each do |account|
+			account['currencyCode'] = MonobankConnector::CURRENCIES[account['currencyCode'].to_s]
 			if account['maskedPan'].empty?
 				account['maskedPan'] = account['type'].upcase
 			else

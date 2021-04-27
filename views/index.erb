@@ -11,7 +11,7 @@
 			<a href="./?id=<%=account['id']%>">
 				<div class='w3-bar-item w3-hover-<%= account["type"] %> w3-round-large' style="border-right: 1px solid black;font-size: 12px">
 					<%= account['maskedPan'] %> <br>
-					<%= account['balance'] %> <%= MonobankConnector::CURRENCIES[account['currencyCode'].to_s] %>
+					<%= account['balance'] %> <%= account['currencyCode'] %>
 				</div>
 			</a>
 			<% end %>

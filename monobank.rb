@@ -10,7 +10,7 @@ require 'sinatra/cors'
 require "sinatra/basic_auth"
 require 'optparse'
 require File.expand_path('./lib/mono.rb')
-require File.expand_path('./lib/server.rb')
+require File.expand_path('./lib/server_settings.rb')
 require File.expand_path('./lib/auth.rb')
 #########################################################
 

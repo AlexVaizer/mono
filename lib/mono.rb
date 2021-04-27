@@ -32,23 +32,27 @@ module MonobankConnector
 			{"id"=>"ZEcXBmHXn6GzoqPN", "time"=>1612143372, "description"=>"Відсотки за сiчень", "mcc"=>4829, "amount"=>5010, "operationAmount"=>5010, "currencyCode"=>980, "commissionRate"=>0, "cashbackAmount"=>0, "balance"=>1423312, "hold"=>true}
 		],	
 	}
+	def MonobankConnector.send_request(url)
+		https = Net::HTTP.new(url.host, url.port)
+		https.use_ssl = true
+		request = Net::HTTP::Get.new(url)
+		request["X-Token"] = MonobankConnector::TOKEN
+		response = https.request(request)
+		if response.code == '200'
+				client_info = JSON.parse(response.read_body)
+			else 
+				error = JSON.parse(response.read_body)
+				raise StandardError.new("Respose from API: #{response.code} - #{error}")
+			end
+		return client_info
+	end
 
 	def MonobankConnector.get_client_info(env)
 		if env == 'local' then
 			client_info = Marshal.load(Marshal.dump(MonobankConnector::MOCK_DATA['client-info']))
 		else
 			url = URI.join(MonobankConnector::API_URL, MonobankConnector::CLIENT_INFO_PATH)
-			https = Net::HTTP.new(url.host, url.port)
-			https.use_ssl = true
-			request = Net::HTTP::Get.new(url)
-			request["X-Token"] = MonobankConnector::TOKEN
-			response = https.request(request)
-			if response.code == '200'
-				client_info = JSON.parse(response.read_body)
-			else 
-				error = JSON.parse(response.read_body)
-				raise StandardError.new("Respose from API: #{response.code} - #{error}")
-			end
+			client_info = MonobankConnector.send_request(url)
 		end
 		client_info['accounts'].each do |account|   
 			if account['maskedPan'].empty?
@@ -69,18 +73,8 @@ module MonobankConnector
 			json = MOCK_DATA['statements']
 		else
 			url = URI(MonobankConnector::API_URL + MonobankConnector::STATEMENTS_PATH + "/#{account}/#{date_start}/#{date_end}")
-			https = Net::HTTP.new(url.host, url.port)
-			https.use_ssl = true
-			request = Net::HTTP::Get.new(url)
-			request["X-Token"] = MonobankConnector::TOKEN
-			response = https.request(request)
-			if response.code == '200'
-				json = JSON.parse(response.read_body)
-			else 
-				error = JSON.parse(response.read_body)
-				raise StandardError.new("Respose from API: #{response.code} - #{error}")
-			end
+			statements = MonobankConnector.send_request(url)
 		end
-		return json
+		return statements
 	end
 end

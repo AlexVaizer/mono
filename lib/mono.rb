@@ -72,11 +72,12 @@ module MonobankConnector
 
 	def MonobankConnector.get_statements(env, account, date_start = (Time.now.to_i - 30*24*60*60), date_end = Time.now.to_i)
 		if env == 'local'
-			json = MOCK_DATA['statements']
+			statements = MOCK_DATA['statements']
 		else
 			url = URI(MonobankConnector::API_URL + MonobankConnector::STATEMENTS_PATH + "/#{account}/#{date_start}/#{date_end}")
 			statements = MonobankConnector.send_request(url)
 		end
+		statements = statements.map { |stat| [ Time.at(stat['time']).strftime("%d.%m.%Y"), stat['amount'].to_f/100, stat['description'], stat['balance'].to_f/100] }
 		return statements
 	end
 end

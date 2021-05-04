@@ -41,15 +41,15 @@ ServerSettings.save_pid
 			date_start = params['start'] || Time.now.to_i - 30*24*60*60
 			date_end = params['end'] || Time.now.to_i
 			begin
-				mono = MonobankConnector.new(ServerSettings::ENV)
-				mono.get_client_info
-				@list = mono.accounts 
+				mono = MonobankConnector.new
+				DataFactory.get_client_info(mono,ServerSettings::ENV)
+				@list = mono.accounts
 				@title = "Accounts List"
 				if params['id'] then 
 					account_id = params['id']
 					@account_info = mono.accounts.select { |x| x[:id] == account_id }
 					@account_info = @account_info.first
-					mono.get_statements(account_id)
+					DataFactory.get_statements(mono,account_id,ServerSettings::ENV)
 					@statements = mono.statements
 					@title = @account_info['maskedPan'] 
 				end

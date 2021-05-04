@@ -50,8 +50,8 @@ module DataFactory
 		return client_info
 	end
 
-	def DataFactory.get_statements (obj, account, date_start = Time.now.to_i - 30*24*60*60, date_end = Time.now.to_i)
-		if MOCK_DATA_FOR.include?(obj.env)
+	def DataFactory.get_statements (obj, account, env = DEFAULT_ENV, date_start = Time.now.to_i - 30*24*60*60, date_end = Time.now.to_i)
+		if MOCK_DATA_FOR.include?(env)
 			statements = client_info = Marshal.load(Marshal.dump(DataFactory::MOCK_DATA['statements']))
 		else
 			url = URI(DataFactory::API_URL + DataFactory::STATEMENTS_PATH + "/#{account}/#{date_start}/#{date_end}")
@@ -72,8 +72,7 @@ module DataFactory
 		puts obj.statements = parsed_statements
 	end
 
-	def DataFactory.get_client_info(obj)
-
+	def DataFactory.get_client_info(obj,env = DEFAULT_ENV)
 		if MOCK_DATA_FOR.include?(obj.env) then
 			client_info = Marshal.load(Marshal.dump(DataFactory::MOCK_DATA['client-info']))
 		else

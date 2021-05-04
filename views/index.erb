@@ -4,22 +4,16 @@
 	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 	<link rel="shortcut icon" href="./public/favicon.png">
 	<body>
-<!-- HEADER -->
 		<%= erb :header %>
-
-<!-- STATEMENTS  -->
 		<% begin %>
 			<% if @statements && @account_info then %>			
 				<%= erb :single_card %>
 				<%= erb :table%>
 			<% else %>
-<!-- ACCOUNTS  -->
 				<%= erb :accounts%>
 			<% end %>
 		<% rescue %>
-<!-- ERRORS  -->
 			<%= erb :errors%>
 		<%end%>
-<!-- FOOTER  -->
 	</body>
 </html>

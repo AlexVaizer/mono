@@ -51,7 +51,7 @@ ServerSettings.save_pid
 					@account_info = @account_info.first
 					DataFactory.get_statements(mono,account_id,ServerSettings::ENV)
 					@statements = mono.statements
-					@title = @account_info['maskedPan'] 
+					@title = @account_info[:maskedPan] 
 				end
 				erb :index
 			rescue 

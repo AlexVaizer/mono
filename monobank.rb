@@ -46,10 +46,10 @@ ServerSettings.save_pid
 				@list = mono.accounts
 				@title = "Accounts List"
 				if params['id'] then 
-					account_id = params['id']
-					@account_info = mono.accounts.select { |x| x[:id] == account_id }
+					mono.selected_account = params['id']
+					@account_info = mono.accounts.select { |x| x[:id] == mono.selected_account }
 					@account_info = @account_info.first
-					DataFactory.get_statements(mono,account_id,ServerSettings::ENV)
+					DataFactory.get_statements(mono,ServerSettings::ENV)
 					@statements = mono.statements
 					@title = @account_info[:maskedPan] 
 				end

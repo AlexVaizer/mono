@@ -2,7 +2,7 @@
 module ServerSettings
 	require 'erb'
 	ALLOWED_ENVS = ['local', 'stage', 'prod']
-	SSL_ENABLE_FOR = ['prod','stage']
+	SSL_ENABLE_FOR = ['prod']
 	SSL_CERT_PATH = './ssl/cert.crt'
 	SSL_KEY_PATH = './ssl/pkey.pem'
 	SSL_SETUP_PATH = './lib/ssl.rb'

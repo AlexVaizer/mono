@@ -1,8 +1,6 @@
 module DataFactory
-	
 	MOCK_DATA_FOR = ['local']
 	DEFAULT_ENV = 'local'
-
 	API_URL = 'https://api.monobank.ua'
 	TOKEN = ENV['MONO_TOKEN']
 	CLIENT_INFO_PATH = '/personal/client-info'
@@ -33,6 +31,7 @@ module DataFactory
 			{"id"=>"ZEcXBmHXn6GzoqPN", "time"=>1612143372, "description"=>"Відсотки за сiчень", "mcc"=>4829, "amount"=>5010, "operationAmount"=>5010, "currencyCode"=>980, "commissionRate"=>0, "cashbackAmount"=>0, "balance"=>1423312, "hold"=>true}
 		],	
 	}
+
 	def DataFactory.send_request(url)
 		https = Net::HTTP.new(url.host, url.port)
 		https.use_ssl = true
@@ -50,16 +49,15 @@ module DataFactory
 		return client_info
 	end
 
-	def DataFactory.get_statements (obj, account, env = DEFAULT_ENV, date_start = Time.now.to_i - 30*24*60*60, date_end = Time.now.to_i)
+	def DataFactory.get_statements (obj, env = DEFAULT_ENV, date_start = Time.now.to_i - 30*24*60*60, date_end = Time.now.to_i)
 		if MOCK_DATA_FOR.include?(env)
 			statements = client_info = Marshal.load(Marshal.dump(DataFactory::MOCK_DATA['statements']))
 		else
-			url = URI(DataFactory::API_URL + DataFactory::STATEMENTS_PATH + "/#{account}/#{date_start}/#{date_end}")
+			url = URI(DataFactory::API_URL + DataFactory::STATEMENTS_PATH + "/#{obj.selected_account}/#{date_start}/#{date_end}")
 			statements = DataFactory.send_request(url)
 		end
 		parsed_statements = []
 		statements.each do |stat| 
-			puts stat
 			stat = stat.transform_keys(&:to_sym)
 			a = {
 				time: Time.at(stat[:time]).strftime("%d.%m.%Y"), 
@@ -69,11 +67,12 @@ module DataFactory
 			}
 			parsed_statements.push(a)
 		end
-		puts obj.statements = parsed_statements
+		obj.statements = parsed_statements
+		return true
 	end
 
 	def DataFactory.get_client_info(obj,env = DEFAULT_ENV)
-		if MOCK_DATA_FOR.include?(obj.env) then
+		if MOCK_DATA_FOR.include?(env) then
 			client_info = Marshal.load(Marshal.dump(DataFactory::MOCK_DATA['client-info']))
 		else
 			url = URI.join(DataFactory::API_URL, DataFactory::CLIENT_INFO_PATH)

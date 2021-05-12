@@ -1,4 +1,8 @@
 module DataFactory
+	require 'net/http'
+	require 'uri'
+	require 'json'
+	
 	MOCK_DATA_FOR = ['local']
 	DEFAULT_ENV = 'local'
 	API_URL = 'https://api.monobank.ua'

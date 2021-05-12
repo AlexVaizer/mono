@@ -1,19 +1,18 @@
 <div class='w3-display-container' style='width:100%'>
 	<div class='w3-container w3-margin w3-display-topmiddle' style='max-width: 700px; min-width: 340px'>
 		<ul class="w3-ul w3-card-4">
-			<% @list['accounts'].each do |account| %>
-		    <li class="w3-bar w3-button" onclick='location.replace("./?id=<%=account['id']%>")'>
-		      <img src="./public/<%=MonobankConnector::CURRENCIES[account['currencyCode'].to_s]%>.png" class="w3-bar-item w3-circle w3-hide-small" style="width:81px">
-		      <div class="w3-bar-item">
-		        <span class="w3-large w3-left"><%= a = account['maskedPan'] %></span><br>
-		        <span class='w3-left' style="text-align: left;"><%= account['balance']%> 
-		        	<%=MonobankConnector::CURRENCIES[account['currencyCode'].to_s]%> 
-		        	<b>
-		        	<%=account['type']%>
-		        	</b>
-		        </span>
-		      </div>
-		    </li>
+			<% @list.each do |account| %>
+			    <li class="w3-bar w3-button" onclick='location.replace("./?id=<%=account[:id]%>")'>
+					<img src="./public/<%=account[:currencyCode]%>.png" class="w3-bar-item w3-circle w3-hide-small" style="width:81px">
+					<div class="w3-bar-item">
+					<span class="w3-large w3-left"><%= a = account[:maskedPan] %></span><br>
+					<span class='w3-left' style="text-align: left;">
+						<%= account[:balance]%> 
+			        	<%=account[:currencyCode]%> 
+			        	<b><%=account[:type]%></b>
+			        </span>
+			      </div>
+			    </li>
 		    <% end %>
 		</ul>
 	</div>

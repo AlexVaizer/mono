@@ -1,27 +1,27 @@
 <%
-# @table_content = {
-# 	'headers' => ['header1', 'header2', 'header3'],
-# 	'width' => [20,50,30],
-# 	'content' => [
-# 		['hello', 'cruel', 'world'],
-# 		['my', 'name', 'is Alex'],
-# 		['and', 'i love', 'living'],
-# 	]
-# }
+	@table_content = {}
+	@table_content[:content] = @statements
+	@table_content[:headers] = ['Time', 'Amount', 'Description', 'Balance']
+	@table_content[:width] = [20,20,40,20]
 %>
-<table class='w3-table-all w3-hoverable w3-small w3-card-4'>
-	<tr class="">
-		<% @table_content['headers'].each do |header| %>
-		<th><%= header %></th>
+<div class='w3-container w3-margin'>
+	<h1>Transactions History:</h1>
+	
+	<table class='w3-table-all w3-hoverable w3-small w3-card-4'>
+		<tr class="">
+			<% @table_content[:headers].each do |header| %>
+			<th><%= header %></th>
+			<%end%>
+		</tr>
+		<% @table_content[:content].each do |row| %>
+		<tr>
+			<%i = 0
+			row.each do |key,cell|%>
+				<td  width='<%=@table_content[:width][i]%>%'><%=cell%></td>
+			<% i = i+1
+			end%>
+		</tr>	
 		<%end%>
-	</tr>
-	<% @table_content['content'].each do |row| %>
-	<tr>
-		<%i = 0
-		row.each do |cell|%>
-			<td  width='<%=@table_content['width'][i]%>%'><%=cell%></td>
-		<% i = i+1
-		end%>
-	</tr>	
-	<%end%>
-</table>
+	</table>
+</div>
+

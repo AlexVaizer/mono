@@ -1,5 +1,5 @@
 #!/usr/bin/ruby
-require './lib/server.rb'
+require './lib/server_settings.rb'
 
 #GET IP ADDRESS
 values = {}

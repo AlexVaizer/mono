@@ -2,7 +2,7 @@
 module ServerSettings
 	require 'erb'
 	ALLOWED_ENVS = ['local', 'stage', 'prod']
-	SSL_ENABLE_FOR = ['prod','stage']
+	SSL_ENABLE_FOR = ['prod']
 	SSL_CERT_PATH = './ssl/cert.crt'
 	SSL_KEY_PATH = './ssl/pkey.pem'
 	SSL_SETUP_PATH = './lib/ssl.rb'
@@ -11,7 +11,7 @@ module ServerSettings
 	SERVICE_TEMPLATE_PATH = './lib/monobank_service.erb'
 	SERVICE_DESTINATION_PATH = '/etc/systemd/system/monobank.service'
 	CURRENT_FOLDER = `pwd`.chomp
-	DEBUG_MESSAGES = ENV['MONO_DEBUG_MODE'] || false
+	DEBUG_MESSAGES = ENV['MONO_DEBUG_MODE'] || true
 	BASIC_AUTH_USER = ENV['MONO_BASIC_AUTH_USER']
 	BASIC_AUTH_PASS = ENV['MONO_BASIC_AUTH_PASS']
 

@@ -2,11 +2,11 @@
 	<ul class="w3-ul w3-card-4">
 		<li class="w3-bar" >
 		<span onclick='location.replace("./")' class="w3-bar-item w3-button w3-white w3-xlarge w3-left w3-middle" style="vertical-align: middle;"><</span>
-			<img src="./public/<%=MonobankConnector::CURRENCIES[@account_info['currencyCode'].to_s]%>.png" class="w3-bar-item w3-circle w3-hide-small" style="width:81px">
+			<img src="./public/<%=@account_info[:currencyCode]%>.png" class="w3-bar-item w3-circle w3-hide-small" style="width:81px">
 			<div class="w3-bar-item">
 				
-				<span class="w3-large"><%= @account_info['balance']%> <%=MonobankConnector::CURRENCIES[@account_info['currencyCode'].to_s]%> <b><%=@account_info['type']%></b></span><br>
-				<span><%=@account_info['maskedPan']%></span>
+				<span class="w3-large"><%= @account_info[:balance]%> <%=@account_info[:currencyCode]%> <b><%=@account_info[:type]%></b></span><br>
+				<span><%=@account_info[:maskedPan]%></span>
 			</div>
 		</li>
 	</ul>

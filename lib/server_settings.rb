@@ -1,4 +1,3 @@
-
 module ServerSettings
 	require 'erb'
 	ALLOWED_ENVS = ['local', 'stage', 'prod']

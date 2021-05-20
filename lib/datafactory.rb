@@ -55,7 +55,7 @@ module DataFactory
 
 	def DataFactory.get_statements (obj, env = DEFAULT_ENV, date_start = Time.now.to_i - 30*24*60*60, date_end = Time.now.to_i)
 		if MOCK_DATA_FOR.include?(env)
-			statements = client_info = Marshal.load(Marshal.dump(DataFactory::MOCK_DATA['statements']))
+			statements = Marshal.load(Marshal.dump(DataFactory::MOCK_DATA['statements']))
 		else
 			url = URI(DataFactory::API_URL + DataFactory::STATEMENTS_PATH + "/#{obj.selected_account}/#{date_start}/#{date_end}")
 			statements = DataFactory.send_request(url)

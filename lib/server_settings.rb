@@ -10,7 +10,7 @@ module ServerSettings
 	SERVICE_TEMPLATE_PATH = './lib/monobank_service.erb'
 	SERVICE_DESTINATION_PATH = '/etc/systemd/system/monobank.service'
 	CURRENT_FOLDER = `pwd`.chomp
-	DEBUG_MESSAGES = ENV['MONO_DEBUG_MODE'] || true
+	DEBUG_MESSAGES = ENV['MONO_DEBUG_MODE'] || false
 	BASIC_AUTH_USER = ENV['MONO_BASIC_AUTH_USER']
 	BASIC_AUTH_PASS = ENV['MONO_BASIC_AUTH_PASS']
 

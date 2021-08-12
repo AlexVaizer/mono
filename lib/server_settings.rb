@@ -3,8 +3,8 @@ module ServerSettings
 	ALLOWED_ENVS = ['local', 'stage', 'prod']
 	SSL_ENABLE_FOR = ['prod']
 	SSL_KEYS_FOLDER = ENV['MONO_SSL_FOLDER'] || './ssl'
-	SSL_CERT_FILE = SSL_KEYS_FOLDER + '/cert.pem'
-	SSL_KEY_FILE = SSL_KEYS_FOLDER + '/privkey.pem'
+	SSL_CERT_PATH = SSL_KEYS_FOLDER + '/cert.pem'
+	SSL_KEY_PATH = SSL_KEYS_FOLDER + '/privkey.pem'
 	SSL_SETUP_PATH = './lib/ssl.rb'
 	IP = ENV['MONO_SERV_IP'] || '127.0.0.1'
 	PORT = ENV['MONO_SERV_PORT'].to_i || 4567

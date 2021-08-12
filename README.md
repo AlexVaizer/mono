@@ -18,8 +18,8 @@ Deployment and work is tested on Ubuntu 20.04.2 LTS hosted on AWS virtual machin
  - Clone the repo: `git clone https://github.com/AlexVaizer/mono.git`
  - Install dependencies: `cd ./mono/ && bundle install`
  - Get a Monobank API Token: https://api.monobank.ua/
+ - Create a folder on yur server and copy SSL certificate/key there. They should be named `cert.pem` (certificate) and `privkey.pem` (private key)
  - Run service setup: `sudo ./install.rb`, follow the instructions (USER-INPUT needed). This will create a service file in `/etc/systemd/system/monobank.service`
- - Create a `ssl` folder inside project, copy SSL certificate/key there. They should be named `cert.crt` (certificate) and `pkey.pem` (private key)
 
 
 # Run Server

@@ -38,7 +38,13 @@ values['mono_pass'] = gets.chomp
 puts "Basic Auth Password chosen: #{values['mono_pass']}"
 puts "----------------------------------------------"
 
-env_values_string = "MONO_SERV_IP='#{values['ip']}' MONO_SERV_PORT='#{values['port']}' MONO_TOKEN='#{values['mono_token']}' MONO_BASIC_AUTH_USER='#{values['mono_user']}' MONO_BASIC_AUTH_PASS='#{values['mono_pass']}'"
+# Get SSL files path
+puts "Please enter Path where your SSL certificates are located"
+values['mono_ssl'] = gets.chomp
+puts "SSL Path saved: #{values['mono_pass']}"
+puts "----------------------------------------------"
+
+env_values_string = "MONO_SERV_IP='#{values['ip']}' MONO_SERV_PORT='#{values['port']}' MONO_TOKEN='#{values['mono_token']}' MONO_BASIC_AUTH_USER='#{values['mono_user']}' MONO_BASIC_AUTH_PASS='#{values['mono_pass']}' MONO_SSL_FOLDER='#{values['mono_ssl']}'"
 puts "(WORKS ONLY IN UBUNTU) Do you want to set up service [y/n]"
 service_setup = gets.chomp
 until ['y','n'].include?(service_setup)

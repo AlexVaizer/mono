@@ -47,7 +47,7 @@ module DataFactory
 				raise StandardError.new("empty response!") if client_info.empty?
 		else 
 				error = JSON.parse(response.read_body)
-				raise StandardError.new("Respose from API: #{response.code} - #{error}")
+				raise StandardError.new("Respose from MONOBANK API: #{response.code} - #{error}.\nPlease try again later")
 		end
 
 		return client_info

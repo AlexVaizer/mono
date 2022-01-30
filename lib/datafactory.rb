@@ -10,7 +10,7 @@ module DataFactory
 	TOKEN_ETH = ENV['ETH_TOKEN'] || 'GGWMBCPI5AFFK18VHQNJX7N8DGMJR6NZR6'
 	ETH_ADDRESS = ENV["ETH_ADDRESS"] || "0xA07fDc4A73a067078601a00C36dc6627FA0A80B8"
 	ETH_URL = 'https://api.etherscan.io/api/'
-
+	TIME_FORMAT = "%d.%m.%Y %H:%M"
 	CLIENT_INFO_PATH = '/personal/client-info'
 	STATEMENTS_PATH = '/personal/statement'
 	CURRENCIES = {
@@ -110,8 +110,9 @@ module DataFactory
 			{name: 'address', value: DataFactory::ETH_ADDRESS},
 			{name: 'startblock', value: 0},
 			{name: 'endblock', value: 99999999},
-			{name: 'page', value: 1},
-			{name: 'offset', value: 0}
+			#{name: 'page', value: 1},
+			#{name: 'offset', value: 0}
+			{name: 'sort', value: 'desc'}
 		]
 		return DataFactory.send_request_eth(DataFactory::ETH_URL, params)
 	end
@@ -150,16 +151,20 @@ module DataFactory
 			balance = balance_i.to_f / 10000000000000000000
 			amount_i = stat['value'].to_i
 			amount = amount_i.to_f / 1000000000000000000
+			if stat['from'].downcase == DataFactory::ETH_ADDRESS.downcase then 
+				symbol =  '-'
+			else 
+				symbol = '+'
+			end
 			a = {
-				time: Time.at(stat['timeStamp'].to_i).strftime("%d.%m.%Y"), 
-				amount: amount, 
-				description: stat['hash'],
-				balance: balance,
+				time: Time.at(stat['timeStamp'].to_i).strftime(DataFactory::TIME_FORMAT), 
+				amount: symbol + amount.to_s, 
+				tx_id: "<a target=_new href='https://etherscan.io/tx/#{stat['hash']}'>#{stat['hash']}</a>",
+				tx_fee: balance,
 			}
 			parsed_statements.push(a)
 		end
 		obj.statements = parsed_statements
-
 		return true
 	end
 
@@ -174,7 +179,7 @@ module DataFactory
 		statements.each do |stat| 
 			stat = stat.transform_keys(&:to_sym)
 			a = {
-				time: Time.at(stat[:time]).strftime("%d.%m.%Y"), 
+				time: Time.at(stat[:time]).strftime(DataFactory::TIME_FORMAT), 
 				amount: stat[:amount].to_f/100, 
 				description: stat[:description],
 				balance: stat[:balance].to_f/100,

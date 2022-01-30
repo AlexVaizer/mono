@@ -1,8 +1,13 @@
 <%
 	@table_content = {}
 	@table_content[:content] = @statements
-	@table_content[:headers] = ['Time', 'Amount', 'Description', 'Balance']
-	@table_content[:width] = [20,20,40,20]
+	if @account_info[:type] == 'ETH' then
+		@table_content[:headers] = ['Time', 'Amount', 'TX ID', 'Gas fee']
+		@table_content[:width] = [20,20,40,20]
+	else
+		@table_content[:headers] = ['Time', 'Amount', 'Description', 'Balance']
+		@table_content[:width] = [20,20,40,20]
+	end
 %>
 <div class='w3-container w3-margin'>
 	<h1>Transactions History:</h1>

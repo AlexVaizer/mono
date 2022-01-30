@@ -52,7 +52,6 @@ ServerSettings.save_pid
 					bool = mono.selected_account == 'ETH'
 					if mono.selected_account == 'ETH'
 						DataFactory.get_statements_eth(mono,ServerSettings::ENV)
-						#return mono.statements.to_s
 					else
 						DataFactory.get_statements(mono,ServerSettings::ENV)
 					end
@@ -63,6 +62,7 @@ ServerSettings.save_pid
 			rescue 
 				@errors = ServerSettings.return_errors($!,$@,ServerSettings::DEBUG_MESSAGES)
 				status 500
+				#return @errors
 				erb :index
 			end
 		end

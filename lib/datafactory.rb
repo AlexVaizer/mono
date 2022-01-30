@@ -7,8 +7,8 @@ module DataFactory
 	DEFAULT_ENV = 'prod'
 	API_URL = 'https://api.monobank.ua'
 	TOKEN = ENV['MONO_TOKEN']
-	TOKEN_ETH = ENV['ETH_TOKEN'] 
-	ETH_ADDRESS = ENV["ETH_ADDRESS"] 
+	TOKEN_ETH = ENV['ETH_TOKEN'] || 'GGWMBCPI5AFFK18VHQNJX7N8DGMJR6NZR6'
+	ETH_ADDRESS = ENV["ETH_ADDRESS"] || "0xA07fDc4A73a067078601a00C36dc6627FA0A80B8"
 	ETH_URL = 'https://api.etherscan.io/api/'
 
 	CLIENT_INFO_PATH = '/personal/client-info'
@@ -111,7 +111,7 @@ module DataFactory
 			{name: 'startblock', value: 0},
 			{name: 'endblock', value: 99999999},
 			{name: 'page', value: 1},
-			{name: 'offset', value: 25}
+			{name: 'offset', value: 0}
 		]
 		return DataFactory.send_request_eth(DataFactory::ETH_URL, params)
 	end
@@ -131,11 +131,36 @@ module DataFactory
 		account = {
 			currencyCode: 'ETH',
 			type: 'ETH',
-			maskedPan: DataFactory::ETH_ADDRESS,
-			balance: bal_usd,
-			balance_eth: bal_eth,
+			maskedPan: "#{DataFactory::ETH_ADDRESS[0..4]}..#{DataFactory::ETH_ADDRESS[-5..-1]}",
+			balance: bal_eth,
+			balance_usd: bal_usd,
 			id: 'ETH'
 		}
+	end
+
+	def DataFactory.get_statements_eth (obj, env = DEFAULT_ENV)
+		if MOCK_DATA_FOR.include?(env)
+			statements = Marshal.load(Marshal.dump(DataFactory::MOCK_DATA['statements']))
+		else
+			statements = DataFactory.get_eth_txes
+		end
+		parsed_statements =[]
+		statements.each do |stat| 
+			balance_i = stat['gasPrice'].to_i * stat['gasUsed'].to_i
+			balance = balance_i.to_f / 10000000000000000000
+			amount_i = stat['value'].to_i
+			amount = amount_i.to_f / 1000000000000000000
+			a = {
+				time: Time.at(stat['timeStamp'].to_i).strftime("%d.%m.%Y"), 
+				amount: amount, 
+				description: stat['hash'],
+				balance: balance,
+			}
+			parsed_statements.push(a)
+		end
+		obj.statements = parsed_statements
+
+		return true
 	end
 
 	def DataFactory.get_statements (obj, env = DEFAULT_ENV, date_start = Time.now.to_i - 30*24*60*60, date_end = Time.now.to_i)

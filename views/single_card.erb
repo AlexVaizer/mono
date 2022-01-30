@@ -4,9 +4,16 @@
 		<span onclick='location.replace("./")' class="w3-bar-item w3-button w3-white w3-xlarge w3-left w3-middle" style="vertical-align: middle;"><</span>
 			<img src="./public/<%=@account_info[:currencyCode]%>.png" class="w3-bar-item w3-circle w3-hide-small" style="width:81px">
 			<div class="w3-bar-item">
+				<%
+					if @account_info[:type] = 'ETH' then %>
+						<span class="w3-large"><%= @account_info[:balance]%> <%=@account_info[:currencyCode]%> <b><%=@account_info[:balance_usd]%> USD</b></span><br>
+						<span><%=@account_info[:maskedPan_full]%></span>
+					<%
+					else %>		
+					<span class="w3-large"><%= @account_info[:balance]%> <%=@account_info[:currencyCode]%> <b><%=@account_info[:type]%></b></span><br>
+					<span><%=@account_info[:maskedPan]%></span>
+					<%end%>
 				
-				<span class="w3-large"><%= @account_info[:balance]%> <%=@account_info[:currencyCode]%> <b><%=@account_info[:type]%></b></span><br>
-				<span><%=@account_info[:maskedPan]%></span>
 			</div>
 		</li>
 	</ul>

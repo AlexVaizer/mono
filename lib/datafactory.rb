@@ -135,7 +135,8 @@ module DataFactory
 			maskedPan: "#{DataFactory::ETH_ADDRESS[0..4]}..#{DataFactory::ETH_ADDRESS[-5..-1]}",
 			balance: bal_eth,
 			balance_usd: bal_usd,
-			id: 'ETH'
+			id: 'ETH',
+			maskedPan_full: DataFactory::ETH_ADDRESS
 		}
 	end
 

@@ -5,7 +5,7 @@
 			<img src="./public/<%=@account_info[:currencyCode]%>.png" class="w3-bar-item w3-circle w3-hide-small" style="width:81px">
 			<div class="w3-bar-item">
 				<%
-					if @account_info[:type] = 'ETH' then %>
+					if @account_info[:type] == 'ETH' then %>
 						<span class="w3-large"><%= @account_info[:balance]%> <%=@account_info[:currencyCode]%> <b><%=@account_info[:balance_usd]%> USD</b></span><br>
 						<span><%=@account_info[:maskedPan_full]%></span>
 					<%

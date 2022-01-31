@@ -62,8 +62,7 @@ ServerSettings.save_pid
 			rescue 
 				@errors = ServerSettings.return_errors($!,$@,ServerSettings::DEBUG_MESSAGES)
 				status 500
-				#return @errors
-				erb :index
+				erb :errors
 			end
 		end
 	end

@@ -52,7 +52,7 @@ module DataFactory
 		response = https.request(request)
 		if response.code == '200'
 				client_info = JSON.parse(response.read_body)
-				raise StandardError.new("empty response!") if client_info.empty?
+				client_info = [] if client_info.empty?
 		else 
 				error = JSON.parse(response.read_body)
 				raise StandardError.new("Respose from MONOBANK API: #{response.code} - #{error}.\nPlease try again later")

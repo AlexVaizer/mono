@@ -49,7 +49,12 @@ ServerSettings.save_pid
 					mono.selected_account = params['id']
 					@account_info = mono.accounts.select { |x| x[:id] == mono.selected_account }
 					@account_info = @account_info.first
-					DataFactory.get_statements(mono,ServerSettings::ENV)
+					bool = mono.selected_account == 'ETH'
+					if mono.selected_account == 'ETH'
+						DataFactory.get_statements_eth(mono,ServerSettings::ENV)
+					else
+						DataFactory.get_statements(mono,ServerSettings::ENV)
+					end
 					@statements = mono.statements
 					@title = @account_info[:maskedPan] 
 				end
@@ -57,7 +62,7 @@ ServerSettings.save_pid
 			rescue 
 				@errors = ServerSettings.return_errors($!,$@,ServerSettings::DEBUG_MESSAGES)
 				status 500
-				erb :index
+				erb :errors
 			end
 		end
 	end

@@ -1,5 +1,22 @@
-<% @errors = @errors || ServerSettings.return_errors($!,$@,ServerSettings::DEBUG_MESSAGES) %>
-<div class='w3-container w3-margin'>
-	<h1 class="w3-center">Error occured</h1>
-	<span class="w3-center"><%= @errors %></span>
-</div>
+<html>
+	<title>Error occured</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+	<link rel="shortcut icon" href="./public/favicon.png">
+	<body>
+
+		<div class='w3-dark-grey w3-bar w3-responsive'>
+			<a href="#" onclick="window.location.reload(true);">
+				<div class='w3-bar-item w3-hover-black'>
+					Reload Page
+				</div>
+			</a>
+		</div>
+
+		<% @errors = @errors || ServerSettings.return_errors($!,$@,ServerSettings::DEBUG_MESSAGES) %>
+		<div class='w3-container w3-margin'>
+			<h1 class="w3-center">Error occured</h1>
+			<span class="w3-center"><%= @errors %></span>
+		</div>
+	</body>
+</html>

@@ -7,8 +7,8 @@ module DataFactory
 	DEFAULT_ENV = 'prod'
 	API_URL = 'https://api.monobank.ua'
 	TOKEN = ENV['MONO_TOKEN']
-	TOKEN_ETH = ENV['ETH_TOKEN'] || 'GGWMBCPI5AFFK18VHQNJX7N8DGMJR6NZR6'
-	ETH_ADDRESS = ENV["ETH_ADDRESS"] || "0xA07fDc4A73a067078601a00C36dc6627FA0A80B8"
+	TOKEN_ETH = ENV['ETH_TOKEN'] 
+	ETH_ADDRESS = ENV["ETH_ADDRESS"]
 	ETH_URL = 'https://api.etherscan.io/api/'
 	TIME_FORMAT = "%d.%m.%Y %H:%M"
 	CLIENT_INFO_PATH = '/personal/client-info'

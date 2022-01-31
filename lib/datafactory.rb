@@ -142,7 +142,7 @@ module DataFactory
 
 	def DataFactory.get_statements_eth (obj, env = DEFAULT_ENV)
 		if MOCK_DATA_FOR.include?(env)
-			statements = Marshal.load(Marshal.dump(DataFactory::MOCK_DATA['statements']))
+			statements = Marshal.load(Marshal.dump(DataFactory::MOCK_DATA['tx_list']))
 		else
 			statements = DataFactory.get_eth_txes
 		end

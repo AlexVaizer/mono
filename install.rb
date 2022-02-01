@@ -67,5 +67,5 @@ if service_setup == 'y' then
 	ServerSettings.setup_service(values)
 else
 	puts "----------------------------------------------"
-	puts "Command to run server manually:\n#{env_values_string} ruby #{ServerSettings::CURRENT_FOLDER}/monobank.rb -e local"
+	puts "Command to run server manually:\n#{env_values_string} ruby #{ServerSettings::CURRENT_FOLDER}/monobank.rb -e development"
 end

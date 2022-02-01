@@ -45,10 +45,10 @@ ServerSettings.save_pid
 				mono.client_info = DataFactory::Mono.return_client_info(ServerSettings::ENV)
 				mono.accounts = mono.client_info[:accounts]
 				mono.client_info.delete(:accounts)
-				mono.accounts.push(DataFactory::ETH.return_client_info(ServerSettings::ENV))
+				mono.accounts.concat(DataFactory::ETH.return_client_info(ServerSettings::ENV))
 				@list = mono.accounts
 				@title = "Accounts List"
-				if !(params['id'].nil? || params['id'].empty?)  then 
+				if (!(params['id'].nil? || params['id'].empty?) && mono.accounts.any? {|h| h[:a] == params['id']})  then 
 					mono.selected_account = params['id']
 					@account_info = mono.accounts.select { |x| x[:id] == mono.selected_account }
 					@account_info = @account_info.first

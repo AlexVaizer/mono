@@ -18,15 +18,15 @@ require File.expand_path('./lib/datafactory.rb')
 
 OptionParser.new do |opts|
 	opts.banner = "Usage: ruby sinatra.rb -e <ENV>"
-	opts.on("-e", "--env ENVIRONMENT", "Set a testing ENV. Possible values: local, stage, prod") do |e|
-		@env = e
+	opts.on("-e", "--env ENVIRONMENT", "Set a testing ENV. Possible values: development, test, production") do |e|
+		@env = e.to_sym
 	end
 end.parse!
 
 ServerSettings::ENV = ServerSettings.validate_env(@env)
 ServerSettings.save_pid
 
-
+	set :environment, ServerSettings::ENV
 	set :port, ServerSettings::PORT
 	set :bind, ServerSettings::IP
 	set :ssl_certificate, File.expand_path(ServerSettings::SSL_CERT_PATH)

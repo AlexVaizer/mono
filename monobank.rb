@@ -42,21 +42,23 @@ ServerSettings.save_pid
 			date_end = params['end'] || Time.now.to_i
 			begin
 				mono = MonobankConnector.new
-				DataFactory.get_client_info(mono,ServerSettings::ENV)
+				mono.client_info = DataFactory::Mono.return_client_info(ServerSettings::ENV)
+				mono.accounts = mono.client_info[:accounts]
+				mono.client_info.delete(:accounts)
+				mono.accounts.push(DataFactory::ETH.return_client_info(ServerSettings::ENV))
 				@list = mono.accounts
 				@title = "Accounts List"
-				if params['id'] then 
+				if !(params['id'].nil? || params['id'].empty?)  then 
 					mono.selected_account = params['id']
 					@account_info = mono.accounts.select { |x| x[:id] == mono.selected_account }
 					@account_info = @account_info.first
-					bool = mono.selected_account == 'ETH'
-					if mono.selected_account == 'ETH'
-						DataFactory.get_statements_eth(mono,ServerSettings::ENV)
+					if mono.selected_account[0..1] == '0x'
+						mono.statements = DataFactory::ETH.return_statements(ServerSettings::ENV, mono.selected_account)
 					else
-						DataFactory.get_statements(mono,ServerSettings::ENV)
+						mono.statements = DataFactory::Mono.return_statements(ServerSettings::ENV, mono.selected_account)
 					end
 					@statements = mono.statements
-					@title = @account_info[:maskedPan] 
+					@title = @account_info[:maskedPan]
 				end
 				erb :index
 			rescue 

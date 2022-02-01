@@ -40,7 +40,7 @@ Run `./install.rb` and fill all needed info, reply 'n' to question "Do you want 
 `sudo systemctl stop monobank`
 
 ## In debugging mode
- - `./stop.rb` for Local, Stage
+ - `./stop.rb` for Development, Test environments
  - `sudo ./stop.rb` for Production
 
 # Logging

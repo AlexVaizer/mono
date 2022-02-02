@@ -18,15 +18,15 @@ require File.expand_path('./lib/datafactory.rb')
 
 OptionParser.new do |opts|
 	opts.banner = "Usage: ruby sinatra.rb -e <ENV>"
-	opts.on("-e", "--env ENVIRONMENT", "Set a testing ENV. Possible values: local, stage, prod") do |e|
-		@env = e
+	opts.on("-e", "--env ENVIRONMENT", "Set a testing ENV. Possible values: development, test, production") do |e|
+		@env = e.to_sym
 	end
 end.parse!
 
 ServerSettings::ENV = ServerSettings.validate_env(@env)
 ServerSettings.save_pid
 
-
+	set :environment, ServerSettings::ENV
 	set :port, ServerSettings::PORT
 	set :bind, ServerSettings::IP
 	set :ssl_certificate, File.expand_path(ServerSettings::SSL_CERT_PATH)
@@ -42,21 +42,23 @@ ServerSettings.save_pid
 			date_end = params['end'] || Time.now.to_i
 			begin
 				mono = MonobankConnector.new
-				DataFactory.get_client_info(mono,ServerSettings::ENV)
+				mono.client_info = DataFactory::Mono.return_client_info(ServerSettings::ENV)
+				mono.accounts = mono.client_info[:accounts]
+				mono.client_info.delete(:accounts)
+				mono.accounts.concat(DataFactory::ETH.return_client_info(ServerSettings::ENV))
 				@list = mono.accounts
 				@title = "Accounts List"
-				if params['id'] then 
+				if (!(params['id'].nil? || params['id'].empty?) && mono.accounts.any? {|h| h[:id] == params['id']})  then 
 					mono.selected_account = params['id']
 					@account_info = mono.accounts.select { |x| x[:id] == mono.selected_account }
 					@account_info = @account_info.first
-					bool = mono.selected_account == 'ETH'
-					if mono.selected_account == 'ETH'
-						DataFactory.get_statements_eth(mono,ServerSettings::ENV)
+					if mono.selected_account[0..1] == '0x'
+						mono.statements = DataFactory::ETH.return_statements(ServerSettings::ENV, mono.selected_account)
 					else
-						DataFactory.get_statements(mono,ServerSettings::ENV)
+						mono.statements = DataFactory::Mono.return_statements(ServerSettings::ENV, mono.selected_account)
 					end
 					@statements = mono.statements
-					@title = @account_info[:maskedPan] 
+					@title = @account_info[:maskedPan]
 				end
 				erb :index
 			rescue 

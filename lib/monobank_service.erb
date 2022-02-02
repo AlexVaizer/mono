@@ -13,9 +13,9 @@ Environment=<%= "'MONO_BASIC_AUTH_USER=#{@env_values['mono_user']}'" %>
 Environment=<%= "'MONO_BASIC_AUTH_PASS=#{@env_values['mono_pass']}'" %>
 Environment=<%= "'MONO_SSL_FOLDER=#{@env_values['mono_ssl']}'" %>
 Environment=<%= "'ETH_TOKEN=#{@env_values['eth_token']}'" %>
-Environment=<%= "'ETH_ADDRESS=#{@env_values['eth_address']}'" %>
+Environment=<%= "'ETH_ADDRESSES=#{@env_values['eth_address']}'" %>
 WorkingDirectory=<%=ServerSettings::CURRENT_FOLDER%>
-ExecStart=<%=File.join(ServerSettings::CURRENT_FOLDER, 'monobank.rb -e prod')%>
+ExecStart=<%=File.join(ServerSettings::CURRENT_FOLDER, 'monobank.rb -e production')%>
 ExecStop=<%=File.join(ServerSettings::CURRENT_FOLDER,'stop.rb')%>
 
 

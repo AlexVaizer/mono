@@ -1,7 +1,7 @@
 module ServerSettings
 	require 'erb'
-	ALLOWED_ENVS = ['local', 'stage', 'prod']
-	SSL_ENABLE_FOR = ['prod']
+	ALLOWED_ENVS = [:development, :test, :production]
+	SSL_ENABLE_FOR = [:production]
 	SSL_KEYS_FOLDER = ENV['MONO_SSL_FOLDER'] || './ssl'
 	SSL_CERT_PATH = File.join(SSL_KEYS_FOLDER, 'cert.pem')
 	SSL_KEY_PATH = File.join(SSL_KEYS_FOLDER, 'privkey.pem')

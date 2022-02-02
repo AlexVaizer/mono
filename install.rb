@@ -51,12 +51,12 @@ puts "ETH token saved: #{values['eth_token']}"
 puts "----------------------------------------------"
 
 # Get Etherscan TOKEN
-puts "Please enter your Ether Address"
+puts "Please enter your Ether Address(es). Should be separated by comma"
 values['eth_address'] = gets.chomp
 puts "ETH token saved: #{values['eth_address']}"
 puts "----------------------------------------------"
 
-env_values_string = "MONO_SERV_IP='#{values['ip']}' MONO_SERV_PORT='#{values['port']}' ETH_TOKEN=#{values['eth_token']} ETH_ADDRESS=#{values['eth_address']} MONO_TOKEN='#{values['mono_token']}' MONO_BASIC_AUTH_USER='#{values['mono_user']}' MONO_BASIC_AUTH_PASS='#{values['mono_pass']}' MONO_SSL_FOLDER='#{values['mono_ssl']}'"
+env_values_string = "MONO_SERV_IP='#{values['ip']}' MONO_SERV_PORT='#{values['port']}' ETH_TOKEN=#{values['eth_token']} ETH_ADDRESSES=#{values['eth_address']} MONO_TOKEN='#{values['mono_token']}' MONO_BASIC_AUTH_USER='#{values['mono_user']}' MONO_BASIC_AUTH_PASS='#{values['mono_pass']}' MONO_SSL_FOLDER='#{values['mono_ssl']}'"
 puts "(WORKS ONLY IN UBUNTU) Do you want to set up service [y/n]"
 service_setup = gets.chomp
 until ['y','n'].include?(service_setup)
@@ -67,5 +67,5 @@ if service_setup == 'y' then
 	ServerSettings.setup_service(values)
 else
 	puts "----------------------------------------------"
-	puts "Command to run server manually:\n#{env_values_string} ruby #{ServerSettings::CURRENT_FOLDER}/monobank.rb -e local"
+	puts "Command to run server manually:\n#{env_values_string} ruby #{ServerSettings::CURRENT_FOLDER}/monobank.rb -e development"
 end

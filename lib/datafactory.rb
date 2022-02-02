@@ -174,7 +174,7 @@ module DataFactory
 		end
 
 		def self.return_client_info(env)
-			if ! (ETH_ADDRESSES.nil? || ETH_ADDRESSES.empty) then
+			if ! (ETH_ADDRESSES.nil? || ETH_ADDRESSES.empty?) then
 				client_info = self.get_client_info(env)
 				#puts client_info
 				accounts = []

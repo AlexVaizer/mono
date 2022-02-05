@@ -256,7 +256,7 @@ module DataFactory
 		##
 		#Creates or updates row in a TABLE by ID_FIELD with DATA
 		def self.create(table, id_field, data) 
-			acc = self.get(table, data[id_field], id_field) 
+			acc = self.get(table, data[id_field.to_sym], id_field) 
 			if ! acc then
 				data[:timeUpdated] = Time.now.iso8601
 				keys = data.keys.map { |e| e.to_s }.join(',')
@@ -265,6 +265,7 @@ module DataFactory
 				re = self.request(request)
 				return re = self.get(table, data[id_field.to_sym], id_field) 
 			else
+				acc = self.update(table, id_field, data)
 				return acc
 			end
 		end
@@ -283,6 +284,7 @@ module DataFactory
 				request = "#{request} #{k.to_s}='#{v}',"
 			end
 			request = "#{request.chop} WHERE #{id_field}=\"#{data[id_field.to_sym]}\""
+			puts request
 			re = self.request(request)
 			return self.get(table, data[id_field.to_sym], id_field)
 		end

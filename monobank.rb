@@ -34,7 +34,6 @@ ServerSettings.save_pid
 	ServerSettings.enable_ssl(ServerSettings::ENV)
 	set :views, Proc.new { File.join(root, "views") }
 	puts "Server started for ENV:#{ServerSettings::ENV} at #{ServerSettings::IP}:#{ServerSettings::PORT}" 
-
 		
 	protect do
 		get '/' do 
@@ -42,13 +41,23 @@ ServerSettings.save_pid
 			date_end = params['end'] || Time.now.to_i
 			begin
 				mono = MonobankConnector.new
-				mono.client_info = DataFactory::Mono.return_client_info(ServerSettings::ENV)
-				mono.accounts = mono.client_info[:accounts]
-				mono.client_info.delete(:accounts)
-				mono.accounts.concat(DataFactory::ETH.return_client_info(ServerSettings::ENV))
+				db_client_info = DataFactory::SQLite.get_all('clients')
+				if db_client_info.empty? || (Time.parse(db_client_info.first[:timeUpdated]) < (Time.now - 60)) then
+					mono.client_info = DataFactory::Mono.return_client_info(ServerSettings::ENV)
+					mono.accounts = mono.client_info[:accounts]
+					mono.client_info.delete(:accounts)
+					mono.accounts.concat(DataFactory::ETH.return_client_info(ServerSettings::ENV))
+					DataFactory::SQLite.create('clients', 'clientId', mono.client_info)
+					mono.accounts.each do |acc|
+						DataFactory::SQLite.create('accounts', 'id', acc)
+					end
+				else
+					mono.client_info = db_client_info
+					mono.accounts = DataFactory::SQLite.get_all('accounts')
+				end
 				@list = mono.accounts
 				@title = "Accounts List"
-				if (!(params['id'].nil? || params['id'].empty?) && mono.accounts.any? {|h| h[:id] == params['id']})  then 
+				if (!(params['id'].nil? || params['id'].empty?) && mono.accounts.any? {|h| h[:id] == params['id']}) then 
 					mono.selected_account = params['id']
 					@account_info = mono.accounts.select { |x| x[:id] == mono.selected_account }
 					@account_info = @account_info.first

@@ -57,13 +57,13 @@ puts "ETH token saved: #{values['eth_address']}"
 puts "----------------------------------------------"
 
 # Get Etherscan Address
-puts "Please enter your Ether Address(es). Should be separated by comma"
-values['eth_address'] = gets.chomp
-puts "ETH token saved: #{values['db_path']}"
+puts "Please enter SQLite DB path."
+values['db_path'] = gets.chomp
+puts "DB path saved: #{values['db_path']}"
 puts "----------------------------------------------"
 
 
-env_values_string = "MONO_SERV_IP='#{values['ip']}' MONO_SERV_PORT='#{values['port']}' ETH_TOKEN=#{values['eth_token']} ETH_ADDRESSES=#{values['eth_address']} MONO_TOKEN='#{values['mono_token']}' MONO_BASIC_AUTH_USER='#{values['mono_user']}' MONO_BASIC_AUTH_PASS='#{values['mono_pass']}' MONO_SSL_FOLDER='#{values['mono_ssl']} MONO_DB_PATH='#{values['db_path']'"
+env_values_string = "MONO_SERV_IP='#{values['ip']}' MONO_SERV_PORT='#{values['port']}' ETH_TOKEN=#{values['eth_token']} ETH_ADDRESSES=#{values['eth_address']} MONO_TOKEN='#{values['mono_token']}' MONO_BASIC_AUTH_USER='#{values['mono_user']}' MONO_BASIC_AUTH_PASS='#{values['mono_pass']}' MONO_SSL_FOLDER='#{values['mono_ssl']}' MONO_DB_PATH='#{values['db_path']}'"
 puts "(WORKS ONLY IN UBUNTU) Do you want to set up service [y/n]"
 service_setup = gets.chomp
 until ['y','n'].include?(service_setup)

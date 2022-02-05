@@ -235,6 +235,7 @@ module DataFactory
 	module DataFactory::SQLite
 		require 'sqlite3'
 		DB_PATH = ENV["MONO_DB_PATH"]
+		
 		def self.request(request)
 			db = SQLite3::Database.open(DB_PATH)
 			db.results_as_hash = true
@@ -244,41 +245,43 @@ module DataFactory
 			return resp
 		end
 
-		def self.get_account(id)
-			request = "SELECT * FROM accounts WHERE id=\"#{id}\""
+
+		def self.get(table, id, id_field)
+			request = "SELECT * FROM #{table} WHERE #{id_field}=\"#{id}\""
 			re = self.request(request)
 			return re.first
 		end
 		
-		def self.create_account(data)
-			acc = self.get_account(data[:id]) 
+		def self.create(table, id_field, data)
+			acc = self.update(table, id_field, data) 
 			if ! acc then
+				data[:timeUpdated] = Time.now.iso8601
 				keys = data.keys.map { |e| e.to_s }.join(',')
 				values = " '#{data.values.join('\',\'')}' "
-				request = "INSERT INTO accounts (#{keys.to_s}) VALUES (#{values})"
+				request = "INSERT INTO #{table} (#{keys.to_s}) VALUES (#{values})"
 				re = self.request(request)
-				return re = self.get_account(data[:id]) 
+				return re = self.get(table, data[id_field.to_sym], id_field) 
 			else
 				return acc
 			end
 		end
 
-		def self.get_accounts()
-			request = "SELECT * FROM accounts"
+		def self.get_all(table)
+			request = "SELECT * FROM #{table}"
 			re = self.request(request)
 			resp = re.map {|str| str.transform_keys(&:to_sym) }
 			return resp
 		end
 
-		def self.update_account(id, data)
-			request = "UPDATE accounts SET"
+		def self.update(table, id_field,  data)
+			request = "UPDATE #{table} SET"
 			data[:timeUpdated] = Time.now.iso8601
 			data.each do |k,v|
 				request = "#{request} #{k.to_s}='#{v}',"
 			end
-			request = "#{request.chop} WHERE id=\"#{id}\""
+			request = "#{request.chop} WHERE #{id_field}=\"#{data[id_field.to_sym]}\""
 			self.request(request)
-			return self.get_account(id)
+			return self.get(table, data[id_field.to_sym], id_field)
 		end
 	end
 end

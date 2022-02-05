@@ -42,7 +42,7 @@ ServerSettings.save_pid
 			begin
 				mono = MonobankConnector.new
 				db_client_info = DataFactory::SQLite.get_all('clients')
-				if db_client_info.empty? || (Time.parse(db_client_info.first[:timeUpdated]) < (Time.now - 60)) then
+				if db_client_info.empty? || (Time.parse(db_client_info.first[:timeUpdated]) < (Time.now - DataFactory::SQLite::DB_UPD_INTERVAL)) then
 					mono.client_info = DataFactory::Mono.return_client_info(ServerSettings::ENV)
 					mono.accounts = mono.client_info[:accounts]
 					mono.client_info.delete(:accounts)

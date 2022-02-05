@@ -235,6 +235,7 @@ module DataFactory
 	module DataFactory::SQLite
 		require 'sqlite3'
 		DB_PATH = ENV["MONO_DB_PATH"]
+		DB_UPD_INTERVAL = 120 #seconds
 		
 		def self.request(request)
 			db = SQLite3::Database.open(DB_PATH)

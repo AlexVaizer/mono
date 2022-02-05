@@ -107,12 +107,8 @@ module DataFactory
 				result_accounts.push(account)
 			end
 			result_accounts.sort_by! { |k| k[:maskedPan]}
-
-			#obj.accounts = result_accounts
 			client_info.delete(:accounts)
 			client_info[:accounts] = result_accounts
-			#obj.client_info = client_info
-			#return true
 			return client_info
 		end
 
@@ -190,7 +186,7 @@ module DataFactory
 						balance: bal_eth,
 						balance_usd: bal_usd,
 						id: account['account'],
-						maskedPan_full: account['account']
+						maskedPanFull: account['account']
 					}
 					accounts.push(account)
 				end
@@ -234,6 +230,55 @@ module DataFactory
 			end
 			return parsed_statements
 		end
+	end
 
+	module DataFactory::SQLite
+		require 'sqlite3'
+		DB_PATH = ENV["MONO_DB_PATH"]
+		def self.request(request)
+			db = SQLite3::Database.open(DB_PATH)
+			db.results_as_hash = true
+			re = db.execute(request)
+			db.close
+			resp = re.map {|str| str.transform_keys(&:to_sym) }
+			return resp
+		end
+
+		def self.get_account(id)
+			request = "SELECT * FROM accounts WHERE id=\"#{id}\""
+			re = self.request(request)
+			return re.first
+		end
+		
+		def self.create_account(data)
+			acc = self.get_account(data[:id]) 
+			if ! acc then
+				keys = data.keys.map { |e| e.to_s }.join(',')
+				values = " '#{data.values.join('\',\'')}' "
+				request = "INSERT INTO accounts (#{keys.to_s}) VALUES (#{values})"
+				re = self.request(request)
+				return re = self.get_account(data[:id]) 
+			else
+				return acc
+			end
+		end
+
+		def self.get_accounts()
+			request = "SELECT * FROM accounts"
+			re = self.request(request)
+			resp = re.map {|str| str.transform_keys(&:to_sym) }
+			return resp
+		end
+
+		def self.update_account(id, data)
+			request = "UPDATE accounts SET"
+			data[:timeUpdated] = Time.now.iso8601
+			data.each do |k,v|
+				request = "#{request} #{k.to_s}='#{v}',"
+			end
+			request = "#{request.chop} WHERE id=\"#{id}\""
+			self.request(request)
+			return self.get_account(id)
+		end
 	end
 end

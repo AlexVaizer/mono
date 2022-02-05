@@ -184,7 +184,7 @@ module DataFactory
 						type: 'ETH',
 						maskedPan: "#{account['account'][0..4]}..#{account['account'][-5..-1]}",
 						balance: bal_eth,
-						balance_usd: bal_usd,
+						balanceUsd: bal_usd,
 						id: account['account'],
 						maskedPanFull: account['account']
 					}
@@ -252,8 +252,10 @@ module DataFactory
 			return re.first
 		end
 		
-		def self.create(table, id_field, data)
-			acc = self.update(table, id_field, data) 
+		##
+		#Creates or updates row in a TABLE by ID_FIELD with DATA
+		def self.create(table, id_field, data) 
+			acc = self.get(table, data[id_field], id_field) 
 			if ! acc then
 				data[:timeUpdated] = Time.now.iso8601
 				keys = data.keys.map { |e| e.to_s }.join(',')
@@ -280,7 +282,7 @@ module DataFactory
 				request = "#{request} #{k.to_s}='#{v}',"
 			end
 			request = "#{request.chop} WHERE #{id_field}=\"#{data[id_field.to_sym]}\""
-			self.request(request)
+			re = self.request(request)
 			return self.get(table, data[id_field.to_sym], id_field)
 		end
 	end

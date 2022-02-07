@@ -172,7 +172,6 @@ module DataFactory
 		def self.return_client_info(env)
 			if ! (ETH_ADDRESSES.nil? || ETH_ADDRESSES.empty?) then
 				client_info = self.get_client_info(env)
-				#puts client_info
 				accounts = []
 				client_info[:balances].each do |account|
 					in_float = account['balance'].to_i/1000000000000000000.to_f
@@ -284,7 +283,6 @@ module DataFactory
 				request = "#{request} #{k.to_s}='#{v}',"
 			end
 			request = "#{request.chop} WHERE #{id_field}=\"#{data[id_field.to_sym]}\""
-			puts request
 			re = self.request(request)
 			return self.get(table, data[id_field.to_sym], id_field)
 		end

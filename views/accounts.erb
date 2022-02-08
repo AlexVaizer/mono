@@ -1,7 +1,7 @@
 <div class='w3-display-container' style='width:100%'>
 	<div class='w3-container w3-margin w3-display-topmiddle' style='max-width: 700px; min-width: 340px'>
 		<ul class="w3-ul w3-card-4">
-			<% @list.each do |account| %>
+			<% @object.accounts.each do |account| %>
 			    <li class="w3-bar w3-button" onclick='location.replace("./?id=<%=account[:id]%>")'>
 					<img src="./public/<%=account[:currencyCode]%>.png" class="w3-bar-item w3-circle w3-hide-small" style="width:81px">
 					<div class="w3-bar-item">

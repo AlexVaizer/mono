@@ -1,10 +1,15 @@
 <div class='w3-dark-grey w3-bar w3-responsive'>
-	<%@list.each do |account|%>
+	<%@object.accounts.each do |account|%>
 		<a href="./?id=<%=account[:id]%>">
 			<div class='w3-bar-item w3-hover-<%= account[:type] %> w3-round-large' style="border-right: 1px solid black;font-size: 12px">
 				<%= account[:maskedPan] %> <br>
 				<%= account[:balance] %> <%= account[:currencyCode] %>
 			</div>
 		</a>
+		
 	<% end %>
+	<div class='w3-bar-item w3-right' style="font-size: 12px">
+		<%= "DB Upd: #{Time.parse(@object.client_info[:timeUpdated]).strftime(DataFactory::TIME_FORMAT)}" %> <br>
+		<%= @object.client_info[:name] %>
+	</div>
 </div>

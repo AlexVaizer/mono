@@ -36,15 +36,13 @@ ServerSettings.save_pid
 			begin
 				mono = MonobankConnector.new
 				mono.get_client_info
-				@list = mono.accounts
 				@title = "Accounts List – MONO"
 				if !(params['id'].nil? || params['id'].empty?) then 
 					mono.select_account(params['id'])
 					mono.get_statements_from_api
-					@account_info = mono.selected_account
-					@statements = mono.statements
-					@title = "#{@account_info[:maskedPan]} – MONO"
+					@title = "#{mono.selected_account[:maskedPan]} – MONO"
 				end
+				@object = mono
 				erb :index
 			rescue 
 				@errors = ServerSettings.return_errors($!,$@,ServerSettings::DEBUG_MESSAGES)

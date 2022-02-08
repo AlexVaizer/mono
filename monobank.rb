@@ -15,15 +15,9 @@ require File.expand_path('./lib/auth.rb')
 require File.expand_path('./lib/datafactory.rb')
 #########################################################
 
+env = ENV['MONO_ENV'].to_sym || :development
 
-OptionParser.new do |opts|
-	opts.banner = "Usage: ruby sinatra.rb -e <ENV>"
-	opts.on("-e", "--env ENVIRONMENT", "Set a testing ENV. Possible values: development, test, production") do |e|
-		@env = e.to_sym
-	end
-end.parse!
-
-ServerSettings::ENV = ServerSettings.validate_env(@env)
+ServerSettings::ENV = ServerSettings.validate_env(env)
 ServerSettings.save_pid
 
 	set :environment, ServerSettings::ENV
@@ -41,33 +35,15 @@ ServerSettings.save_pid
 			date_end = params['end'] || Time.now.to_i
 			begin
 				mono = MonobankConnector.new
-				db_client_info = DataFactory::SQLite.get_all('clients')
-				if db_client_info.empty? || (Time.parse(db_client_info.first[:timeUpdated]) < (Time.now - DataFactory::SQLite::DB_UPD_INTERVAL)) then
-					mono.client_info = DataFactory::Mono.return_client_info(ServerSettings::ENV)
-					mono.accounts = mono.client_info[:accounts]
-					mono.client_info.delete(:accounts)
-					mono.accounts.concat(DataFactory::ETH.return_client_info(ServerSettings::ENV))
-					DataFactory::SQLite.create('clients', 'clientId', mono.client_info)
-					mono.accounts.each do |acc|
-						DataFactory::SQLite.create('accounts', 'id', acc)
-					end
-				else
-					mono.client_info = db_client_info
-					mono.accounts = DataFactory::SQLite.get_all('accounts')
-				end
+				mono.get_client_info
 				@list = mono.accounts
-				@title = "Accounts List"
-				if (!(params['id'].nil? || params['id'].empty?) && mono.accounts.any? {|h| h[:id] == params['id']}) then 
-					mono.selected_account = params['id']
-					@account_info = mono.accounts.select { |x| x[:id] == mono.selected_account }
-					@account_info = @account_info.first
-					if mono.selected_account[0..1] == '0x'
-						mono.statements = DataFactory::ETH.return_statements(ServerSettings::ENV, mono.selected_account)
-					else
-						mono.statements = DataFactory::Mono.return_statements(ServerSettings::ENV, mono.selected_account)
-					end
+				@title = "Accounts List – MONO"
+				if !(params['id'].nil? || params['id'].empty?) then 
+					mono.select_account(params['id'])
+					mono.get_statements_from_api
+					@account_info = mono.selected_account
 					@statements = mono.statements
-					@title = @account_info[:maskedPan]
+					@title = "#{@account_info[:maskedPan]} – MONO"
 				end
 				erb :index
 			rescue 

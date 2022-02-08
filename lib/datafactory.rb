@@ -12,7 +12,7 @@ module DataFactory
 		'980'			=> 'UAH',
 		'9999'			=> 'ETH',
 	}
-	ENVIRONMENT = ENV['MONO_ENV'] || :development
+	ENVIRONMENT = ENV['MONO_ENV'].to_sym || :development
 
 	
 	def DataFactory.send_request(url, mono_token = '', params = [], eth_token = '')

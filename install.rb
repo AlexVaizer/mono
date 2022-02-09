@@ -1,5 +1,6 @@
 #!/usr/bin/ruby
 require './lib/server_settings.rb'
+require 'sqlite3'
 
 #GET IP ADDRESS
 values = {}
@@ -50,13 +51,33 @@ values['eth_token'] = gets.chomp
 puts "ETH token saved: #{values['eth_token']}"
 puts "----------------------------------------------"
 
-# Get Etherscan TOKEN
+# Get Etherscan Address
 puts "Please enter your Ether Address(es). Should be separated by comma"
 values['eth_address'] = gets.chomp
 puts "ETH token saved: #{values['eth_address']}"
 puts "----------------------------------------------"
 
-env_values_string = "MONO_SERV_IP='#{values['ip']}' MONO_SERV_PORT='#{values['port']}' ETH_TOKEN=#{values['eth_token']} ETH_ADDRESSES=#{values['eth_address']} MONO_TOKEN='#{values['mono_token']}' MONO_BASIC_AUTH_USER='#{values['mono_user']}' MONO_BASIC_AUTH_PASS='#{values['mono_pass']}' MONO_SSL_FOLDER='#{values['mono_ssl']}'"
+# Get DB PATH
+puts "Please enter SQLite DB path."
+values['db_path'] = gets.chomp
+
+create_accounts = 'CREATE TABLE IF NOT EXISTS "accounts" ("id"	TEXT NOT NULL UNIQUE,"type"	TEXT,"currencyCode"	TEXT,"balance"	NUMERIC,"balanceUsd"	NUMERIC,"cashbackType"	TEXT,"creditLimit"	NUMERIC,"maskedPan"	TEXT,"sendId"	TEXT,"maskedPanFull"	TEXT, "ethUsdRate" NUMERIC, "iban"	TEXT,"timeUpdated"	TEXT,PRIMARY KEY("id"))' 
+create_clients = 'CREATE TABLE IF NOT EXISTS "clients" ("clientId"	TEXT UNIQUE,"name"	TEXT,"webHookUrl"	TEXT,"permissions"	TEXT,"timeUpdated"	TEXT,PRIMARY KEY("clientId"))'
+File.delete(values['db_path']) if File.exist?(values['db_path'])
+db = SQLite3::Database.open(values['db_path'])
+db.results_as_hash = true
+db.execute(create_accounts)
+db.execute(create_clients)
+result_accounts = db.execute("PRAGMA table_info(accounts)")
+result_clients =  db.execute("PRAGMA table_info(clients)")
+db.close
+puts "Clients table created: #{result_clients}"
+puts "Accounts table created: #{result_accounts}"
+puts "DB path saved: #{values['db_path']}"
+puts "----------------------------------------------"
+
+
+env_values_string = "MONO_SERV_IP='#{values['ip']}' MONO_SERV_PORT='#{values['port']}' ETH_TOKEN=#{values['eth_token']} ETH_ADDRESSES=#{values['eth_address']} MONO_TOKEN='#{values['mono_token']}' MONO_BASIC_AUTH_USER='#{values['mono_user']}' MONO_BASIC_AUTH_PASS='#{values['mono_pass']}' MONO_SSL_FOLDER='#{values['mono_ssl']}' MONO_DB_PATH='#{values['db_path']}' MONO_ENV='development'"
 puts "(WORKS ONLY IN UBUNTU) Do you want to set up service [y/n]"
 service_setup = gets.chomp
 until ['y','n'].include?(service_setup)
@@ -67,5 +88,5 @@ if service_setup == 'y' then
 	ServerSettings.setup_service(values)
 else
 	puts "----------------------------------------------"
-	puts "Command to run server manually:\n#{env_values_string} ruby #{ServerSettings::CURRENT_FOLDER}/monobank.rb -e development"
+	puts "Command to run server manually:\n#{env_values_string} ruby #{ServerSettings::CURRENT_FOLDER}/monobank.rb"
 end

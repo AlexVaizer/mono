@@ -3,4 +3,5 @@
 ./logs/*
 *.DS_Store
 *.pid
+*.sqlite
 *.lock

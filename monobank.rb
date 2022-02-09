@@ -15,15 +15,9 @@ require File.expand_path('./lib/auth.rb')
 require File.expand_path('./lib/datafactory.rb')
 #########################################################
 
+env = ENV['MONO_ENV'].to_sym || :development
 
-OptionParser.new do |opts|
-	opts.banner = "Usage: ruby sinatra.rb -e <ENV>"
-	opts.on("-e", "--env ENVIRONMENT", "Set a testing ENV. Possible values: development, test, production") do |e|
-		@env = e.to_sym
-	end
-end.parse!
-
-ServerSettings::ENV = ServerSettings.validate_env(@env)
+ServerSettings::ENV = ServerSettings.validate_env(env)
 ServerSettings.save_pid
 
 	set :environment, ServerSettings::ENV
@@ -34,7 +28,6 @@ ServerSettings.save_pid
 	ServerSettings.enable_ssl(ServerSettings::ENV)
 	set :views, Proc.new { File.join(root, "views") }
 	puts "Server started for ENV:#{ServerSettings::ENV} at #{ServerSettings::IP}:#{ServerSettings::PORT}" 
-
 		
 	protect do
 		get '/' do 
@@ -42,24 +35,14 @@ ServerSettings.save_pid
 			date_end = params['end'] || Time.now.to_i
 			begin
 				mono = MonobankConnector.new
-				mono.client_info = DataFactory::Mono.return_client_info(ServerSettings::ENV)
-				mono.accounts = mono.client_info[:accounts]
-				mono.client_info.delete(:accounts)
-				mono.accounts.concat(DataFactory::ETH.return_client_info(ServerSettings::ENV))
-				@list = mono.accounts
-				@title = "Accounts List"
-				if (!(params['id'].nil? || params['id'].empty?) && mono.accounts.any? {|h| h[:id] == params['id']})  then 
-					mono.selected_account = params['id']
-					@account_info = mono.accounts.select { |x| x[:id] == mono.selected_account }
-					@account_info = @account_info.first
-					if mono.selected_account[0..1] == '0x'
-						mono.statements = DataFactory::ETH.return_statements(ServerSettings::ENV, mono.selected_account)
-					else
-						mono.statements = DataFactory::Mono.return_statements(ServerSettings::ENV, mono.selected_account)
-					end
-					@statements = mono.statements
-					@title = @account_info[:maskedPan]
+				mono.get_client_info
+				@title = "Accounts List – MONO"
+				if !(params['id'].nil? || params['id'].empty?) then 
+					mono.select_account(params['id'])
+					mono.get_statements_from_api
+					@title = "#{mono.selected_account[:maskedPan]} – MONO"
 				end
+				@object = mono
 				erb :index
 			rescue 
 				@errors = ServerSettings.return_errors($!,$@,ServerSettings::DEBUG_MESSAGES)

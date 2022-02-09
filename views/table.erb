@@ -1,12 +1,12 @@
 <%
 	@table_content = {}
-	@table_content[:content] = @statements
-	if @account_info[:type] == 'ETH' then
-		@table_content[:headers] = ['Time', 'Amount', 'TX ID', 'Gas fee']
-		@table_content[:width] = [20,20,40,20]
+	@table_content[:content] = @object.statements
+	if @object.selected_account[:type] == 'ETH' then
+		@table_content[:headers] = ['Time', 'Amount', 'TX Link', 'Gas fee']
+		@table_content[:width] = [20,20,38,20]
 	else
 		@table_content[:headers] = ['Time', 'Amount', 'Description', 'Balance']
-		@table_content[:width] = [20,20,40,20]
+		@table_content[:width] = [20,20,38,20]
 	end
 %>
 <div class='w3-container w3-margin'>
@@ -14,12 +14,14 @@
 	
 	<table class='w3-table-all w3-hoverable w3-small w3-card-4'>
 		<tr class="">
+			<th> </th>
 			<% @table_content[:headers].each do |header| %>
 			<th><%= header %></th>
 			<%end%>
 		</tr>
 		<% @table_content[:content].each do |row| %>
 		<tr>
+			<td width='2%' class=""><input class="w3-check w3-center w3-middle" type="checkbox" style="width: 12px;height: 12px; margin-top: -35%;vertical-align: middle;"></td>
 			<%i = 0
 			row.each do |key,cell|%>
 				<td  width='<%=@table_content[:width][i]%>%'><%=cell%></td>

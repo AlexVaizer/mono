@@ -2,16 +2,16 @@
 	<ul class="w3-ul w3-card-4">
 		<li class="w3-bar" >
 		<span onclick='location.replace("./")' class="w3-bar-item w3-button w3-white w3-xlarge w3-left w3-middle" style="vertical-align: middle;"><</span>
-			<img src="./public/<%=@account_info[:currencyCode]%>.png" class="w3-bar-item w3-circle w3-hide-small" style="width:81px">
+			<img src="./public/<%=@object.selected_account[:currencyCode]%>.png" class="w3-bar-item w3-circle w3-hide-small" style="width:81px">
 			<div class="w3-bar-item">
 				<%
-					if @account_info[:type] == 'ETH' then %>
-						<span class="w3-large"><%= @account_info[:balance]%> <%=@account_info[:currencyCode]%> <b><%=@account_info[:balance_usd]%> USD</b></span><br>
-						<span><%=@account_info[:maskedPan_full]%></span>
+					if @object.selected_account[:type] == 'ETH' then %>
+						<span class="w3-large wrapping"><%= @object.selected_account[:balance]%> <%=@object.selected_account[:currencyCode]%> || <b><%=@object.selected_account[:balanceUsd]%> USD</b> || Rate: <%= @object.selected_account[:ethUsdRate]%></span><br>
+						<span class="wrapping"><%=@object.selected_account[:maskedPanFull]%></span>
 					<%
 					else %>		
-					<span class="w3-large"><%= @account_info[:balance]%> <%=@account_info[:currencyCode]%> <b><%=@account_info[:type]%></b></span><br>
-					<span><%=@account_info[:maskedPan]%></span>
+					<span class="w3-large"><%= @object.selected_account[:balance]%> <%=@object.selected_account[:currencyCode]%> <b><%=@object.selected_account[:type]%></b></span><br>
+					<span><%=@object.selected_account[:maskedPan]%></span>
 					<%end%>
 				
 			</div>

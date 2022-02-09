@@ -143,6 +143,7 @@ module DataFactory
 	end
 
 	module DataFactory::ETH
+		require 'bigdecimal'
 		ETH_ADDRESSES = ENV["ETH_ADDRESSES"]
 		ETH_TOKEN = ENV['ETH_TOKEN']
 		ETH_URL = 'https://api.etherscan.io/api/'
@@ -175,8 +176,8 @@ module DataFactory
 				client_info = self.get_client_info()
 				accounts = []
 				client_info[:balances].each do |account|
-					in_float = account['balance'].to_i/1000000000000000000.to_f
-					bal_eth = in_float.round(4)
+					in_float = (BigDecimal(account['balance'])/10**18).to_f
+					bal_eth = in_float.round(6)
 					bal_usd = bal_eth * client_info[:last_price]['ethusd'].to_f
 					bal_usd = bal_usd.round(2)
 					account = {
@@ -211,10 +212,8 @@ module DataFactory
 			statements = self.get_statements(address)
 			parsed_statements = []
 			statements.each do |stat| 
-				balance_i = stat['gasPrice'].to_i * stat['gasUsed'].to_i
-				balance = balance_i.to_f / 10000000000000000000
-				amount_i = stat['value'].to_i
-				amount = amount_i.to_f / 1000000000000000000
+				fee = ((BigDecimal(stat['gasPrice']) * BigDecimal(stat['gasUsed'])) / 10**18).to_f.round(6)
+				amount = (BigDecimal(stat['value']) / 10**18).to_f.round(6)
 				if stat['from'].downcase == address.downcase then 
 					symbol =  '-'
 				else 
@@ -224,7 +223,7 @@ module DataFactory
 					time: Time.at(stat['timeStamp'].to_i).strftime(DataFactory::TIME_FORMAT), 
 					amount: symbol + amount.to_s, 
 					tx_id: "<a target=_new href='https://etherscan.io/tx/#{stat['hash']}'>#{stat['hash']}</a>",
-					tx_fee: balance,
+					tx_fee: fee,
 				}
 				parsed_statements.push(a)
 			end

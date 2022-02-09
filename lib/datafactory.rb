@@ -41,14 +41,14 @@ module DataFactory
 				client_info = [] if client_info.empty?
 			else
 				error = client_info
-				raise StandardError.new("Respose from API: #{url} - #{response.code} \n #{error}.\nPlease try again later")
+				raise StandardError.new("Respose from API: #{uri.host} - #{response.code} - #{error}.\nPlease try again later")
 			end	
 		else
 			if response.code == '200' then 
 				client_info = JSON.parse(response.read_body)
 			else
 				error = JSON.parse(response.read_body)
-				raise StandardError.new("Respose from API: #{url} - #{response.code} - #{error}.\nPlease try again later")
+				raise StandardError.new("Respose from API: #{uri.host} - #{response.code} - #{error}.\nPlease try again later")
 			end
 		end
 		return client_info

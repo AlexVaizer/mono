@@ -6,7 +6,7 @@
 	<body>
 		<%= erb :header %>
 		<% begin %>
-			<% if (!@object.statements.empty?) && (!@object.selected_account.empty?) then %>			
+			<% if (@object.statements) && (!@object.selected_account.empty?) then %>			
 				<%= erb :single_card %>
 				<%= erb :table%>
 			<% else %>

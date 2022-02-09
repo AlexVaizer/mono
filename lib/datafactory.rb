@@ -187,6 +187,7 @@ module DataFactory
 						maskedPan: "#{account['account'][0..4]}..#{account['account'][-5..-1]}",
 						balance: bal_eth,
 						balanceUsd: bal_usd,
+						ethUsdRate: client_info[:last_price]['ethusd'].to_f,
 						id: account['account'],
 						maskedPanFull: account['account']
 					}
@@ -223,7 +224,7 @@ module DataFactory
 				a = {
 					time: Time.at(stat['timeStamp'].to_i).strftime(DataFactory::TIME_FORMAT), 
 					amount: symbol + amount.to_s, 
-					tx_id: "<a target=_new href='https://etherscan.io/tx/#{stat['hash']}'>#{stat['hash']}</a>",
+					tx_id: "<a target=_new href='https://etherscan.io/tx/#{stat['hash']}'>#{stat['hash'][0..4]}..#{stat['hash'][-4..-1]}</a>",
 					tx_fee: fee,
 				}
 				parsed_statements.push(a)

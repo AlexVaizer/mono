@@ -2,7 +2,7 @@
 	@table_content = {}
 	@table_content[:content] = @object.statements
 	if @object.selected_account[:type] == 'ETH' then
-		@table_content[:headers] = ['Time', 'Amount', 'TX ID', 'Gas fee']
+		@table_content[:headers] = ['Time', 'Amount', 'TX Link', 'Gas fee']
 		@table_content[:width] = [20,20,38,20]
 	else
 		@table_content[:headers] = ['Time', 'Amount', 'Description', 'Balance']

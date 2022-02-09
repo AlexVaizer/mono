@@ -61,7 +61,7 @@ puts "----------------------------------------------"
 puts "Please enter SQLite DB path."
 values['db_path'] = gets.chomp
 
-create_accounts = 'CREATE TABLE IF NOT EXISTS "accounts" ("id"	TEXT NOT NULL UNIQUE,"type"	TEXT,"currencyCode"	TEXT,"balance"	NUMERIC,"balanceUsd"	NUMERIC,"cashbackType"	TEXT,"creditLimit"	NUMERIC,"maskedPan"	TEXT,"sendId"	TEXT,"maskedPanFull"	TEXT,"iban"	TEXT,"timeUpdated"	TEXT,PRIMARY KEY("id"))' 
+create_accounts = 'CREATE TABLE IF NOT EXISTS "accounts" ("id"	TEXT NOT NULL UNIQUE,"type"	TEXT,"currencyCode"	TEXT,"balance"	NUMERIC,"balanceUsd"	NUMERIC,"cashbackType"	TEXT,"creditLimit"	NUMERIC,"maskedPan"	TEXT,"sendId"	TEXT,"maskedPanFull"	TEXT, "ethUsdRate" NUMERIC, "iban"	TEXT,"timeUpdated"	TEXT,PRIMARY KEY("id"))' 
 create_clients = 'CREATE TABLE IF NOT EXISTS "clients" ("clientId"	TEXT UNIQUE,"name"	TEXT,"webHookUrl"	TEXT,"permissions"	TEXT,"timeUpdated"	TEXT,PRIMARY KEY("clientId"))'
 File.delete(values['db_path']) if File.exist?(values['db_path'])
 db = SQLite3::Database.open(values['db_path'])

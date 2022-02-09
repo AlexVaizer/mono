@@ -6,8 +6,8 @@
 			<div class="w3-bar-item">
 				<%
 					if @object.selected_account[:type] == 'ETH' then %>
-						<span class="w3-large"><%= @object.selected_account[:balance]%> <%=@object.selected_account[:currencyCode]%> || <b><%=@object.selected_account[:balanceUsd]%> USD</b></span><br>
-						<span><%=@object.selected_account[:maskedPanFull]%></span>
+						<span class="w3-large wrapping"><%= @object.selected_account[:balance]%> <%=@object.selected_account[:currencyCode]%> || <b><%=@object.selected_account[:balanceUsd]%> USD</b> || Rate: <%= @object.selected_account[:ethUsdRate]%></span><br>
+						<span class="wrapping"><%=@object.selected_account[:maskedPanFull]%></span>
 					<%
 					else %>		
 					<span class="w3-large"><%= @object.selected_account[:balance]%> <%=@object.selected_account[:currencyCode]%> <b><%=@object.selected_account[:type]%></b></span><br>

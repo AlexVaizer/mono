@@ -150,6 +150,7 @@ module DataFactory
 		TX_LIST_PARAMS = {module: 'account',action: 'txlist',tag: 'latest',startblock: 0,endblock: 99999999,sort: 'desc'}
 		LAST_PRICE_PARAMS = {module: 'stats',action: 'ethprice'}
 		BALANCE_PARAMS = {module: 'account',action: 'balancemulti',tag: 'latest',address: ETH_ADDRESSES}
+		ROUND_AMOUNTS_TO = 6
 		MOCK_DATA = {
 			last_price: {"ethbtc"=>"0.06809", "ethbtc_timestamp"=>"1643494559", "ethusd"=>"2603.9", "ethusd_timestamp"=>"1643494552"},
 			balance: [{"account"=>"0xA07fDc4A73a067078601a00C36dc6627FA0A80B8", "balance"=>"1881190803163104475"},{"account"=>"0xA07fDc4A73a067078601a00C36dc6627FA0A80B9", "balance"=>"1881190803163104475"}],
@@ -177,9 +178,9 @@ module DataFactory
 				accounts = []
 				client_info[:balances].each do |account|
 					in_float = (BigDecimal(account['balance'])/10**18).to_f
-					bal_eth = in_float.round(6)
+					bal_eth = in_float.round(ROUND_AMOUNTS_TO)
 					bal_usd = bal_eth * client_info[:last_price]['ethusd'].to_f
-					bal_usd = bal_usd.round(2)
+					bal_usd = bal_usd.round(1)
 					account = {
 						currencyCode: 'ETH',
 						type: 'ETH',
@@ -212,8 +213,8 @@ module DataFactory
 			statements = self.get_statements(address)
 			parsed_statements = []
 			statements.each do |stat| 
-				fee = ((BigDecimal(stat['gasPrice']) * BigDecimal(stat['gasUsed'])) / 10**18).to_f.round(6)
-				amount = (BigDecimal(stat['value']) / 10**18).to_f.round(6)
+				fee = ((BigDecimal(stat['gasPrice']) * BigDecimal(stat['gasUsed'])) / 10**18).to_f.round(ROUND_AMOUNTS_TO)
+				amount = (BigDecimal(stat['value']) / 10**18).to_f.round(ROUND_AMOUNTS_TO)
 				if stat['from'].downcase == address.downcase then 
 					symbol =  '-'
 				else 

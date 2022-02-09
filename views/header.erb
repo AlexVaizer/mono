@@ -1,7 +1,17 @@
+<%
+cards_colors = {
+	'white' => 'white',
+	'black' => 'black',
+	'eaid' => 'cyan',
+	'fop' => 'red',
+	'eth' => 'green'
+}
+%>
+
 <div class='w3-dark-grey w3-bar w3-responsive'>
 	<%@object.accounts.each do |account|%>
 		<a href="./?id=<%=account[:id]%>">
-			<div class='w3-bar-item w3-hover-<%= account[:type] %> w3-round-large' style="border-right: 1px solid black;font-size: 12px">
+			<div class='w3-bar-item w3-hover-<%= cards_colors[account[:type].downcase] %> w3-round-large' style="border-right: 1px solid black;font-size: 12px">
 				<%= account[:maskedPan] %> <br>
 				<%= account[:balance] %> <%= account[:currencyCode] %>
 			</div>

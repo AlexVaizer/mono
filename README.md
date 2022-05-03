@@ -18,11 +18,11 @@ Deployment and work is tested on Ubuntu 20.04.2 LTS hosted on AWS virtual machin
 
 # Installation (For Ubuntu)
  - Install ruby v2.7.0, net-tools and sqlite client: `sudo apt install ruby-full ruby-bundler net-tools libsqlite3-dev`
+ - Install certbot and get SSL certificates, if you need https support: `sudo snap install core; sudo snap refresh core; sudo snap install --classic certbot; sudo certbot certonly --standalone` and copy the path where certificates are saved, you gonna need it on Service Setup step
  - Clone the repo: `git clone https://github.com/AlexVaizer/mono.git`
  - Install dependencies: `cd ./mono/ && bundle install`
  - Get a Monobank API Token: https://api.monobank.ua/
  - Get an Etherscan API Token https://docs.etherscan.io/
- - Create a folder on your server and copy SSL certificate/key there. They should be named `cert.pem` (certificate) and `privkey.pem` (private key)
  - Run service setup: `sudo ./install.rb`, follow the instructions (USER-INPUT needed). This will create a service file in `/etc/systemd/system/monobank.service`
  - sqlite DB is created by the install.rb script, so no need to create manually or do any migrations.
 

@@ -17,8 +17,7 @@ Deployment and work is tested on Ubuntu 20.04.2 LTS hosted on AWS virtual machin
 
 
 # Installation (For Ubuntu)
- - Install ruby v2.7.0: `sudo apt install ruby-full`
- - Install sqlite client: `sudo apt-get install libsqlite3-dev`
+ - Install ruby v2.7.0, net-tools and sqlite client: `sudo apt install ruby-full ruby-bundler net-tools libsqlite3-dev`
  - Clone the repo: `git clone https://github.com/AlexVaizer/mono.git`
  - Install dependencies: `cd ./mono/ && bundle install`
  - Get a Monobank API Token: https://api.monobank.ua/

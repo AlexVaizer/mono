@@ -13,6 +13,7 @@ module DataFactory
 		'9999'			=> 'ETH',
 	}
 	ENVIRONMENT = ENV['MONO_ENV'].to_sym || :development
+	CLIENT_INFO_MODEL = [:clientId, :name, :webHookUrl, :permissions]
 	ACCOUNT_MODEL = [:id, :balance, :balanceUsd, :currencyCode, :type, :maskedPan, :maskedPanFull, :ethUsdRate]
 
 	
@@ -119,8 +120,9 @@ module DataFactory
 			end
 			result_accounts.sort_by! { |k| k[:maskedPan]}
 			client_info.delete(:accounts)
-			client_info[:accounts] = result_accounts
-			return client_info
+			result_info = DataFactory.remap_by_model(client_info, DataFactory::CLIENT_INFO_MODEL)
+			result_info[:accounts] = result_accounts
+			return result_info
 		end
 
 		def self.get_statements(selected_account, date_start = Time.now.to_i - 30*24*60*60, date_end = Time.now.to_i)

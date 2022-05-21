@@ -13,8 +13,16 @@ module DataFactory
 		'9999'			=> 'ETH',
 	}
 	ENVIRONMENT = ENV['MONO_ENV'].to_sym || :development
+	ACCOUNT_MODEL = [:id, :balance, :balanceUsd, :currencyCode, :type, :maskedPan, :maskedPanFull, :ethUsdRate]
 
 	
+	def DataFactory.remap_by_model(hash_source, model = [])
+		model.each do |field|
+			hash_dst[field] = hash_source[field]
+		end
+		return hash_dst
+	end
+
 	def DataFactory.send_request(url, mono_token = '', params = [], eth_token = '')
 		if url.downcase.include?('etherscan')
 			raise ArgumentError.new("Add params Hash and ETH token") if params.empty? || eth_token.empty?
@@ -105,7 +113,8 @@ module DataFactory
 				account[:maskedPan] = account[:maskedPan].gsub('******', '*')
 				account[:balance] = account[:balance].to_f/100
 				account[:type] = account[:type].upcase
-				result_accounts.push(account)
+				result = DataFactory.remap_by_model(account, DataFactory::ACCOUNT_MODEL)
+				result_accounts.push(result)
 			end
 			result_accounts.sort_by! { |k| k[:maskedPan]}
 			client_info.delete(:accounts)
@@ -191,7 +200,8 @@ module DataFactory
 						id: account['account'],
 						maskedPanFull: account['account']
 					}
-					accounts.push(account)
+					result = DataFactory.remap_by_model(account, DataFactory::ACCOUNT_MODEL)
+					accounts.push(result)
 				end
 			else
 				accounts = [] 

@@ -17,6 +17,7 @@ module DataFactory
 
 	
 	def DataFactory.remap_by_model(hash_source, model = [])
+		hash_dst = {}
 		model.each do |field|
 			hash_dst[field] = hash_source[field]
 		end

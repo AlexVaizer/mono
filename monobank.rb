@@ -16,7 +16,7 @@ require File.expand_path('./lib/datafactory.rb')
 #########################################################
 
 env = ENV['MONO_ENV'].to_sym || :development
-
+enable :logging
 ServerSettings::ENV = ServerSettings.validate_env(env)
 ServerSettings.save_pid
 
@@ -27,7 +27,6 @@ ServerSettings.save_pid
 	set :ssl_key, File.expand_path(ServerSettings::SSL_KEY_PATH)
 	ServerSettings.enable_ssl(ServerSettings::ENV)
 	set :views, Proc.new { File.join(root, "views") }
-	puts "Server started for ENV:#{ServerSettings::ENV} at #{ServerSettings::IP}:#{ServerSettings::PORT}" 
 		
 	protect do
 		get '/' do 
@@ -46,6 +45,7 @@ ServerSettings.save_pid
 				erb :index
 			rescue 
 				@errors = ServerSettings.return_errors($!,$@,ServerSettings::DEBUG_MESSAGES)
+				logger.error("#{$!} #{$@}")
 				status 500
 				erb :errors
 			end

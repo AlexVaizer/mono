@@ -15,6 +15,7 @@ module DataFactory
 	ENVIRONMENT = ENV['MONO_ENV'].to_sym || :development
 	CLIENT_INFO_MODEL = [:clientId, :name, :webHookUrl, :permissions]
 	ACCOUNT_MODEL = [:id, :balance, :balanceUsd, :currencyCode, :type, :maskedPan, :maskedPanFull, :ethUsdRate]
+	JAR_MODEL = [:id, :sendId, :title, :description, :currencyCode, :balance, :goal]
 
 	
 	def DataFactory.remap_by_model(hash_source, model = [])
@@ -71,16 +72,21 @@ module DataFactory
 		TOKEN = ENV['MONO_TOKEN']
 		MOCK_DATA = {
 			client_info: {
-				"clientId"=>"4xhSmt92RD", 
-				"name"=>"Вайзер Олександр", 
-				"webHookUrl"=>"", 
-				"permissions"=>"psf", 
-				"accounts"=>[
-					{"id"=>"lu_DfA927YqdOUyQyiwIwA", "currencyCode"=>840, "cashbackType"=>"UAH", "balance"=>1200.0, "creditLimit"=>0, "maskedPan"=>["537541*0987"], "type"=>"BLACK", "iban"=>"UA983220010000026204304774520"}, 
-					{"id"=>"Wru4sMWBrWfsCGpwg_2OJg", "currencyCode"=>978, "cashbackType"=>"UAH", "balance"=>12000, "creditLimit"=>0, "maskedPan"=>["537541*4567"], "type"=>"BLACK", "iban"=>"UA693220010000026203301609457"}, 
-					{"id"=>"vwM0597-8y5pyZX-RjmpZQ", "currencyCode"=>980, "cashbackType"=>"UAH", "balance"=>1588, "creditLimit"=>0, "maskedPan"=>["537541*9875"], "type"=>"WHITE", "iban"=>"UA173220010000026206300063546"}, 
-					{"id"=>"RXgPPTrGMLQu_iXuGRXJbg", "currencyCode"=>980, "cashbackType"=>"", "balance"=>12040, "creditLimit"=>0, "maskedPan"=>["FOP"], "type"=>"FOP", "iban"=>"UA173220010000026206300063546"}
-				]
+					"clientId"=>"4xhSmt92RD", 
+					"name"=>"Вайзер Олександр", 
+					"webHookUrl"=>"", 
+					"permissions"=>"psfj", 
+					"accounts"=>[ 
+						{"id"=>"Wru4sMWBrWfsCGpwg_2OJg", "sendId"=>"7QTY7LSAdJ", "currencyCode"=>978, "cashbackType"=>"UAH", "balance"=>0, "creditLimit"=>0, "maskedPan"=>["537541******8332"], "type"=>"black", "iban"=>"UA693220010000026203301620141"}, 
+						{"id"=>"RXgPPTrGMLQu_iXuGRXJbg", "sendId"=>"", "currencyCode"=>980, "cashbackType"=>"", "balance"=>50, "creditLimit"=>0, "maskedPan"=>[], "type"=>"fop", "iban"=>"UA623220010000026009300005217"}, 
+						{"id"=>"vwM0597-8y5pyZX-RjmpZQ", "sendId"=>"4xhSmt92RD", "currencyCode"=>980, "cashbackType"=>"UAH", "balance"=>791749, "creditLimit"=>0, "maskedPan"=>["537541******1260"], "type"=>"black", "iban"=>"UA173220010000026206300008932"}, 
+						{"id"=>"aDIOepi3OM48BgBqHVZQhw", "sendId"=>"7Vx3VA7h7X", "currencyCode"=>980, "cashbackType"=>"UAH", "balance"=>248018, "creditLimit"=>0, "maskedPan"=>["444111******7535"], "type"=>"white", "iban"=>"UA423220010000026200313981536"}, 
+						{"id"=>"ZhcEkxQNsgSozL2lh40CKw", "sendId"=>"", "currencyCode"=>980, "cashbackType"=>"UAH", "balance"=>0, "creditLimit"=>0, "maskedPan"=>["444111******8894"], "type"=>"eAid", "iban"=>"UA633220010000026206320000095"}
+					], 
+					"jars"=>[
+						{"id"=>"SlHUM-1qJEA_pzc_EvGIf5CsIGVY-l0", "sendId"=>"jar/5D155Y2agA", "title"=>"На машину", "description"=>"", "currencyCode"=>978, "balance"=>40000, "goal"=>40000}, 
+						{"id"=>"3_eXW5If939bPhonMGclqxbaIr5JMUc", "sendId"=>"jar/3XSbN32TKf", "title"=>"На черный день", "description"=>"", "currencyCode"=>840, "balance"=>40000, "goal"=>40000}
+					]
 			},
 			statements: [
 				{"id"=>"fQ35XN5yrDI0wFys", "time"=>1612212722, "description"=>"Patreon", "mcc"=>5815, "amount"=>-14080, "operationAmount"=>-500, "currencyCode"=>840, "commissionRate"=>0, "cashbackAmount"=>0, "balance"=>1409232, "hold"=>false, "receiptId"=>"K737-HMXC-H45X-XA6K"}, 
@@ -98,11 +104,7 @@ module DataFactory
 			end
 			return client_info
 		end
-
-		def self.return_client_info()
-			client_info = self.get_client_info()
-			client_info = client_info.transform_keys(&:to_sym)
-			accounts = client_info[:accounts]
+		def self.parse_accounts(accounts)
 			result_accounts = []
 			accounts.each do |account|
 				account = account.transform_keys(&:to_sym)
@@ -119,9 +121,29 @@ module DataFactory
 				result_accounts.push(result)
 			end
 			result_accounts.sort_by! { |k| k[:maskedPan]}
-			client_info.delete(:accounts)
+			return result_accounts
+		end
+		def self.parse_jars(jars)
+			result = []
+			jars.each do |jar|
+				jar = jar.transform_keys(&:to_sym)
+				result_jar = DataFactory.remap_by_model(jar, DataFactory::JAR_MODEL)
+				result_jar[:currencyCode] = CURRENCIES[jar[:currencyCode].to_s]
+				result_jar[:balance] = result_jar[:balance].to_f/100
+				result_jar[:goal] = result_jar[:goal].to_f/100
+				result.push(result_jar)
+			end
+			return result
+		end
+
+		def self.return_client_info()
+			client_info = self.get_client_info()
+			client_info = client_info.transform_keys(&:to_sym)
+			result_accounts = self.parse_accounts(client_info[:accounts])
+			result_jars = self.parse_jars(client_info[:jars])
 			result_info = DataFactory.remap_by_model(client_info, DataFactory::CLIENT_INFO_MODEL)
 			result_info[:accounts] = result_accounts
+			result_info[:jars] = result_jars
 			return result_info
 		end
 
@@ -149,7 +171,6 @@ module DataFactory
 				}
 				parsed_statements.push(a)
 			end
-			#obj.statements = parsed_statements
 			return parsed_statements
 		end
 	end
@@ -270,14 +291,14 @@ module DataFactory
 		##
 		#Creates or updates row in a TABLE by ID_FIELD with DATA
 		def self.create(table, id_field, data) 
-			acc = self.get(table, data[id_field.to_sym], id_field) 
+			acc = self.get(table, data[id_field.to_sym], id_field)
 			if ! acc then
 				data[:timeUpdated] = Time.now.iso8601
 				keys = data.keys.map { |e| e.to_s }.join(',')
 				values = " '#{data.values.join('\',\'')}' "
 				request = "INSERT INTO #{table} (#{keys.to_s}) VALUES (#{values})"
 				re = self.request(request)
-				return re = self.get(table, data[id_field.to_sym], id_field) 
+				return re = self.get(table, data[id_field.to_sym], id_field)
 			else
 				acc = self.update(table, id_field, data)
 				return acc

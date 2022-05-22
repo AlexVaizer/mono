@@ -1,9 +1,12 @@
 class MonobankConnector
-	attr_accessor :client_info, :accounts, :selected_account, :statements 
+	attr_accessor :client_info, :accounts, :selected_account, :statements, :jars
 	CLIENT_INFO_TABLE = 'clients'
 	CLIENT_INFO_TABLE_ID = 'clientId'
 	ACCOUNTS_TABLE = 'accounts'
 	ACCOUNTS_TABLE_ID = 'id'
+	JARS_TABLE = 'jars'
+	JARS_TABLE_ID = 'id'
+	
 	
 	def initialize()
 		@client_info = {}
@@ -11,6 +14,7 @@ class MonobankConnector
 		@accounts = []
 		@statements = []
 		@selected_account = {}
+		@jars = []
 	end
 
 	def get_client_info_from_db()
@@ -33,6 +37,15 @@ class MonobankConnector
 			return false
 		end
 	end
+	def get_jars_from_db()
+		jars = DataFactory::SQLite.get_all(JARS_TABLE)
+		if ! jars.empty? then
+			@jars  = jars
+			return true
+		else
+			return false
+		end
+	end
 
 	def get_client_info
 		self.get_client_info_from_db
@@ -40,18 +53,24 @@ class MonobankConnector
 			self.get_client_info_from_api_and_save_to_db
 		else
 			self.get_accounts_from_db
+			self.get_jars_from_db
 		end
 	end
 
 	def get_client_info_from_api_and_save_to_db
 		client_info = DataFactory::Mono.return_client_info()
 		@accounts = client_info[:accounts]
+		@jars = client_info[:jars]
 		@accounts.concat(DataFactory::ETH.return_client_info())
 		client_info.delete(:accounts)
+		client_info.delete(:jars)
 		@client_info = client_info
 		DataFactory::SQLite.create(CLIENT_INFO_TABLE, CLIENT_INFO_TABLE_ID, @client_info)
 		@accounts.each do |acc|
 				DataFactory::SQLite.create(ACCOUNTS_TABLE, ACCOUNTS_TABLE_ID, acc)
+		end
+		@jars.each do |jar|
+				DataFactory::SQLite.create(JARS_TABLE, JARS_TABLE_ID, jar)
 		end
 	end
 

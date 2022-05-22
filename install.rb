@@ -63,16 +63,20 @@ values['db_path'] = gets.chomp
 
 create_accounts = 'CREATE TABLE IF NOT EXISTS "accounts" ("id"	TEXT NOT NULL UNIQUE,"type"	TEXT,"currencyCode"	TEXT,"balance"	NUMERIC,"balanceUsd"	NUMERIC,"cashbackType"	TEXT,"creditLimit"	NUMERIC,"maskedPan"	TEXT,"sendId"	TEXT,"maskedPanFull"	TEXT, "ethUsdRate" NUMERIC, "iban"	TEXT,"timeUpdated"	TEXT,PRIMARY KEY("id"))' 
 create_clients = 'CREATE TABLE IF NOT EXISTS "clients" ("clientId"	TEXT UNIQUE,"name"	TEXT,"webHookUrl"	TEXT,"permissions"	TEXT,"timeUpdated"	TEXT,PRIMARY KEY("clientId"))'
+create_jars = 'CREATE TABLE IF NOT EXISTS "jars" ("id"	TEXT NOT NULL UNIQUE,"sendId"	TEXT,"title"	TEXT,"description"	TEXT,"currencyCode"	TEXT,"balance"	NUMERIC,"goal"	NUMERIC,"timeUpdated"	TEXT,PRIMARY KEY("id"))'
 File.delete(values['db_path']) if File.exist?(values['db_path'])
 db = SQLite3::Database.open(values['db_path'])
 db.results_as_hash = true
 db.execute(create_accounts)
 db.execute(create_clients)
+db.execute(create_jars)
 result_accounts = db.execute("PRAGMA table_info(accounts)")
 result_clients =  db.execute("PRAGMA table_info(clients)")
+result_jars =  db.execute("PRAGMA table_info(jars)")
 db.close
-puts "Clients table created: #{result_clients}"
-puts "Accounts table created: #{result_accounts}"
+puts "Clients table created: #{result_clients}\n"
+puts "Accounts table created: #{result_accounts}\n"
+puts "Jars table created: #{result_jars}\n"
 puts "DB path saved: #{values['db_path']}"
 puts "----------------------------------------------"
 

@@ -5,7 +5,7 @@
 			<li class="w3-bar" >
 				<img src="./public/<%=jar[:currencyCode]%>.png" class="w3-bar-item w3-circle w3-hide-small" style="width:81px">
 				<div class="w3-bar-item">
-						<span><%=jar[:title]%></span>
+						<a href="https://send.monobank.ua/<%=jar[:sendId]%>" target='_blank'><%=jar[:title]%></a>
 						<span class="w3-large"><b><%= jar[:balance]%></b> / <%=jar[:goal]%> <%=jar[:currencyCode]%></span><br>
 						<span><%=jar[:comment]%></span>
 				</div>

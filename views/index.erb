@@ -5,15 +5,18 @@
 	<link rel="shortcut icon" href="./public/favicon.png">
 	<body>
 		<%= erb :header %>
-		<% begin %>
-			<% if (@object.statements) && (!@object.selected_account.empty?) then %>			
-				<%= erb :single_card %>
-				<%= erb :table%>
-			<% else %>
-				<%= erb :accounts%>
-			<% end %>
-		<% rescue %>
-			<%= erb :errors%>
-		<%end%>
+		<div class="w3-container">
+			<% begin %>
+				<% if (@object.statements) && (!@object.selected_account.empty?) then %>			
+					<%= erb :single_card %>
+					<%= erb :table%>
+				<% else %>
+						<%= erb :accounts%>
+						<%= erb :jars%>
+				<% end %>
+			<% rescue %>
+				<%= erb :errors%>
+			<%end%>
+		</div>
 	</body>
 </html>

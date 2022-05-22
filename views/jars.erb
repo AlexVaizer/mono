@@ -1,0 +1,20 @@
+<h1>Jars:</h1>
+<div class='w3-display-container' style='width:100%'>
+	<div class='w3-container w3-margin w3-display-topmiddle' style='max-width: 700px; min-width: 340px'>
+		<ul class="w3-ul w3-card-4">
+			<% @object.jars.each do |jar| %>
+			    <li class="w3-bar w3-button" onclick='location.replace("https://send.monobank.ua/<%=jar[:sendId]%>")'>
+					<img src="./public/<%=jar[:currencyCode]%>.png" class="w3-bar-item w3-circle w3-hide-small" style="width:81px">
+					<div class="w3-bar-item">
+					<span class="w3-large w3-left"><%= a = jar[:title] %></span><br>
+					<span class='w3-left' style="text-align: left;">
+						<%= jar[:balance]%> 
+			        	<%=jar[:currencyCode]%> / 
+			        	<b><%=jar[:goal]%></b>
+			        </span>
+			      </div>
+			    </li>
+		    <% end %>
+		</ul>
+	</div>
+</div>

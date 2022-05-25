@@ -1,12 +1,21 @@
 <%
 	@table_content = {}
-	@table_content[:content] = @object.statements
-	if @object.selected_account[:type] == 'ETH' then
+	
+	if @object.selected_account[:type] == 'CRYPT' then
 		@table_content[:headers] = ['Time', 'Amount', 'TX Link', 'Gas fee']
 		@table_content[:width] = [20,20,38,20]
+		@table_content[:content] = @object.statements.map { |e|   
+			{
+				time: e[:time],
+				amount: e[:amount],
+				txLink: "<a target=_blank href='#{e[:etherscanUrl]}'>#{e[:txIdShort]}</a>",
+				txFee: e[:txFee]
+			}
+		}
 	else
 		@table_content[:headers] = ['Time', 'Amount', 'Description', 'Balance']
 		@table_content[:width] = [20,20,38,20]
+		@table_content[:content] = @object.statements
 	end
 %>
 <div class='w3-container w3-margin'>

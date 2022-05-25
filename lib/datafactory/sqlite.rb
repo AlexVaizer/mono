@@ -26,7 +26,6 @@ module DataFactory
 				{ name: 'maskedPan', type: 'TEXT'},
 				{ name: 'maskedPanFull', type: 'TEXT'},
 				{ name: 'ethUsdRate', type: 'NUMERIC'},
-				{ name: 'color', type: 'TEXT'},
 				{ name: 'timeUpdated', type: 'TEXT'},
 			]
 		}

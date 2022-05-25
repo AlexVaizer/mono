@@ -30,13 +30,7 @@ module DataFactory
 			],
 		}
 
-		CARDS_COLORS = {
-			:white => 'white',
-			:black => 'black',
-			:eaid => 'cyan',
-			:fop => 'red',
-			:eth => 'green'
-		}
+
 		
 		def self.get_client_info()
 			if DataFactory::MOCK_DATA_FOR.include?(ENVIRONMENT) then
@@ -65,8 +59,7 @@ module DataFactory
 					type: account[:type].upcase,
 					maskedPanFull: maskedPan,
 					maskedPan: maskedPan.gsub('******', '*'),
-					ethUsdRate: 0,
-					color: CARDS_COLORS[account[:type].downcase.to_sym]
+					ethUsdRate: 0
 				}
 				result_accounts.push(acc_res)
 			end

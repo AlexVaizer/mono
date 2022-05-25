@@ -88,7 +88,6 @@ class MonobankConnector
 
 	def select_account(id)
 		@selected_account = @accounts.select { |x| x[:id] == id }.first 
-		puts @selected_account
 		if ! @selected_account.empty? 
 			return true 
 		else

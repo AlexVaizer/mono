@@ -29,8 +29,8 @@ module DataFactory
 					{ name: 'ethUsdRate', type: 'NUMERIC'},
 					{ name: 'timeUpdated', type: 'TEXT'},
 				]
-			}
-			jars: {
+			},
+			jar: {
 				tableName: 'jars',
 				idField: 'id',
 				fields: [ 
@@ -49,8 +49,8 @@ module DataFactory
 		def self.prepare_migration_request(model)
 			request = ''
 			scheme = MODELS[model]
-			fields_string = scheme[:fields].map { |m| "\"#{m[:name]}\" #{m[:type]}" }
-			request = "CREATE TABLE IF NOT EXISTS \"#{scheme[:tableName]}\"(#{fields_string.join(',')},PRIMARY KEY(\"#{scheme[:idField]}\"))"
+			fields = scheme[:fields].map { |m| "\"#{m[:name]}\" #{m[:type]}" }
+			request = "CREATE TABLE IF NOT EXISTS \"#{scheme[:tableName]}\"(#{fields.join(',')},PRIMARY KEY(\"#{scheme[:idField]}\"))"
 			return request
 		end
 
@@ -85,14 +85,14 @@ module DataFactory
 		##
 		#Creates or updates row in a TABLE by ID_FIELD with DATA
 		def self.create(model, data)
-			acc = self.get(model, data[id_field.to_sym])
+			acc = self.get(model, data[MODELS[model][:idField]])
 			if ! acc then
 				data[:timeUpdated] = Time.now.iso8601
 				keys = data.keys.map { |e| e.to_s }.join(',')
 				values = " '#{data.values.join('\',\'')}' "
 				request = "INSERT INTO #{MODELS[model][:tableName]} (#{keys.to_s}) VALUES (#{values})"
 				re = self.request(request)
-				return re = self.get(model, data[id_field.to_sym])
+				return acc = self.get(model, data[MODELS[model][:idField]])
 			else
 				acc = self.update(model, data)
 				return acc

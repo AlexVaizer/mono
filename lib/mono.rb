@@ -7,7 +7,6 @@ class MonobankConnector
 	JARS_TABLE = 'jars'
 	JARS_TABLE_ID = 'id'
 	
-	
 	def initialize()
 		@client_info = {}
 		@client_info_updated = ''
@@ -37,6 +36,7 @@ class MonobankConnector
 			return false
 		end
 	end
+	
 	def get_jars_from_db()
 		jars = DataFactory::SQLite.get_all(JARS_TABLE)
 		if ! jars.empty? then
@@ -78,7 +78,7 @@ class MonobankConnector
 		if @selected_account.nil? || @selected_account.empty?
 			raise ArgumentError.new('no selected account found')
 		else
-			if @selected_account[:type] == 'ETH'
+			if @selected_account[:type] == 'CRYPT'
 				@statements = DataFactory::ETH.return_statements(@selected_account[:id])
 			else
 				@statements = DataFactory::Mono.return_statements(@selected_account[:id])
@@ -88,6 +88,7 @@ class MonobankConnector
 
 	def select_account(id)
 		@selected_account = @accounts.select { |x| x[:id] == id }.first 
+		puts @selected_account
 		if ! @selected_account.empty? 
 			return true 
 		else

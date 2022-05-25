@@ -15,10 +15,12 @@ require File.expand_path('./lib/auth.rb')
 require File.expand_path('./lib/datafactory.rb')
 #########################################################
 
-env = ENV['MONO_ENV'].to_sym || :development
+env = ENV['MONO_ENV'] || :development
+env = env.to_sym
 enable :logging
 ServerSettings::ENV = ServerSettings.validate_env(env)
 ServerSettings.save_pid
+DataFactory::SQLite.migrate_db
 
 	set :environment, ServerSettings::ENV
 	set :port, ServerSettings::PORT

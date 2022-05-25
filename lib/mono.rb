@@ -88,10 +88,10 @@ class MonobankConnector
 
 	def select_account(id)
 		@selected_account = @accounts.select { |x| x[:id] == id }.first 
-		if ! @selected_account.empty? 
+		if !(@selected_account.nil? || @selected_account.empty?)
 			return true 
 		else
-			raise ArgumentError.new("Could nor select account #{id}")
+			raise ArgumentError.new("Could not find account '#{id}'")
 		end
 	end
 end

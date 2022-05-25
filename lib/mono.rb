@@ -1,11 +1,5 @@
 class MonobankConnector
 	attr_accessor :client_info, :accounts, :selected_account, :statements, :jars
-	CLIENT_INFO_TABLE = 'clients'
-	CLIENT_INFO_TABLE_ID = 'clientId'
-	ACCOUNTS_TABLE = 'accounts'
-	ACCOUNTS_TABLE_ID = 'id'
-	JARS_TABLE = 'jars'
-	JARS_TABLE_ID = 'id'
 	
 	def initialize()
 		@client_info = {}
@@ -17,7 +11,7 @@ class MonobankConnector
 	end
 
 	def get_client_info_from_db()
-		client_info = DataFactory::SQLite.get_all(CLIENT_INFO_TABLE) 
+		client_info = DataFactory::SQLite.get_all(DataFactory::SQLite::CLIENT_INFO_MODEL[:tableName]) 
 		if ! client_info.empty? then
 			@client_info = client_info.first
 			@client_info_updated = Time.parse(@client_info[:timeUpdated])
@@ -28,7 +22,7 @@ class MonobankConnector
 	end
 
 	def get_accounts_from_db()
-		accounts = DataFactory::SQLite.get_all(ACCOUNTS_TABLE)
+		accounts = DataFactory::SQLite.get_all(DataFactory::SQLite::ACCOUNT_MODEL[:tableName])
 		if ! accounts.empty? then
 			@accounts  = accounts
 			return true
@@ -38,7 +32,7 @@ class MonobankConnector
 	end
 	
 	def get_jars_from_db()
-		jars = DataFactory::SQLite.get_all(JARS_TABLE)
+		jars = DataFactory::SQLite.get_all(DataFactory::SQLite::JAR_MODEL[:tableName])
 		if ! jars.empty? then
 			@jars  = jars
 			return true
@@ -65,12 +59,12 @@ class MonobankConnector
 		client_info.delete(:accounts)
 		client_info.delete(:jars)
 		@client_info = client_info
-		DataFactory::SQLite.create(CLIENT_INFO_TABLE, CLIENT_INFO_TABLE_ID, @client_info)
+		DataFactory::SQLite.create(DataFactory::SQLite::CLIENT_INFO_MODEL[:tableName], DataFactory::SQLite::CLIENT_INFO_MODEL[:idField], @client_info)
 		@accounts.each do |acc|
-				DataFactory::SQLite.create(ACCOUNTS_TABLE, ACCOUNTS_TABLE_ID, acc)
+				DataFactory::SQLite.create(DataFactory::SQLite::ACCOUNT_MODEL[:tableName], DataFactory::SQLite::ACCOUNT_MODEL[:idField], acc)
 		end
 		@jars.each do |jar|
-				DataFactory::SQLite.create(JARS_TABLE, JARS_TABLE_ID, jar)
+				DataFactory::SQLite.create(DataFactory::SQLite::JAR_MODEL[:tableName], DataFactory::SQLite::JAR_MODEL[:idField], jar)
 		end
 	end
 

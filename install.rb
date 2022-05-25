@@ -60,14 +60,11 @@ puts "----------------------------------------------"
 puts "Please enter SQLite DB path."
 values['db_path'] = gets.chomp
 values['db_path'] = File.expand_path(values['db_path'])
-ENV['MONO_DB_PATH'] = values['db_path']
-require './lib/datafactory.rb'
-DataFactory::SQLite.migrate_db()
 puts "DB path saved: #{values['db_path']}"
 puts "----------------------------------------------"
 
 
-env_values_string = "MONO_SERV_IP='#{values['ip']}' MONO_SERV_PORT='#{values['port']}' ETH_TOKEN=#{values['eth_token']} ETH_ADDRESSES=#{values['eth_address']} MONO_TOKEN='#{values['mono_token']}' MONO_BASIC_AUTH_USER='#{values['mono_user']}' MONO_BASIC_AUTH_PASS='#{values['mono_pass']}' MONO_SSL_FOLDER='#{values['mono_ssl']}' MONO_DB_PATH='#{values['db_path']}' MONO_ENV='development'"
+env_values_string = "MONO_SERV_IP='#{values['ip']}' MONO_SERV_PORT='#{values['port']}' ETH_TOKEN=#{values['eth_token']} ETH_ADDRESSES=#{values['eth_address']} MONO_TOKEN='#{values['mono_token']}' MONO_BASIC_AUTH_USER='#{values['mono_user']}' MONO_BASIC_AUTH_PASS='#{values['mono_pass']}' MONO_SSL_FOLDER='#{values['mono_ssl']}' MONO_DB_PATH='#{values['db_path']}' MONO_DEBUG_MODE='true' MONO_ENV='development'"
 puts "(WORKS ONLY IN UBUNTU) Do you want to set up service [y/n]"
 service_setup = gets.chomp
 until ['y','n'].include?(service_setup)

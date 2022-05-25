@@ -13,6 +13,9 @@ require File.expand_path('./lib/mono.rb')
 require File.expand_path('./lib/server_settings.rb')
 require File.expand_path('./lib/auth.rb')
 require File.expand_path('./lib/datafactory.rb')
+require File.expand_path './lib/datafactory/mono.rb'
+require File.expand_path './lib/datafactory/eth.rb'
+require  File.expand_path'./lib/datafactory/sqlite.rb'
 #########################################################
 
 env = ENV['MONO_ENV'] || :development

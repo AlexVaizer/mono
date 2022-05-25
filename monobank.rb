@@ -18,7 +18,7 @@ require File.expand_path './lib/datafactory/eth.rb'
 require  File.expand_path'./lib/datafactory/sqlite.rb'
 #########################################################
 
-env = ENV['MONO_ENV'] || :development
+env = ENV['MONO_ENV'] || 'development'
 env = env.to_sym
 enable :logging
 ServerSettings::ENV = ServerSettings.validate_env(env)

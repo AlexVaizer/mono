@@ -14,7 +14,7 @@
 			acc_display[:row1] = account[:maskedPan]
 			acc_display[:row2] = "#{account[:balanceUsd]} USD"
 		when 'FOP'
-			acc_display[:row1] = "#{account[:type]} #{account[:currencyCode]}"
+			acc_display[:row1] = account[:maskedPanFull]
 			acc_display[:row2] = "#{account[:balance]} #{account[:currencyCode]}"
 		else
 			acc_display[:row1] = account[:maskedPan]

@@ -51,7 +51,7 @@ module DataFactory
 			accounts.each do |account|
 				account = account.transform_keys(&:to_sym)
 				if account[:maskedPan].empty?
-					maskedPan = account[:type].upcase
+					maskedPan = "#{account[:type].upcase} #{DataFactory::CURRENCIES[account[:currencyCode].to_s]}"
 				else
 					maskedPan = account[:maskedPan].first
 				end

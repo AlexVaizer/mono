@@ -68,10 +68,12 @@ module DataFactory
 		
 		def self.request(request)
 			db = SQLite3::Database.open(DB_PATH)
+			#puts request
 			db.results_as_hash = true
 			re = db.execute(request)
 			db.close
 			resp = re.map {|str| str.transform_keys(&:to_sym) }
+			#puts resp
 			return resp
 		end
 
@@ -85,14 +87,15 @@ module DataFactory
 		##
 		#Creates or updates row in a TABLE by ID_FIELD with DATA
 		def self.create(model, data)
-			acc = self.get(model, data[MODELS[model][:idField]])
+			id_pointer = MODELS[model][:idField].to_sym
+			acc = self.get(model, data[id_pointer])
 			if ! acc then
 				data[:timeUpdated] = Time.now.iso8601
 				keys = data.keys.map { |e| e.to_s }.join(',')
 				values = " '#{data.values.join('\',\'')}' "
 				request = "INSERT INTO #{MODELS[model][:tableName]} (#{keys.to_s}) VALUES (#{values})"
 				re = self.request(request)
-				return acc = self.get(model, data[MODELS[model][:idField]])
+				return acc = self.get(model, data[id_pointer])
 			else
 				acc = self.update(model, data)
 				return acc
@@ -107,14 +110,15 @@ module DataFactory
 		end
 
 		def self.update(model,  data)
+			id_pointer = MODELS[model][:idField].to_sym
 			request = "UPDATE #{MODELS[model][:tableName]} SET"
 			data[:timeUpdated] = Time.now.iso8601
 			data.each do |k,v|
 				request = "#{request} #{k.to_s}='#{v}',"
 			end
-			request = "#{request.chop} WHERE #{MODELS[model][:idField]}=\"#{data[id_field.to_sym]}\""
+			request = "#{request.chop} WHERE #{MODELS[model][:idField]}=\"#{data[id_pointer]}\""
 			re = self.request(request)
-			return self.get(model, id_field)
+			return self.get(model, data[id_pointer])
 		end
 	end
 end

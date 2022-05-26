@@ -13,7 +13,7 @@ end
 <div class='w3-container w3-margin'>
 	<ul class="w3-ul w3-card-4">
 		<li class="w3-bar" >
-		<span onclick='location.replace("./")' class="w3-bar-item w3-button w3-white w3-xlarge w3-left w3-middle" style="vertical-align: middle;"><</span>
+		<a href="./" class="w3-bar-item w3-hover-<%=@hover_color%> w3-white w3-xlarge w3-left w3-middle" style="vertical-align: middle; text-decoration: none;"><</a>
 			<img src="./public/<%=@object.selected_account[:currencyCode]%>.png" class="w3-bar-item w3-circle w3-hide-small" style="width:81px">
 			<div class="w3-bar-item">
 						<span class="w3-large wrapping"><%= row1 %></span><br>
@@ -22,3 +22,5 @@ end
 		</li>
 	</ul>
 </div>
+
+

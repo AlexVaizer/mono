@@ -21,15 +21,15 @@
 <div class='w3-container w3-margin'>
 	<h1>Transactions History:</h1>
 	
-	<table class='w3-table-all w3-hoverable w3-small w3-card-4'>
-		<tr class="">
+	<table class='w3-table-all w3-small w3-card-4'>
+		<tr class="w3-<%=@accent_color%>">
 			<th> </th>
 			<% @table_content[:headers].each do |header| %>
 			<th><%= header %></th>
 			<%end%>
 		</tr>
 		<% @table_content[:content].each do |row| %>
-		<tr>
+		<tr class="w3-hover-<%=@hover_color%>">
 			<td width='2%' class=""><input class="w3-check w3-center w3-middle" type="checkbox" style="width: 12px;height: 12px; margin-top: -35%;vertical-align: middle;"></td>
 			<%i = 0
 			row.each do |key,cell|%>

@@ -50,7 +50,7 @@ DataFactory::SQLite.migrate_db
 				erb :index
 			rescue 
 				@errors = ServerSettings.return_errors($!,$@,ServerSettings::DEBUG_MESSAGES)
-				logger.error("#{$!} #{$@}")
+				logger.error(@errors)
 				status 500
 				erb :errors
 			end

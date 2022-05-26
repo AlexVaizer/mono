@@ -5,7 +5,7 @@
 		    <li class="w3-bar w3-button" onclick='location.replace("./?id=<%=account[:id]%>")'>
 				<img src="./public/<%=account[:currencyCode]%>.png" class="w3-bar-item w3-circle w3-hide-small" style="width:81px">
 				<div class="w3-bar-item">
-				<span class="w3-large w3-left"><%= account[:maskedPan] %></span><br>
+				<span class="w3-large w3-left account-name"><%= account[:maskedPanFull] %></span><br>
 				<span class='w3-left' style="text-align: left;">
 					<%= account[:balance]%> 
 		        	<%=account[:currencyCode]%> 

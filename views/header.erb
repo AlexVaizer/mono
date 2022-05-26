@@ -1,24 +1,31 @@
-<%
-cards_colors = {
-	:white => 'white',
-	:black => 'black',
-	:eaid => 'cyan',
-	:fop => 'red',
-	:eth => 'green'
-}
-
-%>
-
 <div class='w3-dark-grey w3-bar w3-responsive'>
-	<%@object.accounts.each do |account|%>
+	<%cards_colors = {
+		:white => 'white',
+		:black => 'black',
+		:eaid => 'cyan',
+		:fop => 'red',
+		:crypt => 'green'
+	}
+	@object.accounts.each do |account|
+		color = cards_colors[account[:type].downcase.to_sym]
+		acc_display = {row1: '', row2: ''}
+		case account[:type]
+		when 'CRYPT'
+			acc_display[:row1] = account[:maskedPan]
+			acc_display[:row2] = "#{account[:balanceUsd]} USD"
+		when 'FOP'
+			acc_display[:row1] = "#{account[:type]} #{account[:currencyCode]}"
+			acc_display[:row2] = "#{account[:balance]} #{account[:currencyCode]}"
+		else
+			acc_display[:row1] = account[:maskedPan]
+			acc_display[:row2] = "#{account[:balance]} #{account[:currencyCode]}"
+		end%>
 		<a href="./?id=<%=account[:id]%>">
-			<%color = cards_colors[account[:type].downcase.to_sym]%>
 			<div class='w3-bar-item w3-hover-<%=color%> w3-round-large' style="border-right: 1px solid black;font-size: 12px">
-				<%= account[:maskedPan] %> <br>
-				<%= account[:balance] %> <%= account[:currencyCode] %>
+				<%= acc_display[:row1] %> <br>
+				<%= acc_display[:row2] %>
 			</div>
 		</a>
-		
 	<% end %>
 	<div class='w3-bar-item w3-right' style="font-size: 12px">
 		<%= "DB Upd: #{Time.parse(@object.client_info[:timeUpdated]).strftime(DataFactory::TIME_FORMAT)}" %> <br>

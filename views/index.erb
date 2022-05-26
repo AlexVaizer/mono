@@ -3,6 +3,16 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 	<link rel="shortcut icon" href="./public/favicon.png">
+	<style type="text/css">
+		.account-name {
+			  overflow: hidden;
+			  text-overflow: ellipsis;
+			  word-wrap: break-word;
+			  display: block;
+			  line-height: 1em; /* a */
+			  max-height: 2em; /* a x number of line to show (ex : 2 line)  */
+			}
+	</style>
 	<body>
 		<%= erb :header %>
 		<div class="w3-container">

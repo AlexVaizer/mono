@@ -4,6 +4,10 @@ module DataFactory
 		STATEMENTS_PATH = '/personal/statement'
 		API_URL = 'https://api.monobank.ua'
 		TOKEN = ENV['MONO_TOKEN']
+		PAYMENT_SYSTEMS = {
+			'5' => 'MC',
+			'4' => 'VISA'
+		}
 		MOCK_DATA = {
 			client_info: {
 					"clientId"=>"4xhSmt92RD", 
@@ -51,19 +55,20 @@ module DataFactory
 				else
 					maskedPan = account[:maskedPan].first
 				end
+				ps_prefix = PAYMENT_SYSTEMS[maskedPan[0]]
 				acc_res = {
 					id: account[:id],
 					balance: account[:balance].to_f/100,
 					balanceUsd: 0,
 					currencyCode: DataFactory::CURRENCIES[account[:currencyCode].to_s],
 					type: account[:type].upcase,
-					maskedPanFull: maskedPan,
-					maskedPan: maskedPan.gsub('******', '*'),
+					maskedPanFull: maskedPan.gsub('******', '*'),
+					maskedPan: "#{ps_prefix} #{maskedPan[-4..-1]}",
 					ethUsdRate: 0
 				}
 				result_accounts.push(acc_res)
 			end
-			result_accounts.sort_by! { |k| k[:maskedPan]}
+			result_accounts.sort_by! { |k| k[:maskedPanFull]}
 			return result_accounts
 		end
 		

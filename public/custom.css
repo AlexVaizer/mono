@@ -1,0 +1,63 @@
+#accounts-section {
+	width:100%;
+}
+
+#accounts-list {
+	max-width: 700px; 
+	min-width: 340px;
+}
+
+#account-image {
+	width:81px;
+}
+
+#account-details {
+	text-align: left;
+}
+
+.wrapping {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  display: block;
+  line-height: 1em; /* a */
+  max-height: 1em; /* a x number of line to show (ex : 2 line)  */
+}
+
+#bar-item {
+	border-right: 1px solid black;
+	font-size: 12px;
+}
+
+#bar-item-last {
+	font-size: 12px;
+}
+
+#jars-section {
+	width:100%;
+}
+
+#jars-list {
+	max-width: 700px; 
+	min-width: 340px;
+}
+
+#jar-image {
+	width:81px;
+}
+
+#single-card-link {
+	vertical-align: middle; 
+	text-decoration: none;
+}
+
+#single-card-image {
+	width:81px;
+}
+
+#row-checkbox {
+	width: 12px;
+	height: 12px; 
+	margin-top: -35%;
+	vertical-align: middle;
+}

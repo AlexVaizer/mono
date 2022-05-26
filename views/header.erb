@@ -1,4 +1,4 @@
-<div class='w3-<%=@accent_color%> w3-bar w3-responsive'>
+<div class='w3-<%=@accent_color%> w3-bar w3-responsive' id='bar'>
 	<%cards_colors = {
 		:white => 'white',
 		:black => 'black',
@@ -20,14 +20,14 @@
 			acc_display[:row1] = account[:maskedPan]
 			acc_display[:row2] = "#{account[:balance]} #{account[:currencyCode]}"
 		end%>
-		<a href="./?id=<%=account[:id]%>">
-			<div class='w3-bar-item w3-hover-<%=color%> w3-round-large' style="border-right: 1px solid black;font-size: 12px">
+		<a href="./?id=<%=account[:id]%>" id="bar-account-link">
+			<div class='w3-bar-item w3-hover-<%=color%> w3-round-large' id='bar-item'>
 				<%= acc_display[:row1] %> <br>
 				<%= acc_display[:row2] %>
 			</div>
 		</a>
 	<% end %>
-	<div class='w3-bar-item w3-right' style="font-size: 12px">
+	<div class='w3-bar-item w3-right' id='bar-item-last'>
 		<%= "DB Upd: #{Time.parse(@object.client_info[:timeUpdated]).strftime(DataFactory::TIME_FORMAT)}" %> <br>
 		<%= @object.client_info[:name] %>
 	</div>

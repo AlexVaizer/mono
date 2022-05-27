@@ -45,7 +45,7 @@ module DataFactory
 					balanceUsd: bal_usd,
 					ethUsdRate: client_info[:last_price]['ethusd'].to_f,
 					id: account['account'],
-					maskedPanFull: account['account']
+					maskedPanFull: "#{account['account'][0..5]}..#{account['account'][-6..-1]}"
 				}
 				
 				accounts.push(account)

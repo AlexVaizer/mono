@@ -4,7 +4,7 @@ module DataFactory
 	require 'json'
 	
 	MOCK_DATA_FOR = [:development]
-	TIME_FORMAT = "%d.%m.%Y %H:%M"
+	TIME_FORMAT = "%d.%m %H:%M"
 	CURRENCIES = {
 		'840'			=> 'USD',
 		'978'			=> 'EUR',

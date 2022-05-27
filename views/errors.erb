@@ -1,22 +1,24 @@
 <html>
-	<title>Error occured</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-	<link rel="shortcut icon" href="./public/favicon.png">
+	<head>
+		<title>Error occured</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+		<link rel="stylesheet" href="./public/custom.css">
+		<link rel="shortcut icon" href="./public/favicon.png">
+	</head>
 	<body>
 
-		<div class='w3-dark-grey w3-bar w3-responsive'>
-			<a href=".">
-				<div class='w3-bar-item w3-hover-black'>
+		<div class='w3-dark-grey w3-bar w3-responsive' id="header">
+			<a href="." id='header-link'>
+				<div class='w3-bar-item w3-hover-black' id='header-link-text'>
 					Reload Page
 				</div>
 			</a>
 		</div>
-
 		<% @errors = @errors || ServerSettings.return_errors($!,$@,ServerSettings::DEBUG_MESSAGES) %>
-		<div class='w3-container w3-margin'>
-			<h1 class="w3-center">Error occured</h1>
-			<span class="w3-center"><%= @errors %></span>
+		<div class='w3-container w3-margin content-section' id='errors-section'>
+			<h1 id='errors-header'>Error occured</h1>
+			<span class="w3-center" id='errors-details'><%= @errors %></span>
 		</div>
 	</body>
 </html>

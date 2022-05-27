@@ -1,13 +1,13 @@
-<div class='w3-container w3-margin-bottom' id="accounts-section" >
+<div class='w3-container w3-margin-bottom content-section' id="accounts-section" >
 	<h1 id="account-header">Accounts:</h1>
-	<ul class="w3-ul w3-card-4" id="accounts-list">
+	<ul class="w3-ul w3-card-4 items-list" id="accounts-list">
 		<% @object.accounts.each do |account| %>
 		    <a href="./?id=<%=account[:id]%>" id="account-link">
 			    <li class="w3-bar w3-hover-<%=@hover_color%>" id="account-item">
-					<img src="./public/<%=account[:currencyCode]%>.png" class="w3-bar-item w3-circle w3-hide-small" id="account-image">
-					<div class="w3-bar-item">
-						<span class="w3-large w3-left wrapping" id="account-name"><%= account[:maskedPanFull] %></span><br>
-						<span class='w3-left' id="account-details">
+					<img src="./public/<%=account[:currencyCode]%>.png" class="w3-bar-item w3-circle w3-hide-small item-image" id="account-image">
+					<div class="w3-bar-item" id="account-details">
+						<span class="w3-large w3-left wrapping" id="account-details-row1"><%= account[:maskedPanFull] %></span><br>
+						<span class='w3-left' id="account-details-row2">
 							<%= account[:balance]%> 
 				        	<%=account[:currencyCode]%> 
 				        	<b><%=account[:type]%></b>

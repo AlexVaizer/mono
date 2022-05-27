@@ -1,9 +1,9 @@
-<div class='w3-container w3-margin-bottom' id='jars-section'>
+<div class='w3-container w3-margin-bottom content-section' id='jars-section'>
 	<h1 id='jars-header'>Jars:</h1>
-	<ul class="w3-ul w3-card-4" id='jars-list'>
+	<ul class="w3-ul w3-card-4 items-list" id='jars-list'>
 		<% @object.jars.each do |jar| %>
 			<li class="w3-bar" >
-				<img src="./public/<%=jar[:currencyCode]%>.png" class="w3-bar-item w3-circle w3-hide-small" id='jar-image'>
+				<img src="./public/<%=jar[:currencyCode]%>.png" class="w3-bar-item w3-circle w3-hide-small item-image" id='jar-image'>
 				<div class="w3-bar-item">
 						<a href="https://send.monobank.ua/<%=jar[:sendId]%>" target='_blank'><%=jar[:title]%></a><br>
 						<span class="w3-large"><b><%= jar[:balance]%></b> / <%=jar[:goal]%> <%=jar[:currencyCode]%></span><br>

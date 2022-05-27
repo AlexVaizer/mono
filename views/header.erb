@@ -1,4 +1,4 @@
-<div class='w3-<%=@accent_color%> w3-bar w3-responsive' id='bar'>
+<div class='w3-<%=@accent_color%> w3-bar w3-responsive' id='header'>
 	<%cards_colors = {
 		:white => 'white',
 		:black => 'black',
@@ -22,8 +22,8 @@
 		end%>
 		<a href="./?id=<%=account[:id]%>" id="bar-account-link">
 			<div class='w3-bar-item w3-hover-<%=color%> w3-round-large' id='bar-item'>
-				<%= acc_display[:row1] %> <br>
-				<%= acc_display[:row2] %>
+				<span id="bar-item-row1"><%= acc_display[:row1] %></span> <br>
+				<span id="bar-item-row2"><%= acc_display[:row2] %></span>
 			</div>
 		</a>
 	<% end %>

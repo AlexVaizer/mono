@@ -43,6 +43,15 @@ module DataFactory
 					{ name: 'goal', type: 'NUMERIC'},
 					{ name: 'timeUpdated', type: 'TEXT'}
 				]
+			},
+			user: {
+				tableName: 'user',
+				idField: 'id',
+				fields: [ 
+					{ name: 'id', type: 'TEXT'},
+					{ name: 'password', type: 'TEXT'},
+					{ name: 'timeUpdated', type: 'TEXT'}
+				]
 			}
 		}
 
@@ -59,9 +68,11 @@ module DataFactory
 			request_accounts = self.prepare_migration_request(:account)
 			request_jars = self.prepare_migration_request(:jar)
 			request_client_info = self.prepare_migration_request(:clientInfo)
+			request_users = self.prepare_migration_request(:user)
 			resp_client_info = self.request(request_client_info)
 			resp_accounts = self.request(request_accounts)
 			resp_jars = self.request(request_jars) 
+			resp_users = self.request(request_users)
 			return true
 		end
 
@@ -73,7 +84,6 @@ module DataFactory
 			re = db.execute(request)
 			db.close
 			resp = re.map {|str| str.transform_keys(&:to_sym) }
-			#puts resp
 			return resp
 		end
 
@@ -84,8 +94,6 @@ module DataFactory
 			return re.first
 		end
 		
-		##
-		#Creates or updates row in a TABLE by ID_FIELD with DATA
 		def self.create(model, data)
 			id_pointer = MODELS[model][:idField].to_sym
 			acc = self.get(model, data[id_pointer])

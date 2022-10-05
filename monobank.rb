@@ -67,7 +67,7 @@ end
 		if user && user[:password] == password
 			token = Token.new()
 			token.create(userId: userId)
-			cookies[:token] = token.jwt
+			response.set_cookie(:token, :value => token.jwt, :expires => token.exp)
 			redirect('/')
 		else
 			"Wrong Creds"

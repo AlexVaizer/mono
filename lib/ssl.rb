@@ -11,7 +11,6 @@ module Sinatra
         :Port => port,
         :SSLEnable => true,
         :SSLCertificate => OpenSSL::X509::Certificate.new(certificate_content),
-        # 123456 is the Private Key Password
         :SSLPrivateKey => OpenSSL::PKey::RSA.new(key_content)
       }
 

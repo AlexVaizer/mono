@@ -1,0 +1,23 @@
+<%@accent_color = 'blue'
+@hover_color = 'pale-blue'%>
+<html>
+	<title><%= @title %></title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+	<link rel="shortcut icon" href="./public/favicon.png">
+	<link rel="stylesheet" href="./public/custom.css">
+	<body>
+
+		<div class='w3-container content-section' id='content'>
+			<form class="w3-container w3-padding w3-card-4 w3-margin items-list" action="/login" method="post">
+
+				<label>username</label>
+				<input class="w3-input w3-border" type="text" name="id">
+
+				<label>password</label>
+				<input class="w3-input w3-border" type="password" name="password">
+				<button class="w3-<%=@accent_color%> w3-hover-<%=@hover_color%> w3-button w3-margin-top w3-margin-bottom w3-border" style="width: 100%" type="submit">Log In</button>
+			</form>
+		</div>
+	</body>
+</html>

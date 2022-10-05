@@ -1,7 +1,9 @@
 *.gem
 ./ssl/*
 ./logs/*
+./cert/*
 *.DS_Store
 *.pid
 *.sqlite
 *.lock
+./create_mock_users.rb

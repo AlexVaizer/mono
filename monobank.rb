@@ -53,7 +53,6 @@ end
 	set :ssl_certificate, File.expand_path(ServerSettings::SSL_CERT_PATH)
 	set :ssl_key, File.expand_path(ServerSettings::SSL_KEY_PATH)
 	set :allow_origin, '*'
-	ServerSettings.enable_ssl(ServerSettings::ENV)
 	set :views, Proc.new { File.join(root, "views") }
 
 	get '/login' do 

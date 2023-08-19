@@ -1,18 +1,16 @@
 #!/usr/bin/ruby
 require './lib/server_settings.rb'
 
-#GET IP ADDRESS
+#GET Domain
 values = {}
-ips = ServerSettings.list_ifconfig_ips
-ips.each_with_index do |v,i|
-	puts "#{i+1}. [#{v}]"
-end
-puts "Please enter [1-#{ips.count}] number and hit Enter"
-i = gets
-i = i.to_i
-values['ip'] = ips[i-1]
-puts "IP address chosen: #{values['ip'] }"
+
+puts "Please enter DOMAIN and hit Enter"
+domain = gets
+values['domain'] = domain
+puts "Port chosen: #{values['domain']}"
 puts "----------------------------------------------"
+
+
 
 # GET PORT
 puts "Please enter PORT number and hit Enter"
@@ -27,22 +25,12 @@ values['mono_token'] = gets.chomp
 puts "Token chosen: #{values['mono_token']}"
 puts "----------------------------------------------"
 
-# GET BASIC AUTH SETTINGS
-puts "Please enter Username for Basic Auth"
-values['mono_user'] = gets.chomp
-puts "Basic Auth Username chosen: #{values['mono_user']}"
-puts "----------------------------------------------"
-
-puts "Please enter Password for Basic Auth"
-values['mono_pass'] = gets.chomp
-puts "Basic Auth Password chosen: #{values['mono_pass']}"
-puts "----------------------------------------------"
-
 # Get SSL files path
 puts "Please enter Path where your SSL certificates are located"
 values['mono_ssl'] = gets.chomp
 puts "SSL Path saved: #{values['mono_ssl']}"
 puts "----------------------------------------------"
+
 
 # Get Etherscan TOKEN
 puts "Please enter your Etherscan token"
@@ -64,7 +52,7 @@ puts "DB path saved: #{values['db_path']}"
 puts "----------------------------------------------"
 
 
-env_values_string = "MONO_SERV_IP='#{values['ip']}' MONO_SERV_PORT='#{values['port']}' ETH_TOKEN=#{values['eth_token']} ETH_ADDRESSES=#{values['eth_address']} MONO_TOKEN='#{values['mono_token']}' MONO_BASIC_AUTH_USER='#{values['mono_user']}' MONO_BASIC_AUTH_PASS='#{values['mono_pass']}' MONO_SSL_FOLDER='#{values['mono_ssl']}' MONO_DB_PATH='#{values['db_path']}' MONO_DEBUG_MODE='true' MONO_ENV='development'"
+env_values_string = "MONO_SERV_IP='#{values['ip']}' MONO_SERV_PORT='#{values['port']}' ETH_TOKEN=#{values['eth_token']} ETH_ADDRESSES=#{values['eth_address']} MONO_TOKEN='#{values['mono_token']}' MONO_DB_PATH='#{values['db_path']}' MONO_DEBUG_MODE='true' MONO_ENV='development'"
 puts "(WORKS ONLY IN UBUNTU) Do you want to set up service [y/n]"
 service_setup = gets.chomp
 until ['y','n'].include?(service_setup)

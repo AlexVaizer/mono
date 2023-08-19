@@ -25,7 +25,7 @@ enable :logging
 ServerSettings::ENV = ServerSettings.validate_env(env)
 ServerSettings.save_pid
 DataFactory::SQLite.migrate_db
-require File.expand_path('./create_mock_users.rb') if File.exists?('./create_mock_users.rb')
+require File.expand_path('./create_mock_users.rb') if File.exist?('./create_mock_users.rb')
 
 helpers do 
 	def protected!

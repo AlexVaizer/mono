@@ -1,6 +1,7 @@
 *.gem
 ./ssl/*
 ./logs/*
+./.bundle/*
 cert/*
 *.DS_Store
 *.pid

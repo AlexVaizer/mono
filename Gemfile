@@ -1,5 +1,5 @@
 source "https://rubygems.org"
-ruby "3.2.2"
+ruby "3.0.2"
 gem 'sinatra' , '3.1.0'
 gem 'sinatra-cors' , '1.2.0'
 gem 'sinatra-basic-auth' , '0.1.0'

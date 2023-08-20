@@ -3,7 +3,7 @@ server {
     ssl_certificate_key <%="#{@env_values['mono_ssl']}/privkey.pem;%>
     ssl on;
     add_header Strict-Transport-Security "max-age=31536000; includeSubdomains;";
-    listen <%="#{@env_values['port']};"%> ssl;
+    listen <%="#{@env_values['port']} ssl;"%>
     server_name <%="#{@env_values['domain']};"%>
 
     location / {

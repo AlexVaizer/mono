@@ -34,7 +34,7 @@ module ServerSettings
 		out_file = File.new("#{ServerSettings::NGINX_DESTINATION_PATH}/#{@env_values['domain']}}", "w")
 		out_file.puts(service_settings.result(binding))
 		out_file.close
-		puts "You need to enable created nginx server: 'sudo ln -s /etc/nginx/sites-available/#{@env_values['domain']} /etc/nginx/sites-enabled/'"
+		puts "You need to enable created nginx server: 'sudo ln -s /etc/nginx/sites-available/#{@env_values['domain']} #{NGINX_DESTINATION_PATH} && sudo service nginx restart'"
 	end
 	
 	def ServerSettings.list_ifconfig_ips
